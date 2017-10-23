@@ -19,10 +19,12 @@ export default class EcoSystem extends Component {
       render: false,
       index: 0,
       currentTask: '',
+      currentTaskCategory: '',
       currentDescription: '',
       editSpecificTask: '',
       currentLocation: {},
-      render: false
+      render: false,
+      toggleShow: false
     }
   }
 
@@ -96,7 +98,9 @@ export default class EcoSystem extends Component {
   showTask(task, specificTask) {
     console.log(specificTask, 'please')
     this.setState({
+      toggleShow: !this.state.toggleShow,
       currentTask: task.Task_Title,
+      currentTaskCategory: task.Category,
       currentDescription: task.Task_Description,
       editSpecificTask: specificTask
     })
@@ -160,29 +164,31 @@ export default class EcoSystem extends Component {
                 </View>
               ))}
             </Swiper>
-            <View style={styles.separator} />
-            <Swipeout right={swipeBtns}
-              autoClose={true}
-              backgroundColor= 'transparent'
-            >
-              <View style={{margin: 10, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 20}}>
-                  {this.state.currentTask} {"\n"}
-                </Text>
-                <Text stlye={{fontSize: 14}}>
-                  {this.state.currentDescription}
-                </Text>
-              </View>
-            </Swipeout>
-          <View style={styles.separator} />
-        </View>
+            {this.state.toggleShow ? (
+            <View style={{height: 140}}>
+              <View style={styles.separator} />
+              <Swipeout right={swipeBtns}
+                autoClose={true}
+                backgroundColor= 'transparent'
+              >
+                <View style={{margin: 10, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize: 20}}>
+                    {this.state.currentTask} {"\n"}
+                  </Text>
+                  <Text stlye={{fontSize: 14}}>
+                    {this.state.currentDescription}
+                  </Text>
+                  <Text style={{marginTop: 2}}>{this.state.currentTaskCategory}</Text>
+                </View>
+              </Swipeout>
+              <View style={styles.separator} /> 
+            </View>) : null }
+          </View>
         <View style={{flex: 3}}>
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, index) => {
                 let clock = task.Start.split(' ')[3].split(':')[0];
-                // CLOCK WILL NOT RENDER IF COLOR IS NOT THERE
-                console.log(clock)
                 let catStyle = {
                   width: 130,
                   height: 130,
@@ -203,6 +209,7 @@ export default class EcoSystem extends Component {
                     source={clocks[clock][1]}
                   />
                 </TouchableHighlight>
+                
               )})
             ) : null}
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
@@ -301,7 +308,7 @@ const styles = StyleSheet.create({
   separator: {
     flex: .005,
     height: 1,
-
+    
     backgroundColor: '#8A7D80',
     // marginLeft: 15
   }
