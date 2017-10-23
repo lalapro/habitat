@@ -218,8 +218,6 @@ export default class EcoSystem extends Component {
                 }
                 // CLOCK WILL NOT RENDER IF COLOR IS NOT THERE
                 let clock = task.Start.split(' ')[3].split(':')[0];
-                // CLOCK WILL NOT RENDER IF COLOR IS NOT THERE
-                console.log(clock)
                 let catStyle = {
                   width: 130,
                   height: 130,
@@ -240,6 +238,7 @@ export default class EcoSystem extends Component {
                     source={clocks[clock][1]}
                   />
                 </TouchableHighlight>
+                
               )})
             ) : null}
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
