@@ -36,16 +36,19 @@ export default class EcoSystem extends Component {
       let locations = res.data
       console.log('BEFORE FILTER', locations)
       let currentDate = new Date();
-      locations.forEach(location => {
-        location.tasks = location.tasks.filter(task => {
-          let taskDate = convertDate(task.Start);
-          console.log(taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth() && taskDate.getDate() === currentDate.getDate())
-          return taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth() && taskDate.getDate() === currentDate.getDate()
+      if (locations.tasks) {
+        locations.forEach(location => {
+          location.tasks = location.tasks.filter(task => {
+            let taskDate = convertDate(task.Start);
+            console.log(taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth() && taskDate.getDate() === currentDate.getDate())
+            return taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth() && taskDate.getDate() === currentDate.getDate()
+          })
         })
-      })
+      }
+      
       console.log('AFTER FILTER', locations)
       this.setState({
-        locations: locations,
+        locations: locations || res.data,
         currentDescription: '',
         currentTask: ''
       })
