@@ -26,7 +26,6 @@ export default class Profile extends Component {
         this.getCompletedTask = this.getCompletedTask.bind(this);
     }
     componentDidMount() {
-        console.log(this.props.screenProps.userID, 'IS IT HERE?')
         this.setState({
             username: this.props.screenProps.userID
         })
@@ -36,7 +35,7 @@ export default class Profile extends Component {
     getPicture() {
         axios({
             method: 'get',
-            url: 'http://10.16.1.152:3000/pictures',
+            url: 'http://10.16.1.233:3000/pictures',
             params: {
               username: this.props.screenProps.userID
             }
@@ -51,20 +50,19 @@ export default class Profile extends Component {
     getCompletedTask() {
         axios({
             method: 'get',
-            url: 'http://10.16.1.152:3000/completedTask',
+            url: 'http://10.16.1.233:3000/completedTask',
             params: {
               username: this.props.screenProps.userID
             }
         })
         .then(res => {
-            console.log(res.data, 'why is it?')
             this.setState({
                 tasks: res.data.tasks
             })
         })
     }
     uploadImageAsync = async (uri) => {
-    let apiUrl = 'http://10.16.1.152:3000/pictures';
+    let apiUrl = 'http://10.16.1.233:3000/pictures';
     let uriParts = uri.split('.');
     let fileType = uri[uri.length - 1];
     let formData = new FormData();
@@ -118,7 +116,7 @@ export default class Profile extends Component {
     }
     // SaveURI(uri) {           // ImageStoreMethod for IOS
     //  ImageStore.getBase64ForTag(uri, (success) => {
-    //      axios.post('http://10.16.1.152:3000/pictures', { Picture: uri })
+    //      axios.post('http://10.16.1.233:3000/pictures', { Picture: uri })
     //          .then(res => {
     //              console.log(res.data);
     //              let decoded = 'data:image/jpg;base64,' + success;
@@ -130,7 +128,7 @@ export default class Profile extends Component {
         let uri = picture.base64;
         console.log(!!uri)
         let pictureText = 'data:image/jpg;base64,' + uri;
-        axios.post('http://10.16.1.152:3000/pictures', { picture: uri, username: this.state.username })
+        axios.post('http://10.16.1.233:3000/pictures', { picture: uri, username: this.state.username })
             .then(res => {
                 let jpg = 'data:image/jpg;base64,' + res.data.picture
                 this.setState({
@@ -140,6 +138,8 @@ export default class Profile extends Component {
         // ImageStore.addImageFromBase64(uri, (success) => { this.SaveURI(success) },
         //      (failure) => { console.log(failure) });
     }
+
+
     showModal(stat) {
         this.setState({ visibleModal: stat })
     }
