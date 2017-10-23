@@ -19,6 +19,7 @@ export default class EcoSystem extends Component {
       render: false,
       index: 0,
       currentTask: '',
+      currentTaskId: '',
       currentTaskCategory: '',
       currentDescription: '',
       editSpecificTask: '',
@@ -27,6 +28,7 @@ export default class EcoSystem extends Component {
       toggleShow: false
     }
   }
+
 
   getMarkers() {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID}})
@@ -91,18 +93,12 @@ export default class EcoSystem extends Component {
     }
   }
 
-
-  componentDidMount() {
-    this.setState({
-      userID: this.props.screenProps.userID,
-    }, () => this.getMarkers())
-  }
-
   showTask(task, specificTask) {
     console.log(specificTask, 'please')
     this.setState({
       toggleShow: !this.state.toggleShow,
       currentTask: task.Task_Title,
+      currenTaskId: task.Task_ID,
       currentTaskCategory: task.Category,
       currentDescription: task.Task_Description,
       editSpecificTask: specificTask
@@ -114,16 +110,31 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.218:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
+  }
+
+  yayTask() {
+    console.log(this.state);
+    axios.put('http://10.16.1.218:3000/yayTask', {params: { taskId: this.state.currentTask, }})
+  }
+
+  nayTask() {
+
+  }
+
+  componentDidMount() {
+    this.setState({
+      userID: this.props.screenProps.userID,
+    }, () => this.getMarkers())
   }
 
   render() {
     console.log('in Ecosystem', this.state.index)
     const { height, width } = Dimensions.get('window');
     const { navigate } = this.props.navigation;
-    const swipeBtns = [
+    const swipeRightBtns = [
       {
         text: 'Edit',
         backgroundColor: '#f4a316',
@@ -135,6 +146,20 @@ export default class EcoSystem extends Component {
         backgroundColor: 'red',
         underlayColor: 'rgba(0, 0, 0, 0.6)',
         onPress: () => { this.deleteTask() }
+     }
+    ];
+    const swipeLeftBtns = [
+      {
+        text: 'Yay',
+        backgroundColor: 'green',
+        underlayColor: 'rgba(0, 0, 0, 0.6)',
+        onPress: () => { this.yayTask() }
+     },
+      {
+        text: 'Nay',
+        backgroundColor: 'brown',
+        underlayColor: 'rgba(0, 0, 0, 0.6)',
+        onPress: () => { this.nayTask() }
      }
     ];
     return this.state.render ? (this.state.locations.length > 0 ? (
@@ -170,7 +195,9 @@ export default class EcoSystem extends Component {
             {this.state.toggleShow ? (
             <View style={{height: 140}}>
               <View style={styles.separator} />
-              <Swipeout right={swipeBtns}
+              <Swipeout 
+                right={swipeRightBtns}
+                left={swipeLeftBtns}
                 autoClose={true}
                 backgroundColor= 'transparent'
               >
@@ -205,7 +232,8 @@ export default class EcoSystem extends Component {
                   justifyContent: 'center'
                 }
               return (
-                <TouchableHighlight style={catStyle} key={index}
+                <View style={{height: 150, margin: 0}} key={index}>
+                <TouchableHighlight style={catStyle} 
                 onPress={() => this.showTask(task, this.state.locations[this.state.index].tasks[index])}>
                   <Image
                     style={{resizeMode: 'contain', overflow: 'hidden'}}
@@ -213,6 +241,7 @@ export default class EcoSystem extends Component {
                   />
                 </TouchableHighlight>
                 
+                </View>
               )})
             ) : null}
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
@@ -235,26 +264,6 @@ export default class EcoSystem extends Component {
   </View>
   }
 }
-
-{/* <Swiper
-  horizontal={true}
-  onIndexChanged={(index) => {this.viewChange(index)}}
->
-<View style={{height: height, width: width, position: 'absolute'}}>
-  <Image style={{height: height, width: width, position: 'absolute'}}
-    source={require('../assets/home.png')}>
-    <Objects data={this.state.locations[0]}/>
-  </Image>
-</View>
-
-<View style={{height: height, width: width, position: 'absolute'}}>
-  <Image style={{height: height, width: width, position: 'absolute'}}
-    source={require('../assets/work.png')}>
-    <Objects data={this.state.locations[1]}/>
-  </Image>
-</View>
-
-</Swiper> */}
 
 const images = [
   [0, require("../assets/Ecosystem/home.png")],
