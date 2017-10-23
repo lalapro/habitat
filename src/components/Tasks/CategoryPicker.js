@@ -15,7 +15,8 @@ class CategoryPicker extends Component {
 			userID: '',
 			categoryID: '',
 			isEdit: false,
-			color: null
+			color: null,
+			readyToRender: false
 		}
 		this.newCategory = this.newCategory.bind(this);
 		this.changeCategory = this.changeCategory.bind(this);
@@ -25,35 +26,41 @@ class CategoryPicker extends Component {
   //axios.get for existing categories
   componentWillMount() {
     //give axios user id and get category names
+
 		this.grabCategories()
   }
 
-
 	grabCategories(specific) {
-		axios.get('http://10.16.1.233:3000/categories', {params: {userID: this.props.userID}})
+		axios.get('http://10.16.1.152:3000/categories', {params: {userID: this.props.userID}})
 			.then((response) => {
 				let categories = response.data;
+				console.log(categories)
+				console.log('AM I BEING CALLED HERE?')
 				this.setState({
 					categories: categories
 				})
-				if (!this.state.isEdit && categories[0]) {
+				console.log('I AM BEING CALLED', categories)
+				if (!this.state.isEdit && categories.length > 0) {
 					this.setState({
 						category: categories[0].ID
 					})
 					// change here
 					this.changeCategory(categories[0].ID)
+					// this.setState({readyToRender: true})
 				}
+				console.log('state has been set ...', this.state.category)
 				if (specific) {
-
 					for(let i = 0; i < categories.length; i++) {
 						console.log('loop loop', categories[i])
 						if (categories[i].Category === specific) {
+							console.log('should set to cuirse', categories[i])
 							this.setState({
 								category: categories[i].ID
 							})
 							console.log('ID should show', categories[i].ID)
 							this.changeCategory(categories[i].ID);
 						}
+						break;
 					}
 				}
 			})
@@ -62,7 +69,9 @@ class CategoryPicker extends Component {
 
 //axios.get for existing categories
 	componentWillReceiveProps(oldone) {
+		console.log('receiving props... CATEGORIES was here', oldone, this.state.isEdit)
     if (oldone.task.Category_ID && !this.state.isEdit) {
+			console.log('receiving props ABOUT TO CHANGE STATE YOOOO', oldone)
       this.setState({
         category: oldone.task.Category_ID,
         isEdit: true
@@ -71,13 +80,25 @@ class CategoryPicker extends Component {
 	}
 
 	changeCategory(category) {
+		// THIS CATEGORY REFERS TO THE ID
+		console.log('called.....', category)
 		this.setState({category})
 		this.props.onSelect(category);
+		this.currentColor(category)
 	}
 
-	addCategory(category) {
+	currentColor(category) {
+		// THIS CATEGORY REFERS TO THE ID
+		for (let i = 0; i < this.state.categories.length; i++) {
+			if (this.state.categories[i].ID === category) {
+				this.props.currentColor(this.state.categories[i].Color)
+			}
+		}
+	}
+
+	addCategory(newCategory) {
 		this.setState({
-			newCategory: category
+			newCategory: newCategory
 		})
 	}
 
@@ -90,8 +111,9 @@ class CategoryPicker extends Component {
     let category = this.state.newCategory;
 		let color = this.state.color;
 		if (category.length > 1) {
-			axios.post('http://10.16.1.233:3000/categories', {category, color, userID: this.props.userID})
+			axios.post('http://10.16.1.152:3000/categories', {category, color, userID: this.props.userID})
 			.then(response => {
+				console.log(`save category ${response}`)
 				this.grabCategories(category)
 				this.setState({ newCategory: '' })
 			})
@@ -106,6 +128,7 @@ class CategoryPicker extends Component {
 
 
 	render() {
+		console.log('before render', this.state.category)
 		return(
 			<View style={StyleSheet.picker}>
 				<Picker
@@ -116,7 +139,7 @@ class CategoryPicker extends Component {
 			 	{this.state.categories ?
 						this.state.categories.map((category, i) => {
 							return (
-								<Picker.Item key={i} style={{borderColor: category.Color}} label={category.Category} value={category.ID} />
+								<Picker.Item key={i} style={{backgroundColor: 'red'}} label={category.Category} value={category.ID} />
 							)
 						}) : ''
 				}
@@ -128,7 +151,7 @@ class CategoryPicker extends Component {
 					placeholder="Create a new category"
 				/>
 				<ColorPicker
-					selectColor={this.selectColor} color={this.state.color}
+					selectColor={this.selectColor} color={this.state.color} userID={this.props.userID} usedColors={this.state.categories}
 				/>
 				<Button
 					onPress={this.newCategory}

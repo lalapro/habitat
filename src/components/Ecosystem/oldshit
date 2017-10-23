@@ -45,7 +45,7 @@ export default class EcoSystem extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://10.16.1.233:3000/mapMarkers', {params: {userID: this.state.userID}})
+    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID}})
       .then(res => console.log(res.data))g
     this.setState({
       currentTasks: this.state.locations[0].tasks

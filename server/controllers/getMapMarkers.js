@@ -2,6 +2,8 @@ const express = require('express');
 const db = require('../../db/index.js');
 var Promise = require("bluebird");
 
+const convertDate = require('./convertDate')
+
 
 const getMapMarkers = (req, res) => {
   let userID = req.query.userID;
@@ -25,13 +27,18 @@ const getMapMarkers = (req, res) => {
           if (err) {
             res.status(404).send(`We encountered an error looking up the tasks ${err}`);
           } else {
+            console.log('TASK HERE', tasks)
+            let sortedByTime = tasks.sort((a,b) => {
+              return convertDate(a.Start).getTime() - convertDate(b.Start).getTime()
+            });
+
+            console.log('TASK AFTER', sortedByTime)
             db.query(categoryQuery, null, (err, categories) => {
               if (err) {
                 res.status(404).send(`We encountered an error looking up the categories ${err}`);
               } else {
-                tasks.forEach(task => {
+                sortedByTime.forEach(task => {
                   categories.forEach(category => {
-                    console.log(tasks)
                     if (task.Category_ID === category.ID) {
                       task.Category = category.Category;
                       task.Color = category.Color;
@@ -46,6 +53,7 @@ const getMapMarkers = (req, res) => {
               }
               count++;
               if (count === length) {
+                console.log('DBDBDBDB', results[0].tasks)
                 res.send(results)
               }
             })
@@ -55,8 +63,8 @@ const getMapMarkers = (req, res) => {
       }
     }
   })
-
 }
+
 
 
 
