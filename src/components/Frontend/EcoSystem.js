@@ -7,7 +7,7 @@ import profile from './Profile';
 import axios from 'axios';
 import TutorialView from './TutorialView.js';
 import GetCurrentLocation from '../Map/GetCurrentLocation';
-import ProgressBar from './ProgressBar.js'
+import convertDate from './convertDate';
 
 export default class EcoSystem extends Component {
   constructor(props) {
@@ -24,14 +24,24 @@ export default class EcoSystem extends Component {
       currentLocation: {},
       render: false
     }
-    this.showTask = this.showTask.bind(this);
   }
 
   getMarkers() {
-    axios.get('http://10.16.1.233:3000/mapMarkers', {params: {userID: this.state.userID}})
+    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID}})
     .then(res => {
+      let locations = res.data
+      console.log('BEFORE FILTER', locations)
+      let currentDate = new Date();
+      locations.forEach(location => {
+        location.tasks = location.tasks.filter(task => {
+          let taskDate = convertDate(task.Start);
+          console.log(taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth() && taskDate.getDate() === currentDate.getDate())
+          return taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth() && taskDate.getDate() === currentDate.getDate()
+        })
+      })
+      console.log('AFTER FILTER', locations)
       this.setState({
-        locations: res.data,
+        locations: locations,
         currentDescription: '',
         currentTask: ''
       })
@@ -85,6 +95,7 @@ export default class EcoSystem extends Component {
   }
 
   showTask(task, specificTask) {
+    console.log(specificTask, 'please')
     this.setState({
       currentTask: task.Task_Title,
       currentDescription: task.Task_Description,
@@ -97,12 +108,13 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.233:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
 
   render() {
+    console.log('in Ecosystem', this.state.index)
     const { height, width } = Dimensions.get('window');
     const { navigate } = this.props.navigation;
     const swipeBtns = [
@@ -136,16 +148,16 @@ export default class EcoSystem extends Component {
             >
               {this.state.locations.map((location, index) => (
                 <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <Image
+                    source={images[location.Avatar][1]}
+                    style={{width: 50, height: 50}}
+                  />
                   <Text style={styles.cardtitle}>
                     {location.Marker_Title}
                   </Text>
                   <Text style={styles.cardDescription}>
                     {location.Marker_Description}
                   </Text>
-                  <Image
-                    source={images[location.Avatar][1]}
-                    style={{width: 200, height: 200}}
-                  />
                 </View>
               ))}
             </Swiper>
@@ -166,24 +178,38 @@ export default class EcoSystem extends Component {
           <View style={styles.separator} />
         </View>
         <View style={{flex: 3}}>
-
-
-          {<ScrollView horizontal={true}>
+          <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
-              this.state.locations[this.state.index].tasks.map((task, i) => {
-                let keyValue = i;
-                return <ProgressBar key={i} task={task} locations={this.state.locations} 
-                  index={this.state.index} showTask={this.showTask} specificIndex={i} />
-              })
-          ) : null}
-
-
-          
+              this.state.locations[this.state.index].tasks.map((task, index) => {
+                let clock = task.Start.split(' ')[3].split(':')[0];
+                // CLOCK WILL NOT RENDER IF COLOR IS NOT THERE
+                console.log(clock)
+                let catStyle = {
+                  width: 130,
+                  height: 130,
+                  borderRadius: 130,
+                  borderColor: task.Color || 'black',
+                  borderWidth: 3,
+                  marginTop: 10,
+                  margin: 5,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }
+              return (
+                <TouchableHighlight style={catStyle} key={index}
+                onPress={() => this.showTask(task, this.state.locations[this.state.index].tasks[index])}>
+                  <Image
+                    style={{resizeMode: 'contain', overflow: 'hidden'}}
+                    source={clocks[clock][1]}
+                  />
+                </TouchableHighlight>
+              )})
+            ) : null}
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
               <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
             </TouchableOpacity>
-          </ScrollView>}
-            
+          </ScrollView>
         </View>
       </View>
     ) :
@@ -228,7 +254,21 @@ const images = [
   [3, require("../assets/egg5.png")]
 ]
 
-
+const clocks = [
+  [0, 'placeholder'],
+  [1, require("../assets/clocks/one.png")],
+  [2, require("../assets/clocks/two.png")],
+  [3, require("../assets/clocks/three.png")],
+  [4, require("../assets/clocks/four.png")],
+  [5, require("../assets/clocks/five.png")],
+  [6, require("../assets/clocks/six.png")],
+  [7, require("../assets/clocks/seven.png")],
+  [8, require("../assets/clocks/eight.png")],
+  [9, require("../assets/clocks/nine.png")],
+  [10, require("../assets/clocks/ten.png")],
+  [11, require("../assets/clocks/eleven.png")],
+  [12, require("../assets/clocks/twelve.png")]
+]
 const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
@@ -245,7 +285,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cardDescription: {
-    fontSize: 50,
+    fontSize: 25,
     color: "#444",
   },
   circle: {
@@ -262,6 +302,7 @@ const styles = StyleSheet.create({
   separator: {
     flex: .005,
     height: 1,
+
     backgroundColor: '#8A7D80',
     // marginLeft: 15
   }

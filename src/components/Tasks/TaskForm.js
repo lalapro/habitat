@@ -13,7 +13,8 @@ class TaskForm extends Component {
       description: null,
       start: null,
       end: null,
-      reRender: false
+      readyToRender: false,
+      currentColor: '#ffffff'
     }
     this.changeFrequency = this.changeFrequency.bind(this);
   }
@@ -38,8 +39,16 @@ class TaskForm extends Component {
     this.setState({ frequency: oldone.task.Frequency })
   }
 
+  renderReady() {
+    this.setState({readyToRender: true})
+  }
+
+  currentColor(currentColor) {
+    this.setState({currentColor})
+  }
+
   render() {
-    return(
+    return (
       <View style={styles.container}>
         <TextInput
           onChangeText={(title) => this.props.handleTaskTitleChange(title)}
@@ -54,7 +63,8 @@ class TaskForm extends Component {
         <TaskDatePicker placeholder={this.props.task.Start ? this.props.task.Start : "Start"} onSelect={(startTime) => this.props.handleStartChange(startTime)} />
         <TaskDatePicker placeholder={this.props.task.End ? this.props.task.End : "End"} onSelect={(endTime) => this.props.handleEndChange(endTime)} />
         <LocationPicker style={styles.picker} task={this.props.task} handleSelect={this.props.handleLocationChange} userID={this.state.userID}/>
-        <CategoryPicker style={styles.picker} task={this.props.task} onSelect={this.props.handleCategoryChange} userID={this.state.userID} reRender={this.props.reRender}/>
+        <View style={{backgroundColor: this.state.currentColor, margin: 10, width: 25, height: 25, borderRadius: 25, position: 'absolute', left:200, top: 270}}/>
+        <CategoryPicker style={styles.picker} task={this.props.task} onSelect={this.props.handleCategoryChange} userID={this.state.userID} reRender={this.props.reRender} renderReady={this.renderReady.bind(this)} currentColor={this.currentColor.bind(this)}/>
         <Picker
           style={[styles.onePicker]} itemStyle={styles.onePickerItem}
           selectedValue={this.state.frequency}

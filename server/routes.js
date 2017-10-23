@@ -12,6 +12,7 @@ const handlePicture = require('./controllers/pictureHandler.js');
 const handleGetPicture = require('./controllers/getPictureHandler.js');
 const { handleToken, handleAuth } = require('./controllers/handleToken');
 const handleEditTasks = require('./controllers/editTaskHandler.js');
+const getColors = require('./controllers/getColors');
 
 routes.post('/signup', handleSignup);
 routes.get('/login', handleLogin);
@@ -29,5 +30,6 @@ routes.get('/pictures', handleGetPicture);
 routes.get('/token', handleToken);
 routes.post('/token', handleAuth);
 routes.put('/editTask', handleEditTasks);
+routes.get('/colors', getColors);
 
 module.exports = routes;
