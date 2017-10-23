@@ -2,7 +2,6 @@ const express = require('express');
 const db = require('../../db/index.js');
 
 const handleEditTasks = (req, res) => {
-  console.log('handle edit task', req.body)
   let User_ID = req.body.UserID;
   let Task_Title = req.body.title;
   let Task_Description = req.body.description;
@@ -12,10 +11,7 @@ const handleEditTasks = (req, res) => {
   let Category_ID = req.body.category;
   let Marker_ID = req.body.markerID;
   let Task_ID = req.body.taskID;
-  console.log(req.body)
-  //GET OLD TASK TITLE
-  //update task title, description, start, end, frequency, days, category, marker
-
+  
   let update = `UPDATE Tasks SET
     Task_Title='${Task_Title}',
     Task_Description='${Task_Description}',
@@ -30,7 +26,6 @@ const handleEditTasks = (req, res) => {
     if (err) {
       res.status(404).send(`We encountered an error deleting the task: ${err}`);
     } else {
-      console.log(results)
       res.status(200).send(results);
     }
   })

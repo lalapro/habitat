@@ -3,7 +3,6 @@ const db = require('../../db/firebase.js');
 
 const getPictureHandler = (req, res) => {
     var callback = function(val) {
-        console.log(val.picture, 'THIS IS CALLBACK')
         res.send(val)
     }
     var picture = req.body.picture;
