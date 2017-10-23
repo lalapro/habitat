@@ -62,7 +62,6 @@ export default class EcoSystem extends Component {
   }
 
   showCurrentLocation() {
-    console.log(this.state.currentLocation)
     if (this.state.locations.length > 0) {
       var locations = this.state.locations.map((curr, idx, arr) => {
         return {
