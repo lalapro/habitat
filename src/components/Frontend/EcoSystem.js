@@ -257,10 +257,10 @@ export default class EcoSystem extends Component {
 </Swiper> */}
 
 const images = [
-  [0, require("../assets/home2.png")],
-  [1, require("../assets/work2.png")],
-  [2, require("../assets/gym.png")],
-  [3, require("../assets/egg5.png")]
+  [0, require("../assets/Ecosystem/home.png")],
+  [1, require("../assets/Ecosystem/work.png")],
+  [2, require("../assets/Ecosystem/gym.png")],
+  [3, require("../assets/Ecosystem/currentlocation.png")]
 ]
 
 const clocks = [
