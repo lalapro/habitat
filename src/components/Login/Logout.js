@@ -25,18 +25,26 @@ export default class Logout extends React.Component {
 
   render() {
     return (
-			<View style={{marginTop: 22, marginHorizontal: 22}}>
+			<View >
         <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.modalVisible}
-          style={{marginTop: 22, backgroundColor: 'rgba(255,255,255,0.5'}}
+          style={{marginTop: 22, backgroundColor: 'rgba(100,255,100,0.5', height: 20, flex: 0.5}}
           onRequestClose={() => {alert("Modal has been closed.")}}
-        >
-					 <Button
-						 onPress={() => this.toggleModal()}
-						 title="LogOuttttt"
-					 />
+        >	
+					<View style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, marginTop: 22, marginHorizontal: 22, backgroundColor: 'purple'}}>
+						<View style={{ marginTop: 15, marginHorizontal: 22, backgroundColor: 'white', height: 250, width: 250}}></View>
+						<Text>Are you sure you want to leave?</Text>
+						<Button
+							onPress={() => this.toggleModal()}
+							title="Yes, I'm sure."
+						/>
+						<Button 
+							onPress = {() => this.props.navigation.goBack()}
+							title="Nevermind, take me back."
+						/>
+					 </View>
         </Modal>
       </View>
 
