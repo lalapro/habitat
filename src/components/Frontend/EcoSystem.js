@@ -95,7 +95,7 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.218:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
@@ -103,8 +103,8 @@ export default class EcoSystem extends Component {
   yayTask() {
     console.log('in yayTask', this.state.locations)
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    axios.put('http://10.16.1.131:3000/yayTask', {
-      taskId: this.state.currentTaskId, 
+    axios.put('http://10.16.1.152:3000/yayTask', {
+      taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
     })
@@ -116,7 +116,7 @@ export default class EcoSystem extends Component {
     })
   }
 
-  
+
   nayTask() {
 
   }
@@ -191,7 +191,7 @@ export default class EcoSystem extends Component {
             {this.state.toggleShow ? (
             <View style={{height: 140}}>
               <View style={styles.separator} />
-              <Swipeout 
+              <Swipeout
                 right={swipeRightBtns}
                 left={swipeLeftBtns}
                 autoClose={true}
@@ -207,7 +207,7 @@ export default class EcoSystem extends Component {
                   <Text style={{marginTop: 2}}>{this.state.currentTaskCategory}</Text>
                 </View>
               </Swipeout>
-              <View style={styles.separator} /> 
+              <View style={styles.separator} />
             </View>) : null }
           </View>
         <View style={{flex: 3}}>
@@ -215,7 +215,8 @@ export default class EcoSystem extends Component {
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, i) => {
                 return <ProgressBar key={i} task={task} locations={this.state.locations}
-                  index={this.state.index} showTask={this.showTask} specificIndex={i} />
+                  index={this.state.index} showTask={this.showTask} specificIndex={i}
+                onPress={() => this.showTask(task, this.state.locations[this.state.index].tasks[index])}/>
               })
           ) : null}
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
   separator: {
     flex: .005,
     height: 1,
-    
+
     backgroundColor: '#8A7D80',
     // marginLeft: 15
   }
