@@ -53,7 +53,6 @@ export default class Signup extends Component {
           />
           <Text>Do you want to start building good Habits?</Text>
         </View>
-
         <View style={styles.formContainer}>
           <SignupForm
             handleSubmit={this.handleSubmit}
@@ -62,7 +61,6 @@ export default class Signup extends Component {
             handleEmailInput={this.handleEmailInput}
             />
         </View>
-
         <TouchableOpacity
           onPress={() => {
             this.handleSignup()
@@ -71,7 +69,6 @@ export default class Signup extends Component {
           >
           <Text style={styles.buttonText}>SIGNUP</Text>
         </TouchableOpacity>
-
       </View>
     );
   }
@@ -86,16 +83,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    // flexGrow: 1,
     justifyContent: 'center'
   },
   logo: {
     width: 100,
     height: 100,
-  },
-  formContainer: {
-    // alignItems: 'center',
-    // justifyContent: 'center'
   },
   buttonContainer: {
     alignItems: 'center',

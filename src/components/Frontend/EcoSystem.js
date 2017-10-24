@@ -118,7 +118,18 @@ export default class EcoSystem extends Component {
 
 
   nayTask() {
-
+    let negativePoints = this.state.locations[this.state.index].NegativePoints - 1;
+    axios.put('http://10.16.1.152:3000/yayTask', {
+      taskId: this.state.currentTaskId,
+      markerId: this.state.locations[this.state.index].Marker_ID,
+      negativePoints
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   }
 
   componentDidMount() {

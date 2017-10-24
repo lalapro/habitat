@@ -37,7 +37,6 @@ export default class MapScreen extends Component {
   }
 
   getMarkers() {
-    // console.log('in get markers', this.state.userID)
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID}})
      .then(markers => {
        this.setState({markers: markers.data})
@@ -59,8 +58,6 @@ export default class MapScreen extends Component {
     this.setState({
       userID: this.props.screenProps.userID
     }, () => this.getMarkers())
-    console.log("componentDidMount triggered")
-
   }
 
   startRender = () => {
@@ -123,14 +120,12 @@ export default class MapScreen extends Component {
   }
 
   toggleHide() {
-    // console.log('invoked')
     this.setState({
       modalVisible: false
     })
   }
 
   zoom(marker) {
-    console.log(marker)
     this.map.animateToRegion(
       {
         latitude: marker.Latitude,
@@ -145,7 +140,6 @@ export default class MapScreen extends Component {
   }
 
   alertAtLocation() {
-    console.log('alertAtLocation is triggered');
     var locations = this.state.markers.map((curr, idx, arr) => {
       return {
         title: curr.Marker_Title,
@@ -158,7 +152,6 @@ export default class MapScreen extends Component {
       longitude: this.state.currentLocation.coordinate.longitude,
       latitude: this.state.currentLocation.coordinate.latitude
     }
-    console.log('location and currentLocation', locations, currentLocation);
     locations.forEach((location) => {
       if (Math.abs((location.longitude - currentLocation.longitude) + (location.latitude - currentLocation.latitude)) < .0001) {
         Alert.alert(
@@ -256,16 +249,12 @@ export default class MapScreen extends Component {
   }
 }
 
-
 const images = [
   [0, require("../assets/Ecosystem/home.png")],
   [1, require("../assets/Ecosystem/work.png")],
   [2, require("../assets/Ecosystem/gym.png")],
   [3, require("../assets/Ecosystem/currentlocation.png")]
 ]
-
-
-
 
 const CARD_HEIGHT = height / 5;
 const CARD_WIDTH = CARD_HEIGHT - 50;

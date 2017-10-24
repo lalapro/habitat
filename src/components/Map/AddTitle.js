@@ -50,7 +50,6 @@ const images = [
   [3, require("../assets/egg5.png")]
 ]
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

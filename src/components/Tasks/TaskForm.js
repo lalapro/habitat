@@ -23,7 +23,6 @@ class TaskForm extends Component {
     this.props.tasks = "";
   }
 
-
   componentWillMount() {
     this.setState({
       userID: this.props.userID

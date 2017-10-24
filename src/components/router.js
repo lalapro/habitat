@@ -22,7 +22,6 @@ export const SignedOut = StackNavigator({
 
 import Map from './Map/MapStack.js';
 import Profile from './Frontend/Profile';
-import Home from './Home/Home';
 import EcoSystem from './Frontend/EcoSystem';
 import TaskBuilder from './Tasks/TaskBuilder';
 import Logout from './Login/Logout.js';

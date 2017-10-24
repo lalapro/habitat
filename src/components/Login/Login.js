@@ -42,7 +42,6 @@ export default class Login extends Component {
   }
 
   login = async () => {
-    // console.log('login button hit', this.props.screenProps)
       const APP_ID = "1729141044061993"
       const options = {
           permissions: ['public_profile', 'email', 'user_friends'],
@@ -50,8 +49,6 @@ export default class Login extends Component {
       const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(APP_ID, options)
       if (type === 'success') {
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`)
-
-        // send post request to user table
         const user = await response.json()
         axios.post(`http://10.16.1.152:3000/token`, {
           name: user.name,
@@ -62,7 +59,6 @@ export default class Login extends Component {
           this.props.screenProps.handleLogIn(res.data.user)
         })
         AsyncStorage.setItem(`user_token`, token);
-
     }
   }
 
@@ -72,7 +68,6 @@ export default class Login extends Component {
   }
 
   render() {
-
     return (
       <View style={styles.container}>
         <View style={styles.logoContainer}>
@@ -89,7 +84,6 @@ export default class Login extends Component {
             handlePasswordInput={this.handlePasswordInput}
             />
         </View>
-
         <TouchableOpacity
           onPress={() => {
             username = this.state.username
@@ -100,16 +94,9 @@ export default class Login extends Component {
           >
           <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
-
-
-
         <Button
            onPress={this.login}
            title='Login with facebook' />
-
-
-
-
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("SignUp")}
           style={styles.buttonContainer}
