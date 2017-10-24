@@ -5,6 +5,7 @@ const handleYayTask = (req, res) => {
   let PositivePoints = req.body.positivePoints;
   let Marker_ID = req.body.markerId;
   let Task_ID = req.body.taskId;
+  console.log('in handleYayTask', req.body);
   
   let updateTask = `UPDATE Tasks SET
     Completion='True'
@@ -22,7 +23,6 @@ const handleYayTask = (req, res) => {
         if (err) {
           res.status(404).send(`We encountered an error while updating Marker: ${err}`)
         } else {
-          console.log(PositivePoints, Marker_ID, Task_ID)
           res.status(201).send(`We updated both task and marker: ${JSON.stringify(results)}`)
         }
       })

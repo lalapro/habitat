@@ -9,6 +9,7 @@ import TutorialView from './TutorialView.js';
 import GetCurrentLocation from '../Map/GetCurrentLocation';
 import geodist from 'geodist';
 import ProgressBar from './ProgressBar'
+import convertDate from '../../../server/controllers/convertDate';
 
 export default class EcoSystem extends Component {
   constructor(props) {
@@ -21,12 +22,18 @@ export default class EcoSystem extends Component {
       index: 0,
       currentTask: '',
       currentTaskId: '',
+      currentTaskIndex: '',
       currentTaskCategory: '',
       currentDescription: '',
+      currentTaskStart: '',
+      currentTaskEnd: '',
       editSpecificTask: '',
       currentLocation: {},
       render: false,
-      toggleShow: false
+      toggleShow: false,
+      positivePoints: 0,
+      negativePoints: 0,
+      nullPoints: 0
     }
     this.showTask = this.showTask.bind(this);
   }
@@ -35,7 +42,7 @@ export default class EcoSystem extends Component {
   getMarkers() {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
     .then(res => {
-      let locations = res.data
+      let locations = res.data;
       this.setState({locations})
     })
     .then(res => this.showCurrentLocation())
@@ -78,14 +85,16 @@ export default class EcoSystem extends Component {
     })
   }
 
-  showTask(task, specificTask) {
-    console.log(specificTask, 'please')
+  showTask(task, specificTask, indexOfTask) {
     this.setState({
       toggleShow: !this.state.toggleShow,
       currentTask: task.Task_Title,
-      currenTaskId: task.Task_ID,
+      currentTaskId: task.Task_ID,
+      currentTaskIndex: indexOfTask,
       currentTaskCategory: task.Category,
       currentDescription: task.Task_Description,
+      currentTaskStart: task.Start,
+      currentTaskEnd: task.End,
       editSpecificTask: specificTask
     })
   }
@@ -101,35 +110,68 @@ export default class EcoSystem extends Component {
   }
 
   yayTask() {
-    console.log('in yayTask', this.state.locations)
+    if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === true) {
+      Alert.alert('Dont try to cheat');
+      return;
+    }
+    var end = this.state.currentTaskEnd;
+    if (convertDate(end) > new Date()) {
+      Alert.alert('the task deadline has not ended yet. Wait!')
+      return;
+    }
+
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    axios.put('http://10.16.1.152:3000/yayTask', {
+    axios.put('http://10.16.1.131:3000/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
     })
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
+    })
+    .then((res) => {
+      this.markTaskComplete();
     })
     .catch((err) => {
       console.error(err);
     })
   }
 
-
   nayTask() {
-    let negativePoints = this.state.locations[this.state.index].NegativePoints - 1;
-    axios.put('http://10.16.1.152:3000/yayTask', {
+    if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === true) {
+      Alert.alert('Dont try to cheat');
+      return;
+    }
+    var end = this.state.currentTaskEnd;
+    if (convertDate(end) > new Date()) {
+      Alert.alert('the task deadline has not ended yet. Wait!')
+      return;
+    }
+
+    let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
+    axios.put('http://10.16.1.131:3000/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
-      negativePoints
+      negativePoints: negativePoints
     })
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
+    })
+    .then((res) => {
+      this.markTaskComplete();
     })
     .catch((err) => {
       console.error(err);
     })
+  }
+
+  markTaskComplete() {
+    console.log(this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion)
+    let newLocation = this.state.locations
+    newLocation[this.state.index].tasks[this.state.currentTaskIndex].Completion = true;
+    this.setState({
+      locations: newLocation,
+    }, ()=> console.log(this.state.locations[this.state.index].tasks, 'checking if task was changed in yayTask'))
   }
 
   componentDidMount() {
@@ -227,7 +269,7 @@ export default class EcoSystem extends Component {
               this.state.locations[this.state.index].tasks.map((task, i) => {
                 return <ProgressBar key={i} task={task} locations={this.state.locations}
                   index={this.state.index} showTask={this.showTask} specificIndex={i}
-                onPress={() => this.showTask(task, this.state.locations[this.state.index].tasks[index])}/>
+                  showTask={() => this.showTask(task, this.state.locations[this.state.index].tasks[i], i)}/>
               })
           ) : null}
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>

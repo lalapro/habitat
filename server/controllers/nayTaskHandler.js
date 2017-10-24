@@ -2,9 +2,10 @@ const express = require('express');
 const db = require('../../db/index.js');
 
 const handleNayTask = (req, res) => {
-  let NegativePoints = req.query.negativePoints;
-  let Marker_ID = req.query.markerId;
-  let Task_ID = req.query.taskId;
+  console.log('hello is this getting triggered', req.body);
+  let NegativePoints = req.body.negativePoints;
+  let Marker_ID = req.body.markerId;
+  let Task_ID = req.body.taskId;
   
   let updateTask = `UPDATE Tasks SET
     Completion='True'
