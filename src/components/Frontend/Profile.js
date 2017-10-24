@@ -56,7 +56,7 @@ export default class Profile extends Component {
     getCompletedTask() {
         axios({
             method: 'get',
-            url: 'http://10.16.1.233:3000/completedTasks',
+            url: 'http://10.16.1.152:3000/completedTasks',
             params: {
               username: this.props.screenProps.userID
             }
