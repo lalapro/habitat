@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableHighlight, StyleSheet } from 'react-native';
 import * as Progress from 'react-native-progress';
+import convertDate from './convertDate'
 
 export default class ProgressBar extends Component {
     constructor(props) {
@@ -9,8 +10,7 @@ export default class ProgressBar extends Component {
         this.state = {
             index: this.props.index,
             locations: this.props.locations,
-            fill: 0,
-            currentTime: new Date().toLocaleString()
+            fill: 0
         }
         this.eachTask = this.eachTask.bind(this);
         this.calculateTime = this.calculateTime.bind(this);
@@ -18,58 +18,29 @@ export default class ProgressBar extends Component {
     }
 
     componentDidMount() {
-        this.calculateTime()
+      this.calculateTime()
+    }
+    componentWillReceiveProps(oldprops, newprops) {
+      console.log('OLD PROPSSSSS', oldprops.task.Task_Title)
+      // console.log('NEWWWWWWWWW', newprops)
+        this.calculateTime(oldprops)
     }
 
-    calculateTime() {
-        let startHour;
-        let endHour;
-        let currentHour;
-        let currentPercentage;
-        let { Start } = this.props.task;
-        let { End } = this.props.task;
-        let { currentTime } = this.state;
+    calculateTime(props) {
+      props = props || this.props;
+      console.log('should call each task', props.task)
+      let { Start } = props.task;
+      let { End } = props.task;
+      let currentTime = new Date();
+      let duration = convertDate(End).getTime() - convertDate(Start).getTime();
+      let timePassed = currentTime.getTime() - convertDate(Start).getTime();
+      let percentage = (timePassed / duration);
 
-        if (Start.split(' ')[4].toLowerCase() === "pm" && Number(Start.split(' ')[3].split(':')[0]) !== 12) {
-            startHour = Number(Start.split(' ')[3].split(':')[0]) + 12;
-        } else {
-            startHour = Number(Start.split(' ')[3].split(':')[0]);
-        }
-
-        if (End.split(' ')[4].toLowerCase() === 'pm' && Number(End.split(' ')[3].split(':')[0]) !== 12) {
-            endHour = Number(End.split(' ')[3].split(':')[0]) + 12;
-        } else {
-            endHour = Number(End.split(' ')[3].split(':')[0]);
-        }
-
-        if (currentTime.split(' ')[2].toLowerCase() === 'pm' && Number(currentTime.split(' ')[1].split(':')[0]) !== 12) {
-            currentHour = Number(currentTime.split(' ')[1].split(':')[0]) + 12;
-        } else {
-            currentHour = Number(currentTime.split(' ')[1].split(':')[0]);
-        }
-
-        let startMinute = Start.split(' ')[3].split(':')[1];
-        let endMinute = End.split(' ')[3].split(':')[1];
-        let currentMinute = Number(this.state.currentTime.split(' ')[1].split(':')[1]);
-        let duration = (endHour - startHour) * 60 + (endMinute - startMinute);
-        let currentProgress = (currentHour - startHour) * 60 + (currentMinute - startMinute);
-
-        console.log('CURRENT START', currentProgress)
-        console.log('CURRENT END', duration)
-        // console.log('CURRENT PROGRESS', currentProgress)
-        if (currentProgress / duration * 100 > 100) {
-            currentPercentage = 1;
-        } else if (currentProgress / duration * 100 <= 0) {
-            currentPercentage = 0
-        } else {
-            currentPercentage = currentProgress / duration;
-        }
-
-        setTimeout(() => {
-            this.setState({
-                fill: currentPercentage
-            });
-        }, 100)
+      this.setState({
+        fill: percentage
+      })
+      console.log('PERCENTAGE ',percentage)
+      return percentage
     }
 
     eachPie(percentage) {
@@ -95,7 +66,8 @@ export default class ProgressBar extends Component {
             marginTop: 25
         }
         let clock = this.props.task.Start.split(' ')[3].split(':')[0];
-
+        // console.log(this.props.task)
+        // console.log('PROGRESS BAR',this.state.fill)
         return (
             <TouchableHighlight style={catStyle}
                 onPress={() => this.eachTask(this.props.task, this.state.locations[this.state.index].tasks[this.props.specificIndex])}>

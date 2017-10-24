@@ -60,7 +60,7 @@ const getMapMarkers = (req, res) => {
               }
               count++;
               if (count === length) {
-                console.log('DBDBDBDB', results[0].tasks)
+                console.log('DBDBDBDB', results)
                 res.send(results)
               }
             })
