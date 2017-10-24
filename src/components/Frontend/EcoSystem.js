@@ -20,13 +20,17 @@ export default class EcoSystem extends Component {
       render: false,
       index: 0,
       currentTask: '',
+      currentTaskId: '',
+      currentTaskCategory: '',
       currentDescription: '',
       editSpecificTask: '',
       currentLocation: {},
-      render: false
+      render: false,
+      toggleShow: false
     }
     this.showTask = this.showTask.bind(this);
   }
+
 
   getMarkers() {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
@@ -60,7 +64,6 @@ export default class EcoSystem extends Component {
     }
   }
 
-
   componentDidMount() {
     this.getMarkers();
 
@@ -78,7 +81,10 @@ export default class EcoSystem extends Component {
   showTask(task, specificTask) {
     console.log(specificTask, 'please')
     this.setState({
+      toggleShow: !this.state.toggleShow,
       currentTask: task.Task_Title,
+      currenTaskId: task.Task_ID,
+      currentTaskCategory: task.Category,
       currentDescription: task.Task_Description,
       editSpecificTask: specificTask
     })
@@ -89,15 +95,42 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.218:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
+  }
+
+  yayTask() {
+    console.log('in yayTask', this.state.locations)
+    let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
+    axios.put('http://10.16.1.131:3000/yayTask', {
+      taskId: this.state.currentTaskId, 
+      markerId: this.state.locations[this.state.index].Marker_ID,
+      positivePoints: positivePoints
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }
+
+  
+  nayTask() {
+
+  }
+
+  componentDidMount() {
+    this.setState({
+      userID: this.props.screenProps.userID,
+    }, () => this.getMarkers())
   }
 
   render() {
     const { height, width } = Dimensions.get('window');
     const { navigate } = this.props.navigation;
-    const swipeBtns = [
+    const swipeRightBtns = [
       {
         text: 'Edit',
         backgroundColor: '#f4a316',
@@ -109,6 +142,20 @@ export default class EcoSystem extends Component {
         backgroundColor: 'red',
         underlayColor: 'rgba(0, 0, 0, 0.6)',
         onPress: () => { this.deleteTask() }
+     }
+    ];
+    const swipeLeftBtns = [
+      {
+        text: 'Yay',
+        backgroundColor: 'green',
+        underlayColor: 'rgba(0, 0, 0, 0.6)',
+        onPress: () => { this.yayTask() }
+     },
+      {
+        text: 'Nay',
+        backgroundColor: 'brown',
+        underlayColor: 'rgba(0, 0, 0, 0.6)',
+        onPress: () => { this.nayTask() }
      }
     ];
     return this.state.render ? (this.state.locations.length > 0 ? (
@@ -141,22 +188,28 @@ export default class EcoSystem extends Component {
                 </View>
               ))}
             </Swiper>
-            <View style={styles.separator} />
-            <Swipeout right={swipeBtns}
-              autoClose={true}
-              backgroundColor= 'transparent'
-            >
-              <View style={{margin: 10, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 20}}>
-                  {this.state.currentTask} {"\n"}
-                </Text>
-                <Text stlye={{fontSize: 14}}>
-                  {this.state.currentDescription}
-                </Text>
-              </View>
-            </Swipeout>
-          <View style={styles.separator} />
-        </View>
+            {this.state.toggleShow ? (
+            <View style={{height: 140}}>
+              <View style={styles.separator} />
+              <Swipeout 
+                right={swipeRightBtns}
+                left={swipeLeftBtns}
+                autoClose={true}
+                backgroundColor= 'transparent'
+              >
+                <View style={{margin: 10, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize: 20}}>
+                    {this.state.currentTask} {"\n"}
+                  </Text>
+                  <Text stlye={{fontSize: 14}}>
+                    {this.state.currentDescription}
+                  </Text>
+                  <Text style={{marginTop: 2}}>{this.state.currentTaskCategory}</Text>
+                </View>
+              </Swipeout>
+              <View style={styles.separator} /> 
+            </View>) : null }
+          </View>
         <View style={{flex: 3}}>
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
@@ -165,9 +218,6 @@ export default class EcoSystem extends Component {
                   index={this.state.index} showTask={this.showTask} specificIndex={i} />
               })
           ) : null}
-
-
-
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
               <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
             </TouchableOpacity>
@@ -190,10 +240,10 @@ export default class EcoSystem extends Component {
 }
 
 const images = [
-  [0, require("../assets/home2.png")],
-  [1, require("../assets/work2.png")],
-  [2, require("../assets/gym.png")],
-  [3, require("../assets/egg5.png")]
+  [0, require("../assets/Ecosystem/home.png")],
+  [1, require("../assets/Ecosystem/work.png")],
+  [2, require("../assets/Ecosystem/gym.png")],
+  [3, require("../assets/Ecosystem/currentlocation.png")]
 ]
 
 
@@ -230,7 +280,7 @@ const styles = StyleSheet.create({
   separator: {
     flex: .005,
     height: 1,
-
+    
     backgroundColor: '#8A7D80',
     // marginLeft: 15
   }

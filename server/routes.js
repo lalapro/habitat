@@ -13,6 +13,8 @@ const handleGetPicture = require('./controllers/getPictureHandler.js');
 const { handleToken, handleAuth } = require('./controllers/handleToken');
 const handleEditTasks = require('./controllers/editTaskHandler.js');
 const getColors = require('./controllers/getColors');
+const handleYayTask = require('./controllers/yayTaskHandler.js');
+const handleNayTask = require('./controllers/nayTaskHandler.js');
 const handleProfileTasks = require('./controllers/profileTasksHandler.js');
 
 routes.post('/signup', handleSignup);
@@ -32,6 +34,8 @@ routes.get('/token', handleToken);
 routes.post('/token', handleAuth);
 routes.put('/editTask', handleEditTasks);
 routes.get('/colors', getColors);
+routes.put('/yayTask', handleYayTask);
+routes.put('/nayTask', handleNayTask);
 routes.get('/completedTasks', handleProfileTasks)
 
 module.exports = routes;

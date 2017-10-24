@@ -196,7 +196,7 @@ export default class MapScreen extends Component {
             title={this.state.currentLocation.title}
             description={this.state.currentLocation.description}
             >
-            <Image style={{width: 20, height: 20}} source={require('../assets/egg6.png')} onLoadEnd={() => {if (!this.state.iconLoaded) this.setState({iconLoaded: true});}}/>
+            <Image style={{width: 20, height: 20}} source={require("../assets/Ecosystem/currentlocation.png")} onLoadEnd={() => {if (!this.state.iconLoaded) this.setState({iconLoaded: true});}}/>
           </MapView.Marker>
           {this.state.markers ? (
             this.state.markers.map((marker, index) => {
@@ -242,7 +242,7 @@ export default class MapScreen extends Component {
           </TouchableOpacity>
         </Animated.ScrollView>
         <TouchableOpacity style={styles.recenter} onPress={() => this.updateCurrentLocation()}>
-          <Image source={require("../assets/egg6.png")} style={{width: 50, height: 50}} />
+          <Image source={require("../assets/Ecosystem/currentlocation.png")} style={{width: 50, height: 50}} />
         </TouchableOpacity>
         {this.state.modalVisible ? (
           <TaskModal userID={this.state.userID} editTask={this.editTask} tasks={this.state.currentPress} modalVisible={this.state.modalVisible} toggleHide={this.toggleHide.bind(this)}/>
@@ -258,10 +258,10 @@ export default class MapScreen extends Component {
 
 
 const images = [
-  [0, require("../assets/home2.png")],
-  [1, require("../assets/work2.png")],
-  [2, require("../assets/gym.png")],
-  [3, require("../assets/egg5.png")]
+  [0, require("../assets/Ecosystem/home.png")],
+  [1, require("../assets/Ecosystem/work.png")],
+  [2, require("../assets/Ecosystem/gym.png")],
+  [3, require("../assets/Ecosystem/currentlocation.png")]
 ]
 
 
