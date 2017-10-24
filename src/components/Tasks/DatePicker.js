@@ -14,7 +14,6 @@ class TaskDatePicker extends Component {
     }, () => {
       this.props.onSelect(this.state.date);
     });
-
   }
 
   render(){

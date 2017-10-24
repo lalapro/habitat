@@ -1,5 +1,4 @@
 import { StackNavigator } from 'react-navigation';
-
 import Ecosystem from './EcoSystem';
 import TaskBuilder from '../Tasks/TaskBuilder'
 

@@ -12,7 +12,6 @@ class TaskItem extends Component {
       expanded: false,
       task: null
     }
-    // this.editTask = this.editTask.bind(this);
   }
 
   componentWillMount() {
@@ -36,7 +35,6 @@ class TaskItem extends Component {
     .catch(err => console.error(err))
   }
 
-  //title, description, completion, start, end, frequency, days, category id -color code?, markerid
   render() {
     const swipeBtns = [
       {
@@ -96,7 +94,6 @@ class TaskItem extends Component {
     )
   }
 }
-
 
 export default TaskItem;
 

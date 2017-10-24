@@ -21,8 +21,6 @@ const handlenNewTask = (req, res) => {
       res.status(201).send(results);
     }
   })
-
 }
-
 
 module.exports = handlenNewTask;

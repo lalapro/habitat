@@ -17,14 +17,12 @@ export default class App extends React.Component {
   }
 
   handleLogIn = (user) => {
-    // console.log('handleLogin being called!')
     this.setState({
       user: user
     })
   }
 
   handleLogout = () => {
-    // console.log('handleLogout being called!')
     this.setState({
       user: null
     })
@@ -38,7 +36,6 @@ export default class App extends React.Component {
         }
       })
       .then(user => {
-        // console.log(token, user.data[0])
         if(user.data[0]) {
           this.setState({
             user: user.data[0].ID
@@ -55,9 +52,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    // console.log('before render', this.state)
     if (this.state.user !== null) {
-      // console.log('inside if statement', this.state)
       return <SignedIn screenProps={{
         userID: this.state.user,
         handleLogout: this.handleLogout

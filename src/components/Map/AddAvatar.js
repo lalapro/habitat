@@ -8,7 +8,6 @@ export default class AddAvatar extends React.Component {
     title: 'Choose your ecobuddy!'
   };
 
-
   render() {
     const { navigate } = this.props.navigation;
     return (
