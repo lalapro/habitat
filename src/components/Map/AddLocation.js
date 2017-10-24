@@ -42,7 +42,6 @@ export default class AddLocation extends React.Component {
     })
     .then(res => console.log('posted'))
     .catch(err => console.error(err))
-
   }
 
   render() {
@@ -89,7 +88,6 @@ const images = [
   [2, require("../assets/gym.png")],
   [3, require("../assets/egg5.png")]
 ]
-
 
 const styles = StyleSheet.create({
   container: {

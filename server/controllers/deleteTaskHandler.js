@@ -14,5 +14,4 @@ const handleDeleteTasks = (req, res) => {
   })
 }
 
-
 module.exports = handleDeleteTasks;

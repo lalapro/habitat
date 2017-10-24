@@ -32,7 +32,6 @@ class TaskBuilder extends Component {
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleStartChange = this.handleStartChange.bind(this);
     this.handleEndChange = this.handleEndChange.bind(this);
-    // this.handleLocationChange = this.handleLocationChange.bind(this);
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
     this.handleFrequencyChange = this.handleFrequencyChange.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
@@ -41,7 +40,6 @@ class TaskBuilder extends Component {
   }
 
   componentDidMount() {
-    console.log('TASK BUILDER', this.props)
     this.setState({
       userID: this.props.screenProps.userID
     });
@@ -61,7 +59,6 @@ class TaskBuilder extends Component {
     }
   }
 
-
   handleTaskTitleChange(title) {
     this.setState({title})
   }
@@ -79,7 +76,6 @@ class TaskBuilder extends Component {
   }
 
   handleLocationChange(markerID, taskID) {
-    // console.log('i heard you...', markerID, taskID)
     this.setState({
       markerID: markerID,
       taskID: taskID
@@ -87,7 +83,6 @@ class TaskBuilder extends Component {
   }
 
   handleCategoryChange(category) {
-    console.log('i hear you...', category)
     this.setState({category})
   }
 
@@ -107,15 +102,12 @@ class TaskBuilder extends Component {
     let startTime = this.state.startTime;
     let endTime = this.state.endTime;
     let markerID = this.state.markerID;
-    console.log(markerID, '-----------')
     let category = this.state.category;
     let frequency = this.state.frequency;
     let userID = this.state.userID;
     let taskID = this.state.taskID;
-    //need to send username to get userId
     let readyToSend = false;
 
-    //{title, description, startTime, markerID, endTime, category, frequency, userID}}
     if (
       title.length < 1 ||
       description.length < 1 ||
@@ -215,7 +207,6 @@ class TaskBuilder extends Component {
     ) : null
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {

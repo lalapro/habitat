@@ -15,8 +15,6 @@ class ColorPicker extends Component {
   }
 
   componentWillReceiveProps() {
-    console.log('props in Color Picker', this.props)
-    console.log('SCREEEEEEEEN')
     this.props.usedColors.forEach(category => {
       let idx = this.state.colors.indexOf(category.Color);
       if(idx !== -1) {
@@ -24,8 +22,6 @@ class ColorPicker extends Component {
       }
     })
     this.setState({render: true})
-    // })
-
   }
 
   setColor(color) {
@@ -41,7 +37,6 @@ class ColorPicker extends Component {
             <TouchableOpacity key={i} onPress={() => this.setColor(color)} >
               <View style={{backgroundColor: color, margin: 10, width: 25, height: 25, borderRadius: 25}}></View>
             </TouchableOpacity>
-
           ))}
         </ScrollView>
       </View>

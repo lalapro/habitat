@@ -21,8 +21,6 @@ export default class Logout extends React.Component {
 		AsyncStorage.removeItem('user_token');
 	}
 
-
-
   render() {
     return (
 			<View >
