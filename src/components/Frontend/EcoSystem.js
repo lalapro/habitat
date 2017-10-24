@@ -34,7 +34,6 @@ export default class EcoSystem extends Component {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID}})
     .then(res => {
       let locations = res.data
-      console.log('BEFORE FILTER', locations)
       let currentDate = new Date();
       if (locations.tasks) {
         locations.forEach(location => {
@@ -46,7 +45,6 @@ export default class EcoSystem extends Component {
         })
       }
       
-      console.log('AFTER FILTER', locations)
       this.setState({
         locations: locations || res.data,
         currentDescription: '',
@@ -94,6 +92,7 @@ export default class EcoSystem extends Component {
   }
 
   showTask(task, specificTask) {
+    console.log(specificTask, 'please')
     this.setState({
       toggleShow: !this.state.toggleShow,
       currentTask: task.Task_Title,
@@ -115,10 +114,22 @@ export default class EcoSystem extends Component {
   }
 
   yayTask() {
-    console.log(this.state);
-    axios.put('http://10.16.1.218:3000/yayTask', {params: { taskId: this.state.currentTask, }})
+    console.log('in yayTask', this.state.locations)
+    let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
+    axios.put('http://10.16.1.131:3000/yayTask', {
+      taskId: this.state.currentTaskId, 
+      markerId: this.state.locations[this.state.index].Marker_ID,
+      positivePoints: positivePoints
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   }
 
+  
   nayTask() {
 
   }
@@ -216,10 +227,6 @@ export default class EcoSystem extends Component {
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, index) => {
-                if(task.Start) {
-
-                }
-                // CLOCK WILL NOT RENDER IF COLOR IS NOT THERE
                 let clock = task.Start.split(' ')[3].split(':')[0];
                 let catStyle = {
                   width: 130,
@@ -234,7 +241,8 @@ export default class EcoSystem extends Component {
                   justifyContent: 'center'
                 }
               return (
-                <TouchableHighlight style={catStyle} key={index}
+                <View style={{height: 150, margin: 0}} key={index}>
+                <TouchableHighlight style={catStyle} 
                 onPress={() => this.showTask(task, this.state.locations[this.state.index].tasks[index])}>
                   <Image
                     style={{resizeMode: 'contain', overflow: 'hidden'}}
@@ -242,6 +250,7 @@ export default class EcoSystem extends Component {
                   />
                 </TouchableHighlight>
                 
+                </View>
               )})
             ) : null}
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
@@ -320,6 +329,7 @@ const styles = StyleSheet.create({
   separator: {
     flex: .005,
     height: 1,
+    
     backgroundColor: '#8A7D80',
     // marginLeft: 15
   }
