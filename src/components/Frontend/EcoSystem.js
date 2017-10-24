@@ -253,6 +253,12 @@ export default class EcoSystem extends Component {
                 </View>
               )})
             ) : null}
+              this.state.locations[this.state.index].tasks.map((task, i) => {
+                return <ProgressBar key={i} task={task} locations={this.state.locations} 
+                  index={this.state.index} showTask={this.showTask} specificIndex={i} />
+              })
+          ) : null}
+
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
               <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
             </TouchableOpacity>

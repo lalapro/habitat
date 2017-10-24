@@ -54,7 +54,6 @@ const handleAuth = (req, res) => {
           if (err) {
             res.send('error in inserting Auth query', err);
           } else {
-            console.log(username)
             db.query(select, null, (err, user) => {
               if (err) {
                 res.send('error in retrieving newly inputted ID')
