@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../../db/firebase.js');
 
+
 const pictureHandler = (req, res) => {
     var callback = function(val) {
         res.send(val)

@@ -38,6 +38,21 @@ export default class EcoSystem extends Component {
     this.showTask = this.showTask.bind(this);
   }
 
+  componentDidMount() {
+    GetCurrentLocation().then(location => {
+      this.setState({
+        currentLocation: {
+          title: 'Current Location',
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude
+        }
+      })
+    })
+    this.setState({
+      userID: this.props.screenProps.userID,
+    }, () => this.getMarkers())
+  }
+
 
   getMarkers() {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
@@ -52,9 +67,11 @@ export default class EcoSystem extends Component {
 
   showCurrentLocation() {
     let locations = this.state.locations;
+    // console.log('SHOW LOCATIONS',locations)
     if (locations.length > 0) {
       for (let i = 0; i < locations.length; i++) {
         let dist = geodist({lat: locations[i].Latitude, lon: locations[i].Longitude}, {lat: this.state.currentLocation.latitude, lon: this.state.currentLocation.longitude}, {exact: true, unit: 'km'})
+        // setTimeout(() => {console.log('DISTANCE', this.state.currentLocation)}, 2000);
         if (dist < 0.05) {
           this.setState({
             index: i,
@@ -71,19 +88,7 @@ export default class EcoSystem extends Component {
     }
   }
 
-  componentDidMount() {
-    this.getMarkers();
 
-    GetCurrentLocation().then(location => {
-      this.setState({
-        currentLocation: {
-          title: 'Current Location',
-          longitude: location.coords.longitude,
-          latitude: location.coords.latitude
-        }
-      })
-    })
-  }
 
   showTask(task, specificTask, indexOfTask) {
     this.setState({
@@ -174,11 +179,6 @@ export default class EcoSystem extends Component {
     }, ()=> console.log(this.state.locations[this.state.index].tasks, 'checking if task was changed in yayTask'))
   }
 
-  componentDidMount() {
-    this.setState({
-      userID: this.props.screenProps.userID,
-    }, () => this.getMarkers())
-  }
 
   render() {
     const { height, width } = Dimensions.get('window');
