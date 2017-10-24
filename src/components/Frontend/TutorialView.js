@@ -33,7 +33,7 @@ class TutorialView extends Component {
         </Swiper>
         <Button
           title="Start Adding Locations"
-          /* onPress={() => navigate('Map')} */
+          onPress={() => navigate('Map')}
         />
       </View>
     )

@@ -7,15 +7,16 @@ import profile from './Profile';
 import axios from 'axios';
 import TutorialView from './TutorialView.js';
 import GetCurrentLocation from '../Map/GetCurrentLocation';
-import convertDate from './convertDate';
+import geodist from 'geodist';
+import ProgressBar from './ProgressBar'
 
 export default class EcoSystem extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
-      userID: null,
-      locations: undefined,
+      userID: props.screenProps.userID,
+      locations: [],
       render: false,
       index: 0,
       currentTask: '',
@@ -24,73 +25,54 @@ export default class EcoSystem extends Component {
       currentLocation: {},
       render: false
     }
+    this.showTask = this.showTask.bind(this);
   }
 
   getMarkers() {
-    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID}})
+    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
     .then(res => {
       let locations = res.data
-      console.log('BEFORE FILTER', locations)
-      let currentDate = new Date();
-      locations.forEach(location => {
-        location.tasks = location.tasks.filter(task => {
-          let taskDate = convertDate(task.Start);
-          console.log(taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth() && taskDate.getDate() === currentDate.getDate())
-          return taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth() && taskDate.getDate() === currentDate.getDate()
-        })
-      })
-      console.log('AFTER FILTER', locations)
-      this.setState({
-        locations: locations,
-        currentDescription: '',
-        currentTask: ''
-      })
+      this.setState({locations})
     })
-    .then(res => GetCurrentLocation())
-    .then(res => {
-      this.setState({
-        currentLocation: {
-          title: 'Current Location',
-          longitude: res.coords.longitude,
-          latitude: res.coords.latitude
-        }
-      })
-    })
-    .then(res => this.setState({render: true}))
     .then(res => this.showCurrentLocation())
     .catch(err => console.error(err))
   }
 
+
   showCurrentLocation() {
-    if (this.state.locations.length > 0) {
-      var locations = this.state.locations.map((curr, idx, arr) => {
-        return {
-          title: curr.Marker_Title,
-          longitude: curr.Longitude,
-          latitude: curr.Latitude,
-          index: idx
-        }
-      })
-      var currentLocation = {
-        title: this.state.currentLocation.title,
-        longitude: this.state.currentLocation.longitude,
-        latitude: this.state.currentLocation.latitude
-      }
-      locations.forEach((location) => {
-        if (Math.abs((location.longitude - currentLocation.longitude) + (location.latitude - currentLocation.latitude)) < .0001) {
+    let locations = this.state.locations;
+    if (locations.length > 0) {
+      for (let i = 0; i < locations.length; i++) {
+        let dist = geodist({lat: locations[i].Latitude, lon: locations[i].Longitude}, {lat: this.state.currentLocation.latitude, lon: this.state.currentLocation.longitude}, {exact: true, unit: 'km'})
+        if (dist < 0.05) {
           this.setState({
-            index: location.index
+            index: i,
+            render: true
           })
+          break;
         }
-      })
+        if (i === locations.length - 1) {
+          this.setState({render: true})
+        }
+      }
+    } else {
+      this.setState({render: true})
     }
   }
 
 
   componentDidMount() {
-    this.setState({
-      userID: this.props.screenProps.userID,
-    }, () => this.getMarkers())
+    this.getMarkers();
+
+    GetCurrentLocation().then(location => {
+      this.setState({
+        currentLocation: {
+          title: 'Current Location',
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude
+        }
+      })
+    })
   }
 
   showTask(task, specificTask) {
@@ -113,7 +95,6 @@ export default class EcoSystem extends Component {
   }
 
   render() {
-    console.log('in Ecosystem', this.state.index)
     const { height, width } = Dimensions.get('window');
     const { navigate } = this.props.navigation;
     const swipeBtns = [
@@ -180,13 +161,13 @@ export default class EcoSystem extends Component {
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, i) => {
-                return <ProgressBar key={i} task={task} locations={this.state.locations} 
+                return <ProgressBar key={i} task={task} locations={this.state.locations}
                   index={this.state.index} showTask={this.showTask} specificIndex={i} />
               })
           ) : null}
 
 
-          
+
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
               <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
             </TouchableOpacity>
@@ -208,26 +189,6 @@ export default class EcoSystem extends Component {
   }
 }
 
-{/* <Swiper
-  horizontal={true}
-  onIndexChanged={(index) => {this.viewChange(index)}}
->
-<View style={{height: height, width: width, position: 'absolute'}}>
-  <Image style={{height: height, width: width, position: 'absolute'}}
-    source={require('../assets/home.png')}>
-    <Objects data={this.state.locations[0]}/>
-  </Image>
-</View>
-
-<View style={{height: height, width: width, position: 'absolute'}}>
-  <Image style={{height: height, width: width, position: 'absolute'}}
-    source={require('../assets/work.png')}>
-    <Objects data={this.state.locations[1]}/>
-  </Image>
-</View>
-
-</Swiper> */}
-
 const images = [
   [0, require("../assets/home2.png")],
   [1, require("../assets/work2.png")],
@@ -235,21 +196,7 @@ const images = [
   [3, require("../assets/egg5.png")]
 ]
 
-const clocks = [
-  [0, 'placeholder'],
-  [1, require("../assets/clocks/one.png")],
-  [2, require("../assets/clocks/two.png")],
-  [3, require("../assets/clocks/three.png")],
-  [4, require("../assets/clocks/four.png")],
-  [5, require("../assets/clocks/five.png")],
-  [6, require("../assets/clocks/six.png")],
-  [7, require("../assets/clocks/seven.png")],
-  [8, require("../assets/clocks/eight.png")],
-  [9, require("../assets/clocks/nine.png")],
-  [10, require("../assets/clocks/ten.png")],
-  [11, require("../assets/clocks/eleven.png")],
-  [12, require("../assets/clocks/twelve.png")]
-]
+
 const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
