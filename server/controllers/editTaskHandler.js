@@ -30,7 +30,6 @@ const handleEditTasks = (req, res) => {
     if (err) {
       res.status(404).send(`We encountered an error deleting the task: ${err}`);
     } else {
-      console.log(results)
       res.status(200).send(results);
     }
   })

@@ -53,7 +53,7 @@ export default class Login extends Component {
 
         // send post request to user table
         const user = await response.json()
-        axios.post(`http://10.16.1.218:3000/token`, {
+        axios.post(`http://10.16.1.233:3000/token`, {
           name: user.name,
           username: user.id,
           token: token

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AsyncStorage, Modal, ImageStore, StyleSheet, Text, View, Image, TextInput, Button, Clipboard, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
 import Expo, { Asset, Camera, Permissions, ImagePicker } from 'expo';
 import axios from 'axios';
+import AllTasks from './AllTasks.js';
 // import base from 'base-64';
 // import utf8 from 'utf8';
 // import RNFetchBlob from 'react-native-fetch-blob';
@@ -18,20 +19,24 @@ export default class Profile extends Component {
             uploading: false,
             visibleModal: false,
             username: null,
-            tasks: null,
+            dates: null,
+            allDates: null,
         }
         this.showModal = this.showModal.bind(this);
         this.uploadPhoto = this.uploadPhoto.bind(this);
         this.getPicture = this.getPicture.bind(this);
         this.getCompletedTask = this.getCompletedTask.bind(this);
+        this.renderDates = this.renderDates.bind(this);
     }
+
     componentDidMount() {
         this.setState({
             username: this.props.screenProps.userID
         })
-        this.getPicture();
+        this.getPicture();    
         this.getCompletedTask();
     }
+
     getPicture() {
         axios({
             method: 'get',
@@ -47,48 +52,74 @@ export default class Profile extends Component {
             })
         })
     }
+
     getCompletedTask() {
         axios({
             method: 'get',
-            url: 'http://10.16.1.233:3000/completedTask',
+            url: 'http://10.16.1.233:3000/completedTasks',
             params: {
               username: this.props.screenProps.userID
             }
         })
         .then(res => {
-            this.setState({
-                tasks: res.data.tasks
+            var completed = [];
+            var notCompleted = [];
+            var allDates = [];
+            var dates = [];
+            res.data.forEach(ele => {
+                let eachDate = ele.Start.split(' ').slice(0, 3).reduce((acc, ele) => {
+                    return `${acc} ${ele}`;
+                });
+                eachDate = eachDate.slice(0, eachDate.length - 1);
+                
+                if (!dates.includes(eachDate)) {
+                    let temp = {
+                        date: eachDate,
+                        completed: [],
+                        notCompleted: []
+                    }
+                    if (ele.Comletion === 'Yes') {
+                        temp.completed.push(ele);
+                    } else {
+                        temp.notCompleted.push(ele);
+                    }
+                    dates.push(eachDate)
+                    allDates.push(temp);
+                } else if (dates.includes(eachDate)) {
+                    allDates.map(element => {
+                        if (element.date === eachDate) {
+                            if (ele.Completion === 'Yes') {
+                                element.completed.push(ele)
+                            } else {
+                                element.notCompleted.push(ele)
+                            }
+                        }
+                    })
+                }
             })
+            this.setState({
+                dates: dates,
+                allDates: allDates
+            })
+            this.renderDates()
         })
     }
-    uploadImageAsync = async (uri) => {
-    let apiUrl = 'http://10.16.1.233:3000/pictures';
-    let uriParts = uri.split('.');
-    let fileType = uri[uri.length - 1];
-    let formData = new FormData();
-    formData.append('photo', {
-        uri,
-        name: `photo.${fileType}`,
-        type: `image/${fileType}`,
-    });
-    let options = {
-        method: 'POST',
-        body: formData,
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
-        },
-    };
-        return fetch(apiUrl, options);
+
+    renderDates() {
+        return this.state.allDates ? this.state.allDates.map((ele, i) => {
+            return <AllTasks ele={ele} key={i} allDates={this.state.allDates} />
+        }) : null;
     }
+
     pickPhoto = async () => {
-    let picture = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
-        base64: true,
-    });
-    this.handlePicture(picture);
+        let picture = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            base64: true,
+        });
+        this.handlePicture(picture);
     }
+    
     takePhoto = async () => {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' })
@@ -100,6 +131,7 @@ export default class Profile extends Component {
         .catch(err => console.log(err, 'ERR!!!'))
         this.handlePicture(picture);
     }
+    
     handlePicture = async picture => {
         try {
             // this.setState({ image: picture.uri });
@@ -124,6 +156,7 @@ export default class Profile extends Component {
     //          })
     //  }, (failure) => {console.log(failure)})
     // }
+    
     uploadPhoto(picture) {
         let uri = picture.base64;
         console.log(!!uri)
@@ -144,9 +177,8 @@ export default class Profile extends Component {
         this.setState({ visibleModal: stat })
     }
     render() {
-        let completedTasksRender = this.state.completedTasks ? this.state.completedTasks.map((ele, i) => {
-            return <View key={i}><Text>{ele.Task_Title}</Text></View>
-        }) : null;
+
+
         return (
     <View style={{flex: 1, backgroundColor: '#ddd'}}>
         <View style={{marginLeft: 5, marginTop: 20, alignItems: 'flex-start', backgroundColor: 'yellow'}}>
@@ -155,26 +187,28 @@ export default class Profile extends Component {
                 title="&#9776;"
             />
         </View>
-        <View style={{flex: 1, alignItems: 'center', backgroundColor: 'blue'}}>
+        <View style={styles.top}>
             <Image style={styles.photo} source={{uri: `${this.state.image}`}} />
             <Button onPress={() => this.showModal(!this.state.visibleModal)} title={'Edit'} style={{flex: 1}}/>
         </View>
-        <View style={styles.location}>
-{/*
-            <TextInput style={styles.input} placeholder="Make a title" placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                onChangeText={(title) => {this.setState({title: title})}} />
-            <TextInput style={styles.input} placeholder="Add Location Name" placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                onChange={(locationName) => {this.setState({locationName})}} />
-            <TextInput style={styles.input} placeholder="Add Location Address" placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                onChange={(locationAddress) => {this.setState({locationAddress})}} /> */}
-            <View>
-                {completedTasksRender}
-            </View>
+        <View style={styles.middle}>
+            {this.renderDates()}
+
+
 
         </View>
-        <View style={styles.completedTasks}>
 
-        </View>
+
+
+
+
+
+
+
+
+
+
+
             <Modal
               animationType="slide"
               transparent={true}
@@ -203,12 +237,17 @@ export default class Profile extends Component {
   }
 }
 const styles = StyleSheet.create({
+    top: {
+        flex: 1, 
+        alignItems: 'center', 
+        backgroundColor: 'blue'
+    },
     photo: {
         backgroundColor: 'black',
         flex: 9,
-        marginTop: 10,
-        width: 100,
-        borderRadius: 40,
+        width: 140,
+        height: 140,
+        borderRadius: 50,
         opacity: 0.7,
         borderBottomLeftRadius: 50,
         shadowColor: 'rgba(0,0,0,1)',
@@ -216,11 +255,11 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 4 },
         shadowRadius: 5
     },
-    location: {
-        flex: 2,
+    middle: {
+        flex: 3,
         width: '100%',
         alignItems: 'center',
-        backgroundColor: 'red'
+        backgroundColor: 'red',
     },
     button: {
         backgroundColor: '#ddd',
@@ -233,8 +272,4 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 5
     },
-    completedTasks: {
-        backgroundColor:'purple',
-        flex: 2
-    }
 })

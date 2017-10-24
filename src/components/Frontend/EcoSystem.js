@@ -52,7 +52,6 @@ export default class EcoSystem extends Component {
   }
 
   showCurrentLocation() {
-    console.log(this.state.currentLocation)
     if (this.state.locations.length > 0) {
       var locations = this.state.locations.map((curr, idx, arr) => {
         return {
@@ -171,7 +170,6 @@ export default class EcoSystem extends Component {
           {<ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, i) => {
-                let keyValue = i;
                 return <ProgressBar key={i} task={task} locations={this.state.locations} 
                   index={this.state.index} showTask={this.showTask} specificIndex={i} />
               })
