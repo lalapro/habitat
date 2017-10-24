@@ -21,14 +21,11 @@ export default class ProgressBar extends Component {
       this.calculateTime()
     }
     componentWillReceiveProps(oldprops, newprops) {
-      console.log('OLD PROPSSSSS', oldprops.task.Task_Title)
-      // console.log('NEWWWWWWWWW', newprops)
         this.calculateTime(oldprops)
     }
 
     calculateTime(props) {
       props = props || this.props;
-      console.log('should call each task', props.task)
       let { Start } = props.task;
       let { End } = props.task;
       let currentTime = new Date();
@@ -39,17 +36,14 @@ export default class ProgressBar extends Component {
       this.setState({
         fill: percentage
       })
-      console.log('PERCENTAGE ',percentage)
-      return percentage
     }
 
     eachPie(percentage) {
-        return <Progress.Pie style={{alignItems: 'center', opacity: 0.3}} progress={percentage} size={130} />
-
+      return <Progress.Pie style={{alignItems: 'center', opacity: 0.3}} progress={percentage} size={130} />
     }
 
     eachTask (task, index) {
-        this.props.showTask(task, index)
+      this.props.showTask(task, index)
     }
 
     render() {
@@ -66,8 +60,6 @@ export default class ProgressBar extends Component {
             marginTop: 25
         }
         let clock = this.props.task.Start.split(' ')[3].split(':')[0];
-        // console.log(this.props.task)
-        // console.log('PROGRESS BAR',this.state.fill)
         return (
             <TouchableHighlight style={catStyle}
                 onPress={() => this.eachTask(this.props.task, this.state.locations[this.state.index].tasks[this.props.specificIndex])}>

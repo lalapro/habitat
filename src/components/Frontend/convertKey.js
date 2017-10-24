@@ -1,6 +1,4 @@
 const convertKey = (string) => {
-
-  console.log(typeof string)
   let date = string.split(' ');
   let month = DATEKEY[date[0]];
   let day = date[1].replace(/th/, "").replace(/rd/, "").replace(/st/, "").replace(/nd/, "");
