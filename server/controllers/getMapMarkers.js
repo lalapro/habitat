@@ -6,7 +6,8 @@ const convertDate = require('./convertDate')
 
 
 const getMapMarkers = (req, res) => {
-  let userID = req.query.userID;
+  let userID = req.query.userID;;
+  let currentDay = req.query.currentDay;
 
   // `SELECT * FROM Marker m JOIN Tasks t WHERE m.User_ID = t.User_ID AND m.User_ID = ${userID}`
   let query = `SELECT * FROM Marker WHERE User_ID = ${userID}`;
@@ -31,7 +32,13 @@ const getMapMarkers = (req, res) => {
             let sortedByTime = tasks.sort((a,b) => {
               return convertDate(a.Start).getTime() - convertDate(b.Start).getTime()
             });
-
+            if (currentDay) {
+              sortedByTime = sortedByTime.filter(task => {
+                let taskDate = convertDate(task.Start);
+                let today = new Date()
+                return taskDate.getFullYear() === today.getFullYear() && taskDate.getMonth() === today.getMonth() && taskDate.getDate() === today.getDate()
+              })
+            }
             console.log('TASK AFTER', sortedByTime)
             db.query(categoryQuery, null, (err, categories) => {
               if (err) {

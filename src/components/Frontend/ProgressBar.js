@@ -29,7 +29,7 @@ export default class ProgressBar extends Component {
         let { Start } = this.props.task;
         let { End } = this.props.task;
         let { currentTime } = this.state;
-        
+
         if (Start.split(' ')[4].toLowerCase() === "pm" && Number(Start.split(' ')[3].split(':')[0]) !== 12) {
             startHour = Number(Start.split(' ')[3].split(':')[0]) + 12;
         } else {
@@ -43,7 +43,7 @@ export default class ProgressBar extends Component {
         }
 
         if (currentTime.split(' ')[2].toLowerCase() === 'pm' && Number(currentTime.split(' ')[1].split(':')[0]) !== 12) {
-            currentHour = Number(currentTime.split(' ')[1].split(':')[0]) + 12;                
+            currentHour = Number(currentTime.split(' ')[1].split(':')[0]) + 12;
         } else {
             currentHour = Number(currentTime.split(' ')[1].split(':')[0]);
         }
@@ -54,7 +54,10 @@ export default class ProgressBar extends Component {
         let duration = (endHour - startHour) * 60 + (endMinute - startMinute);
         let currentProgress = (currentHour - startHour) * 60 + (currentMinute - startMinute);
 
-        if (currentProgress / duration * 100 > 1) {
+        console.log('CURRENT START', currentProgress)
+        console.log('CURRENT END', duration)
+        // console.log('CURRENT PROGRESS', currentProgress)
+        if (currentProgress / duration * 100 > 100) {
             currentPercentage = 1;
         } else if (currentProgress / duration * 100 <= 0) {
             currentPercentage = 0
@@ -66,18 +69,18 @@ export default class ProgressBar extends Component {
             this.setState({
                 fill: currentPercentage
             });
-        }, 100)     
+        }, 100)
     }
 
     eachPie(percentage) {
         return <Progress.Pie style={{alignItems: 'center', opacity: 0.3}} progress={percentage} size={130} />
-    
+
     }
-    
+
     eachTask (task, index) {
         this.props.showTask(task, index)
     }
-    
+
     render() {
         let catStyle = {
             width: 130,
@@ -92,7 +95,7 @@ export default class ProgressBar extends Component {
             marginTop: 25
         }
         let clock = this.props.task.Start.split(' ')[3].split(':')[0];
-       
+
         return (
             <TouchableHighlight style={catStyle}
                 onPress={() => this.eachTask(this.props.task, this.state.locations[this.state.index].tasks[this.props.specificIndex])}>

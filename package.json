@@ -28,6 +28,7 @@
     "express-session": "^1.15.6",
     "firebase": "^4.5.2",
     "firebaseui": "^2.4.0",
+    "geodist": "^0.2.1",
     "jwt-simple": "^0.5.1",
     "moment": "^2.19.1",
     "mysql": "^2.15.0",
