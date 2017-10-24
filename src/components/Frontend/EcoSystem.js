@@ -179,32 +179,14 @@ export default class EcoSystem extends Component {
         <View style={{flex: 3}}>
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
-              this.state.locations[this.state.index].tasks.map((task, index) => {
-                let clock = task.Start.split(' ')[3].split(':')[0];
-                // CLOCK WILL NOT RENDER IF COLOR IS NOT THERE
-                console.log(clock)
-                let catStyle = {
-                  width: 130,
-                  height: 130,
-                  borderRadius: 130,
-                  borderColor: task.Color || 'black',
-                  borderWidth: 3,
-                  marginTop: 10,
-                  margin: 5,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }
-              return (
-                <TouchableHighlight style={catStyle} key={index}
-                onPress={() => this.showTask(task, this.state.locations[this.state.index].tasks[index])}>
-                  <Image
-                    style={{resizeMode: 'contain', overflow: 'hidden'}}
-                    source={clocks[clock][1]}
-                  />
-                </TouchableHighlight>
-              )})
-            ) : null}
+              this.state.locations[this.state.index].tasks.map((task, i) => {
+                return <ProgressBar key={i} task={task} locations={this.state.locations} 
+                  index={this.state.index} showTask={this.showTask} specificIndex={i} />
+              })
+          ) : null}
+
+
+          
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
               <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
             </TouchableOpacity>
