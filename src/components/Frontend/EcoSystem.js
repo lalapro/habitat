@@ -34,7 +34,6 @@ export default class EcoSystem extends Component {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID}})
     .then(res => {
       let locations = res.data
-      console.log('BEFORE FILTER', locations)
       let currentDate = new Date();
       if (locations.tasks) {
         locations.forEach(location => {
@@ -46,7 +45,6 @@ export default class EcoSystem extends Component {
         })
       }
       
-      console.log('AFTER FILTER', locations)
       this.setState({
         locations: locations || res.data,
         currentDescription: '',
@@ -116,10 +114,24 @@ export default class EcoSystem extends Component {
   }
 
   yayTask() {
-    console.log(this.state);
-    axios.put('http://10.16.1.218:3000/yayTask', {params: { taskId: this.state.currentTask, }})
+    console.log('in yayTask', this.state.locations)
+    let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
+    axios.put('http://10.16.1.131:3000/yayTask', {
+      taskId: this.state.currentTaskId, 
+      markerId: this.state.locations[this.state.index].Marker_ID,
+      positivePoints: positivePoints
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   }
 
+
+
+  
   nayTask() {
 
   }
@@ -131,7 +143,6 @@ export default class EcoSystem extends Component {
   }
 
   render() {
-    console.log('in Ecosystem', this.state.index)
     const { height, width } = Dimensions.get('window');
     const { navigate } = this.props.navigation;
     const swipeRightBtns = [
