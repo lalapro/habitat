@@ -38,8 +38,6 @@ export default class EcoSystem extends Component {
     this.showTask = this.showTask.bind(this);
   }
 
-<<<<<<< HEAD
-=======
   componentDidMount() {
     GetCurrentLocation().then(location => {
       this.setState({
@@ -56,7 +54,6 @@ export default class EcoSystem extends Component {
   }
 
 
->>>>>>> 5b12082fdbebff7da65ede737c3d9fb958de3095
   getMarkers() {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
     .then(res => {
