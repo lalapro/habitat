@@ -1,13 +1,19 @@
 const express = require('express');
 const db = require('../../db/index.js');
+const moment = require('moment');
 
 const handleYayTask = (req, res) => {
   let PositivePoints = req.body.positivePoints;
   let Marker_ID = req.body.markerId;
   let Task_ID = req.body.taskId;
-  
+
+  var dateFormat = 'YYYY-MM-DD HH:mm:ss';
+  var testDateUtc = moment.utc(new Date());
+  var localDate = testDateUtc.local();
+
   let updateTask = `UPDATE Tasks SET
-    Completion='True'
+    Completion='True',
+    Time='${localDate}'
     WHERE Task_ID='${Task_ID}'`;
 
   let updateMarker = `UPDATE Marker SET
