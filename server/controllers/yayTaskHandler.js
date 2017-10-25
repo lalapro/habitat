@@ -5,7 +5,6 @@ const handleYayTask = (req, res) => {
   let PositivePoints = req.body.positivePoints;
   let Marker_ID = req.body.markerId;
   let Task_ID = req.body.taskId;
-  console.log('in handleYayTask', req.body);
   
   let updateTask = `UPDATE Tasks SET
     Completion='True'

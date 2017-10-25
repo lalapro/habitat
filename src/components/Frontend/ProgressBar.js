@@ -54,9 +54,6 @@ export default class ProgressBar extends Component {
         let duration = (endHour - startHour) * 60 + (endMinute - startMinute);
         let currentProgress = (currentHour - startHour) * 60 + (currentMinute - startMinute);
 
-        console.log('CURRENT START', currentProgress)
-        console.log('CURRENT END', duration)
-        // console.log('CURRENT PROGRESS', currentProgress)
         if (currentProgress / duration * 100 > 100) {
             currentPercentage = 1;
         } else if (currentProgress / duration * 100 <= 0) {

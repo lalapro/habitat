@@ -14,7 +14,6 @@ export default class AllTasks extends Component {
     }
 
     renderDetails(visible, date) {
-        console.log(date, 'DATE!!')
         this.setState({
             showDetails: visible
         });
@@ -44,7 +43,6 @@ export default class AllTasks extends Component {
 
     render() {
         let { ele } = this.props;
-        console.log(ele)
         let completedTasks = this.state.showDetails ? ele.completed.map((ele, i) => {
             return <Text style={stylyes.completed} key={i}>Title: {ele.Task_Title}, Task: {ele.Task_Description}, Completed: YES</Text>
         }) : null;

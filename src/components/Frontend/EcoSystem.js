@@ -38,7 +38,6 @@ export default class EcoSystem extends Component {
     this.showTask = this.showTask.bind(this);
   }
 
-
   getMarkers() {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
     .then(res => {
@@ -48,7 +47,6 @@ export default class EcoSystem extends Component {
     .then(res => this.showCurrentLocation())
     .catch(err => console.error(err))
   }
-
 
   showCurrentLocation() {
     let locations = this.state.locations;
@@ -127,9 +125,6 @@ export default class EcoSystem extends Component {
       positivePoints: positivePoints
     })
     .then((res) => {
-      console.log(res.data);
-    })
-    .then((res) => {
       this.markTaskComplete();
     })
     .catch((err) => {
@@ -155,9 +150,6 @@ export default class EcoSystem extends Component {
       negativePoints: negativePoints
     })
     .then((res) => {
-      console.log(res.data);
-    })
-    .then((res) => {
       this.markTaskComplete();
     })
     .catch((err) => {
@@ -166,12 +158,11 @@ export default class EcoSystem extends Component {
   }
 
   markTaskComplete() {
-    console.log(this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion)
     let newLocation = this.state.locations
     newLocation[this.state.index].tasks[this.state.currentTaskIndex].Completion = true;
     this.setState({
       locations: newLocation,
-    }, ()=> console.log(this.state.locations[this.state.index].tasks, 'checking if task was changed in yayTask'))
+    })
   }
 
   componentDidMount() {
@@ -225,44 +216,76 @@ export default class EcoSystem extends Component {
             horizontal={true}
             onIndexChanged={(index) => this.setState({index: index, currentTask: '', currentDescription: ''})}
             loop={false}
+          >
+            {this.state.locations.map((location, index) => {
+              posImages = new Array(location.PositivePoints);
+              posImages.fill(2)
+              negImages = new Array(location.NegativePoints);
+              negImages.fill(0)
+              return (
+              // put backgroundImage in the style 
+              <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Image
+                  source={images[location.Avatar][1]}
+                  style={{width: 50, height: 50}}
+                />
+                <Text style={styles.cardtitle}>
+                  {location.Marker_Title}
+                </Text>
+                <Text style={styles.cardDescription}>
+                  {location.Marker_Description}
+                </Text>
+                <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
+                {location.tasks ? (
+                  location.tasks.map((task) => (
+                    <Image 
+                      source={toast[1][1]}
+                      style={{width: 50, height: 50}}
+                    />
+                  ))
+                ) : null}
+                {location.PositivePoints ? 
+                  posImages.map((img) => (
+                      <Image 
+                        source={toast[2][1]}
+                        style={{width: 50, height: 50}}
+                      />
+                    ))
+                 : null}
+                 {location.NegativePoints ? 
+                  negImages.map((img) => (
+                      <Image 
+                        source={toast[0][1]}
+                        style={{width: 50, height: 50}}
+                      />
+                    ))
+                 : null}
+                 </View>
+              </View>
+            )})}
+          </Swiper>
+          {this.state.toggleShow ? (
+          <View style={{height: 140}}>
+            <View style={styles.separator} />
+            <Swipeout
+              right={swipeRightBtns}
+              left={swipeLeftBtns}
+              autoClose={true}
+              backgroundColor= 'transparent'
             >
-              {this.state.locations.map((location, index) => (
-                <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <Image
-                    source={images[location.Avatar][1]}
-                    style={{width: 50, height: 50}}
-                  />
-                  <Text style={styles.cardtitle}>
-                    {location.Marker_Title}
-                  </Text>
-                  <Text style={styles.cardDescription}>
-                    {location.Marker_Description}
-                  </Text>
-                </View>
-              ))}
-            </Swiper>
-            {this.state.toggleShow ? (
-            <View style={{height: 140}}>
-              <View style={styles.separator} />
-              <Swipeout
-                right={swipeRightBtns}
-                left={swipeLeftBtns}
-                autoClose={true}
-                backgroundColor= 'transparent'
-              >
-                <View style={{margin: 10, justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={{fontSize: 20}}>
-                    {this.state.currentTask} {"\n"}
-                  </Text>
-                  <Text stlye={{fontSize: 14}}>
-                    {this.state.currentDescription}
-                  </Text>
-                  <Text style={{marginTop: 2}}>{this.state.currentTaskCategory}</Text>
-                </View>
-              </Swipeout>
-              <View style={styles.separator} />
-            </View>) : null }
-          </View>
+              <View style={{margin: 10, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{fontSize: 20}}>
+                  {this.state.currentTask} {"\n"}
+                </Text>
+                <Text stlye={{fontSize: 14}}>
+                  {this.state.currentDescription}
+                </Text>
+                <Text style={{marginTop: 2}}>{this.state.currentTaskCategory}</Text>
+              </View>
+            </Swipeout>
+            <View style={styles.separator} />
+          </View>) : null }
+        </View>
         <View style={{flex: 3}}>
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
@@ -298,8 +321,19 @@ const images = [
   [1, require("../assets/Ecosystem/work.png")],
   [2, require("../assets/Ecosystem/gym.png")],
   [3, require("../assets/Ecosystem/currentlocation.png")]
-]
+];
 
+const toast = [
+  [0, require("../assets/Ecosystem/toast0.png")],
+  [1, require("../assets/Ecosystem/toast1.png")],
+  [2, require("../assets/Ecosystem/toast2.png")]
+];
+
+const tree = [
+  [0, require("../assets/Ecosystem/tree0.png")],
+  [1, require("../assets/Ecosystem/tree1.png")],
+  [2, require("../assets/Ecosystem/tree2.png")]
+];
 
 const { width, height } = Dimensions.get("window");
 

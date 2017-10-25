@@ -2,7 +2,6 @@ const express = require('express');
 const db = require('../../db/index.js');
 
 const handleNayTask = (req, res) => {
-  console.log('hello is this getting triggered', req.body);
   let NegativePoints = req.body.negativePoints;
   let Marker_ID = req.body.markerId;
   let Task_ID = req.body.taskId;

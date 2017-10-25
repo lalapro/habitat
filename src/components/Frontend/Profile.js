@@ -159,7 +159,6 @@ export default class Profile extends Component {
     
     uploadPhoto(picture) {
         let uri = picture.base64;
-        console.log(!!uri)
         let pictureText = 'data:image/jpg;base64,' + uri;
         axios.post('http://10.16.1.152:3000/pictures', { picture: uri, username: this.state.username })
             .then(res => {
