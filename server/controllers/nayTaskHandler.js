@@ -1,14 +1,19 @@
 const express = require('express');
 const db = require('../../db/index.js');
+const moment = require('moment');
 
 const handleNayTask = (req, res) => {
-  console.log('hello is this getting triggered', req.body);
+
   let NegativePoints = req.body.negativePoints;
   let Marker_ID = req.body.markerId;
   let Task_ID = req.body.taskId;
+  var dateFormat = 'YYYY-MM-DD HH:mm:ss';
+  var testDateUtc = moment.utc(new Date());
+  var localDate = testDateUtc.local();
 
   let updateTask = `UPDATE Tasks SET
-    Completion='False'
+    Completion='False',
+    Time='${localDate}'
     WHERE Task_ID='${Task_ID}'`;
 
   let updateMarker = `UPDATE Marker SET

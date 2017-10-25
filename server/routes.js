@@ -16,7 +16,7 @@ const getColors = require('./controllers/getColors');
 const handleYayTask = require('./controllers/yayTaskHandler.js');
 const handleNayTask = require('./controllers/nayTaskHandler.js');
 const handleProfileTasks = require('./controllers/profileTasksHandler.js');
-const countTasks = require('./controllers/countTasks.js')
+const countTasks = require('./controllers/countTasks.js');
 
 routes.post('/signup', handleSignup);
 routes.get('/login', handleLogin);
@@ -37,7 +37,7 @@ routes.put('/editTask', handleEditTasks);
 routes.get('/colors', getColors);
 routes.put('/yayTask', handleYayTask);
 routes.put('/nayTask', handleNayTask);
-routes.get('/completedTasks', handleProfileTasks)
-routes.get('/countTasks', countTasks)
+routes.get('/completedTasks', handleProfileTasks);
+routes.get('/countTasks', countTasks);
 
 module.exports = routes;

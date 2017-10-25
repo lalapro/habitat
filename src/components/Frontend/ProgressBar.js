@@ -21,16 +21,22 @@ export default class ProgressBar extends Component {
       this.calculateTime()
     }
     componentWillReceiveProps(oldprops, newprops) {
-        this.calculateTime(oldprops)
+      // console.log('RECEIVING PROPS', oldprops)
+      this.calculateTime(oldprops)
     }
 
     calculateTime(props) {
+      // console.log('RECEIVING PROPS', props)
       props = props || this.props;
       let { Start } = props.task;
       let { End } = props.task;
       let currentTime = new Date();
+      console.log('START TIME', convertDate(Start).getTime())
+      console.log('End TIME', convertDate(End).getTime())
       let duration = convertDate(End).getTime() - convertDate(Start).getTime();
       let timePassed = currentTime.getTime() - convertDate(Start).getTime();
+      // console.log('TIME PASSED', timePassed);
+      // console.log('DURATION', duration)
       let percentage = (timePassed / duration);
 
       this.setState({
@@ -39,6 +45,7 @@ export default class ProgressBar extends Component {
     }
 
     eachPie(percentage) {
+      console.log('EACH PIEEPEIPEIPEI', percentage)
       return <Progress.Pie style={{alignItems: 'center', opacity: 0.3}} progress={percentage} size={130} />
     }
 
