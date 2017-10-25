@@ -5,9 +5,9 @@ const handleNayTask = (req, res) => {
   let NegativePoints = req.body.negativePoints;
   let Marker_ID = req.body.markerId;
   let Task_ID = req.body.taskId;
-  
+
   let updateTask = `UPDATE Tasks SET
-    Completion='True'
+    Completion='False'
     WHERE Task_ID='${Task_ID}'`;
 
   let updateMarker = `UPDATE Marker SET
