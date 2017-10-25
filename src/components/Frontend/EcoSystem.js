@@ -115,7 +115,8 @@ export default class EcoSystem extends Component {
   }
 
   yayTask() {
-    if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === true) {
+
+    if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === "True") {
       Alert.alert('Dont try to cheat');
       return;
     }
@@ -132,9 +133,6 @@ export default class EcoSystem extends Component {
       positivePoints: positivePoints
     })
     .then((res) => {
-      console.log(res.data);
-    })
-    .then((res) => {
       this.markTaskComplete();
     })
     .catch((err) => {
@@ -143,7 +141,8 @@ export default class EcoSystem extends Component {
   }
 
   nayTask() {
-    if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === true) {
+    console.log('NAY TASK', this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion)
+    if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === "True") {
       Alert.alert('Dont try to cheat');
       return;
     }
@@ -160,9 +159,6 @@ export default class EcoSystem extends Component {
       negativePoints: negativePoints
     })
     .then((res) => {
-      console.log(res.data);
-    })
-    .then((res) => {
       this.markTaskComplete();
     })
     .catch((err) => {
@@ -171,12 +167,12 @@ export default class EcoSystem extends Component {
   }
 
   markTaskComplete() {
-    console.log(this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion)
     let newLocation = this.state.locations
     newLocation[this.state.index].tasks[this.state.currentTaskIndex].Completion = true;
     this.setState({
       locations: newLocation,
-    }, ()=> console.log(this.state.locations[this.state.index].tasks, 'checking if task was changed in yayTask'))
+    })
+    // , ()=> console.log(this.state.locations[this.state.index].tasks, 'checking if task was changed in yayTask'))
   }
 
 

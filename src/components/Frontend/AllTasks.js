@@ -8,29 +8,10 @@ export default class AllTasks extends Component {
     this.state = {
       showDetails: false,
     }
-    return (
-      <View>
-        {taskStatus}
-        <Text style={styles.title}>
-          {this.props.task.Task_Title}
-        </Text>
-        <Text style={styles.description}>
-          {this.props.task.Marker_Title}
-        </Text>
-        <Text style={styles.description}>
-          {this.props.task.Task_Description}
-        </Text>
-      </View>
-    )
-  }
-}
-
-    // this.renderTasks = this.renderTasks.bind(this);
   }
 
   render() {
     let taskStatus = this.props.task.Completion
-    // console.log('alll takkSKKKKSKSKSKSKSK', this.props.task)
     if (taskStatus === null) {
       taskStatus = <Image source={sprites[1][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
     } else if (taskStatus === "True") {

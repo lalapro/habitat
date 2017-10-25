@@ -58,6 +58,7 @@ export default class Profile extends Component {
 
     axios.get('http://10.16.1.152:3000/completedTasks', {params: {username: this.props.screenProps.userID}})
     .then(tasks => {
+      console.log('GRABBING COMPLETED TASKS',tasks.data);
       tasks.data.forEach(task => {
           let eachDate = task.Start.split(' ').slice(0, 3).reduce((acc, task) => {
               return `${acc} ${task}`;
@@ -77,8 +78,8 @@ export default class Profile extends Component {
         // console.log('GIMME COUNT COUNT COUNT ', tasks.data[0].)
         this.setState({
           inProgress: tasks.data[0].count,
-          completed: tasks.data[1].count,
-          failed: tasks.data[2].count
+          failed: tasks.data[1].count,
+          completed: tasks.data[2].count
         })
       })
   }
@@ -139,6 +140,8 @@ export default class Profile extends Component {
 
   grabDailyTasks(date) {
     date = JSON.stringify(date).slice(1, 11);
+    // FIX TIMEZONE
+    console.log('CLICK ME', date)
     // console.log(this.state.locations)
     this.setState({
       dailyTasks: this.state.daysWithTask[date] || []
