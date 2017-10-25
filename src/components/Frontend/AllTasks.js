@@ -1,88 +1,63 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 export default class AllTasks extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            showDetails: false,
-
-        }
-        this.renderDetails = this.renderDetails.bind(this);
-        // this.renderTasks = this.renderTasks.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDetails: false,
     }
+  }
 
-    renderDetails(visible, date) {
-        console.log(date, 'DATE!!')
-        this.setState({
-            showDetails: visible
-        });
-        // this.renderTasks(date);
+  render() {
+    let taskStatus = this.props.task.Completion
+    if (taskStatus === null) {
+      taskStatus = <Image source={sprites[1][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
+    } else if (taskStatus === "True") {
+      taskStatus = <Image source={sprites[2][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
+    } else {
+      taskStatus = <Image source={sprites[0][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
     }
-
-    // renderTasks(specificDate) {
-
-        // let completedTasks = this.state.showDetails ? specificDate.completed.map(ele => {
-        //     return <Text>`Title: ${ele.Task_Title}, Task: ${Task_Description}`</Text>
-        // }) : null;
-        // let notCompletedTasks = this.state.showDetails ? specificDate.notCompleted.map(ele => {
-        //     return <Text>`Title: ${ele.Task_Title}, Task: ${Task_Description}`</Text>        
-        // }) : null;
-        
-        // return <View>
-        //     <Text>
-        //         {completedTasks}
-        //     </Text>
-        //     <Text>
-        //         {notCompletedTasks}
-        //     </Text>
-        // </View>
-    // }
-
-
-
-    render() {
-        let { ele } = this.props;
-        console.log(ele)
-        let completedTasks = this.state.showDetails ? ele.completed.map((ele, i) => {
-            return <Text style={stylyes.completed} key={i}>Title: {ele.Task_Title}, Task: {ele.Task_Description}, Completed: YES</Text>
-        }) : null;
-        let notCompletedTasks = this.state.showDetails ? ele.notCompleted.map((ele, i) => {
-            return <Text style={styles.tasks} key={i}>Title: {ele.Task_Title}, Task: {ele.Task_Description}, Completed: NO</Text>        
-        }) : null;
-        
-        let renderTasks = function() {
-            return <View style={{ justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-                <View style={styles.dates}>
-                    {completedTasks}
-                </View>
-                <View>
-                    {notCompletedTasks}
-                </View>
-            </View>
-        }
-        
-        return(
-            <View>
-            <TouchableOpacity onPress={() => this.renderDetails(!this.state.showDetails, this.props.ele)}>
-                <Text>
-                    {this.props.ele.date}
-                </Text>
-            </TouchableOpacity>
-                
-                <View>
-                    {renderTasks()}
-                </View>
-            </View>
-        )
-    }
+    return (
+      <View style={{display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+        <Image source={location[this.props.task.Avatar][1]} style={{height: 50, width:50, flex: 1}}/>
+        <View style={{flex: 4, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={styles.title}>
+            {this.props.task.Task_Title}
+          </Text>
+          <Text style={styles.description}>
+            {this.props.task.Task_Description}
+          </Text>
+        </View>
+        {taskStatus}
+      </View>
+    )
+  }
 }
 
+const sprites = [
+  [0, require("../assets/Ecosystem/tree0.png")],
+  [1, require("../assets/Ecosystem/tree1.png")],
+  [2, require("../assets/Ecosystem/tree2.png")]
+]
+
+const location = [
+  [0, require("../assets/Ecosystem/home.png")],
+  [1, require("../assets/Ecosystem/work.png")],
+  [2, require("../assets/Ecosystem/gym.png")],
+  [3, require("../assets/Ecosystem/currentlocation.png")]
+]
+
+
 const styles = StyleSheet.create({
-    dates: {
-    },
-    tasks: {
-        fontSize: 24
-    },
+  title: {
+    fontSize: 20,
+    marginTop: 5,
+    fontWeight: "bold",
+  },
+  description: {
+    fontSize: 15,
+    color: "#444",
+  },
 })
