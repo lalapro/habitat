@@ -41,7 +41,6 @@ export default class ProgressBar extends Component {
     }
 
     eachPie(percentage) {
-      console.log('EACH PIEEPEIPEIPEI', percentage)
       return <Progress.Pie style={{alignItems: 'center', opacity: 0.3}} progress={percentage} size={130} />
     }
 
