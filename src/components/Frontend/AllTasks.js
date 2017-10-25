@@ -30,13 +30,14 @@ export default class AllTasks extends Component {
   }
 
   render() {
-    let taskStatus = this.props.task.Completion
-    if (taskStatus === null) {
-      taskStatus = <Image source={sprites[1][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
-    } else if (taskStatus === "True") {
+    let taskStatus = this.props.task.Completion;
+    console.log('ALL TASKSKSKSKS', taskStatus)
+    if (taskStatus === "True") {
       taskStatus = <Image source={sprites[2][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
-    } else {
+    } else if (taskStatus === "False"){
       taskStatus = <Image source={sprites[0][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
+    } else {
+      taskStatus = <Image source={sprites[1][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
     }
     return (
       <View>
@@ -60,9 +61,13 @@ export default class AllTasks extends Component {
               <Text>
                 Completed on: {this.state.completionTime}
               </Text>
-            ) : (
+            ) : this.state.completion === "False" ? (
               <Text>
                 Failed Task on: {this.state.completionTime}
+              </Text>
+            ) : (
+              <Text>
+                Task in Progress! Hold to edit!
               </Text>
             )}
           </View>

@@ -17,7 +17,7 @@ const convertDate = (string) => {
     hour = Number(hour) + 12;
     hour.toString()
   }
-  console.log('INSIDE CONVERT', hour + minute)
+
 
   let convert = month + day + year + ' ' + hour + minute;
   let dateValue = new Date(convert);
