@@ -214,17 +214,26 @@ export default class EcoSystem extends Component {
             title="&#9776;"
           />
         </View>
-        <View style={{flex: 7}}>
+        <View style={{flex: 8}}>
           <Swiper
             index={this.state.index}
             horizontal={true}
             onIndexChanged={(index) => this.setState({index: index, currentTask: '', currentDescription: ''})}
             loop={false}
           >
+          
             {this.state.locations.map((location, index) => {
-              posImages = new Array(location.PositivePoints);
+              var upgradeImageNumber = Math.floor(location.PositivePoints/10);
+              var positiveImageNumber = location.PositivePoints%10;
+              var downgradeImageNumber = Math.floor(location.NegativePoints/4);
+              var negativeImageNumber = location.NegativePoints%4;
+              upgradeImages = new Array(upgradeImageNumber);
+              upgradeImages.fill(1);
+              posImages = new Array(positiveImageNumber);
               posImages.fill(2)
-              negImages = new Array(location.NegativePoints);
+              downgradeImages = new Array(downgradeImageNumber);
+              downgradeImages.fill(3);
+              negImages = new Array(negativeImageNumber);
               negImages.fill(0)
               return (
               // put backgroundImage in the style 
@@ -239,6 +248,8 @@ export default class EcoSystem extends Component {
                 <Text style={styles.cardDescription}>
                   {location.Marker_Description}
                 </Text>
+                
+                <Image style={{height: '60%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
                 <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
                 {location.tasks ? (
                   location.tasks.map((task) => (
@@ -248,11 +259,27 @@ export default class EcoSystem extends Component {
                     />
                   ))
                 ) : null}
+                {upgradeImageNumber > 0 ? 
+                  upgradeImages.map((img) => (
+                      <Image 
+                        source={toast[2][1]}
+                        style={{width: 100, height: 100}}
+                      />
+                    ))
+                 : null}
                 {location.PositivePoints ? 
                   posImages.map((img) => (
                       <Image 
                         source={toast[2][1]}
                         style={{width: 50, height: 50}}
+                      />
+                    ))
+                 : null}
+                 {downgradeImageNumber > 0 ? 
+                  downgradeImages.map((img) => (
+                      <Image 
+                        source={toast[0][1]}
+                        style={{width: 100, height: 100}}
                       />
                     ))
                  : null}
@@ -265,6 +292,7 @@ export default class EcoSystem extends Component {
                     ))
                  : null}
                  </View>
+                 </Image>
               </View>
             )})}
           </Swiper>
