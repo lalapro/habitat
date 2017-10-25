@@ -9,39 +9,39 @@ import convertKey from './convertKey'
 
 export default class Profile extends Component {
   constructor(props) {
-      super(props);
-      this.state = {
-          image: require('../assets/Profile.png'),
-          visibleModal: false,
-          username: null,
-          dates: null,
-          allDates: null,
-          daysWithTask: {},
-          dailyTasks: [],
-          locations: {},
-          inProgress: 0,
-          completed: 0,
-          failed: 0,
-      }
-      this.showModal = this.showModal.bind(this);
-      this.uploadPhoto = this.uploadPhoto.bind(this);
-      this.getPicture = this.getPicture.bind(this);
+    super(props);
+    this.state = {
+      image: require('../assets/Profile.png'),
+      visibleModal: false,
+      username: null,
+      dates: null,
+      allDates: null,
+      daysWithTask: {},
+      dailyTasks: [],
+      locations: {},
+      inProgress: 0,
+      completed: 0,
+      failed: 0,
+    }
+    this.showModal = this.showModal.bind(this);
+    this.uploadPhoto = this.uploadPhoto.bind(this);
+    this.getPicture = this.getPicture.bind(this);
   }
 
   componentDidMount() {
-      this.setState({
-          username: this.props.screenProps.userID
-      })
-      this.getPicture();
-      this.getCompletedTask();
-      this.countTasks();
+    this.setState({
+      username: this.props.screenProps.userID
+    })
+    this.getPicture();
+    this.getCompletedTask();
+    this.countTasks();
   }
 
   getPicture() {
-      axios.get('http://10.16.1.152:3000/pictures', { params: { username: this.props.screenProps.userID }})
+    axios.get('http://10.16.1.233:3000/pictures', { params: { username: this.props.screenProps.userID } })
       .then(res => {
-          let jpg = 'data:image/jpg;base64,' + res.data.picture;
-          this.setState({ image: jpg })
+        let jpg = 'data:image/jpg;base64,' + res.data.picture;
+        this.setState({ image: jpg })
       })
   }
 
@@ -50,33 +50,33 @@ export default class Profile extends Component {
     var testDateUtc = moment.utc(new Date());
     var localDate = testDateUtc.local();
 
-    axios.get('http://10.16.1.152:3000/completedTasks', { params: { username: this.props.screenProps.userID }})
-    .then(tasks => {
-      tasks.data.forEach(task => {
-        let eachDate = task.Start.split(' ').slice(0, 3).reduce((acc, task) => {
+    axios.get('http://10.16.1.233:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
+      .then(tasks => {
+        tasks.data.forEach(task => {
+          let eachDate = task.Start.split(' ').slice(0, 3).reduce((acc, task) => {
             return `${acc} ${task}`;
-        });
-        eachDate = eachDate.slice(0, eachDate.length - 1);
-        let key = convertKey(eachDate);
-        // creates an object with keys of dates and values of tasks within those dates
-        this.state.daysWithTask[key] ? this.state.daysWithTask[key].push(task) : this.state.daysWithTask[key] = [task];
-        // creates an object with keys of locations and values of
-        this.state.locations[task.Marker_Title] ? this.state.locations[task.Marker_Title].push(task) : this.state.locations[task.Marker_Title] = [task];
+          });
+          eachDate = eachDate.slice(0, eachDate.length - 1);
+          let key = convertKey(eachDate);
+          // creates an object with keys of dates and values of tasks within those dates
+          this.state.daysWithTask[key] ? this.state.daysWithTask[key].push(task) : this.state.daysWithTask[key] = [task];
+          // creates an object with keys of locations and values of
+          this.state.locations[task.Marker_Title] ? this.state.locations[task.Marker_Title].push(task) : this.state.locations[task.Marker_Title] = [task];
+        })
       })
-    })
-    .then(res => this.grabDailyTasks(JSON.stringify(localDate).slice(1, 11)))
+      .then(res => this.grabDailyTasks(JSON.stringify(localDate).slice(1, 11)))
   }
 
   countTasks() {
-    axios.get('http://10.16.1.152:3000/countTasks', {params: {username: this.props.screenProps.userID}})
+    axios.get('http://10.16.1.233:3000/countTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
         tasks.data.forEach(task => {
           if (task.Completion === "False") {
-            this.setState({failed: task.count})
+            this.setState({ failed: task.count })
           } else if (task.Completion === "True") {
-            this.setState({completed: task.count})
+            this.setState({ completed: task.count })
           } else {
-            this.setState({inProgress: task.count})
+            this.setState({ inProgress: task.count })
           }
         })
       })
@@ -84,44 +84,44 @@ export default class Profile extends Component {
 
 
   pickPhoto = async () => {
-      let picture = await ImagePicker.launchImageLibraryAsync({
-          allowsEditing: true,
-          aspect: [4, 3],
-          base64: true,
-      });
-      this.handlePicture(picture);
+    let picture = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      base64: true,
+    });
+    this.handlePicture(picture);
   }
 
   takePhoto = async () => {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
-      this.setState({ hasCameraPermission: status === 'granted' })
-      let picture = await ImagePicker.launchCameraAsync({
-          allowsEditing: true,
-          aspect: [4, 3],
-          base64: true,
-      })
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasCameraPermission: status === 'granted' })
+    let picture = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      base64: true,
+    })
       .catch(err => console.log(err, 'ERR!!!'))
-      this.handlePicture(picture);
+    this.handlePicture(picture);
   }
 
   handlePicture = async picture => {
-      try {
-          this.setState({ visibleModal: !this.state.visibleModal });
-          if (!picture.cancelled) {
-          }
-      } catch (e) {
-          console.log({ e }, 'error!');
-          alert('This is not working');
-      } finally {
-          this.setState({ uploading: false });
-          this.uploadPhoto(picture);
+    try {
+      this.setState({ visibleModal: !this.state.visibleModal });
+      if (!picture.cancelled) {
       }
+    } catch (e) {
+      console.log({ e }, 'error!');
+      alert('This is not working');
+    } finally {
+      this.setState({ uploading: false });
+      this.uploadPhoto(picture);
+    }
   }
 
   uploadPhoto(picture) {
-      let uri = picture.base64;
-      let pictureText = 'data:image/jpg;base64,' + uri;
-      axios.post('http://10.16.1.152:3000/pictures', { picture: uri, username: this.state.username })
+    let uri = picture.base64;
+    let pictureText = 'data:image/jpg;base64,' + uri;
+    axios.post('http://10.16.1.233:3000/pictures', { picture: uri, username: this.state.username })
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })
@@ -130,7 +130,7 @@ export default class Profile extends Component {
 
 
   showModal(stat) {
-      this.setState({ visibleModal: stat })
+    this.setState({ visibleModal: stat })
   }
 
   grabDailyTasks(date) {
@@ -140,23 +140,29 @@ export default class Profile extends Component {
     })
   }
 
+  changeLocation(location) {
+    console.log(location,' LOCATION')
+  }
 
   render() {
+    
+    let tabs = Object.entries(this.state.locations)
+    console.log(tabs)
     return (
-      <View style={{flex: 1, backgroundColor: '#ddd'}}>
-        <View style={{marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
-            <Button
-                onPress={() => this.props.navigation.navigate('DrawerToggle')}
-                title="&#9776;"
-            />
+      <View style={{ flex: 1, backgroundColor: '#ddd' }}>
+        <View style={{ marginLeft: 5, marginTop: 20, alignItems: 'flex-start' }}>
+          <Button
+            onPress={() => this.props.navigation.navigate('DrawerToggle')}
+            title="&#9776;"
+          />
         </View>
-        <View style={{flex: 1, alignItems: 'flex-start', flexDirection: 'row'}}>
-          <View style={{flex: 1.5, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'flex-start', flexDirection: 'row' }}>
+          <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity onPress={() => this.showModal(!this.state.visibleModal)}>
-              <Image style={styles.photo} source={{uri: `${this.state.image}`}}/>
+              <Image style={styles.photo} source={{ uri: `${this.state.image}` }} />
             </TouchableOpacity>
           </View>
-          <View style={{flex: 3, alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{ flex: 3, alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.title}>
               Completed Tasks: {this.state.completed}
             </Text>
@@ -168,56 +174,69 @@ export default class Profile extends Component {
             </Text>
           </View>
         </View>
-        <View style={{flex: 4, marginTop: 25, borderColor: 'black', borderTopWidth: 1}}>
-          <ScrollView style={{marginTop: 15}}>
+        <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
+        <ScrollView horizontal={true} style={{ flexDirection: 'row', marginTop: 10, width: 250, alignContent: 'stretch'}}>
+          { this.state.locations ? (
+            tabs.map((ele, i) => {
+              return (
+                <TouchableOpacity key={i} onPress={() => {this.changeLocation(ele)}}>
+                  <View style={{ alignItems: 'center', justifyContent: 'center', borderColor: 'black', borderWidth: 1, width: 70, height: '100%'}}>
+                    <Text>{ele[0]}</Text>
+                  </View>
+                </TouchableOpacity>
+              )
+            })
+          ) : null }
+        </ScrollView>
+        </View>
+        <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
+          <ScrollView style={{ marginTop: 15 }}>
             {this.state.dailyTasks.map((task, i) => {
               return (
-                // <TouchableOpacity onLongPress={() => this.test(task)} key={i}>
-                  <AllTasks task={task} key={i}/>
-                // </TouchableOpacity>
+                <AllTasks task={task} key={i} />
               )
             })}
           </ScrollView>
         </View>
         <CalendarStrip
-            calendarAnimation={{type: 'sequence', duration: 30}}
-            daySelectionAnimation={{type: 'background', duration: 300, highlightColor: '#9265DC'}}
-            style={{height:100}}
-            calendarHeaderStyle={{color: 'white'}}
-            calendarColor={'#7743CE'}
-            dateNumberStyle={{color: 'white'}}
-            dateNameStyle={{color: 'white'}}
-            iconLeft={require('../assets/egg2.png')}
-            iconRight={require('../assets/egg3.png')}
-            iconContainer={{flex: 0.1}}
-            onDateSelected={(date) => this.grabDailyTasks(date)}
+          calendarAnimation={{ type: 'sequence', duration: 30 }}
+          daySelectionAnimation={{ type: 'background', duration: 300, highlightColor: '#9265DC' }}
+          style={{ height: 100 }}
+          calendarHeaderStyle={{ color: 'white' }}
+          calendarColor={'#7743CE'}
+          dateNumberStyle={{ color: 'white' }}
+          dateNameStyle={{ color: 'white' }}
+          iconLeft={require('../assets/egg2.png')}
+          iconRight={require('../assets/egg3.png')}
+          iconContainer={{ flex: 0.1 }}
+          onDateSelected={(date) => this.grabDailyTasks(date)}
         />
         <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.visibleModal}
-          onRequestClosed={() => {alert('Photo is not selected!!')}}
+          onRequestClosed={() => { alert('Photo is not selected!!') }}
         >
           <View>
-            <View style={{height: 470, opacity: 0.7, backgroundColor: '#ddd'}}>
-                <Image source={require('../assets/toastlogo.png')} style={{height: '100%', width: '100%', opacity: 0.8}}/>
+            <View style={{ height: 470, opacity: 0.7, backgroundColor: '#ddd' }}>
+              <Image source={require('../assets/toastlogo.png')} style={{ height: '100%', width: '100%', opacity: 0.8 }} />
             </View>
-            <View style={{height: '100%', backgroundColor: '#ddd', opacity: 0.7}}>
+            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7 }}>
               <View style={styles.button} >
-                   <Button title={`Take a photo`} onPress={this.takePhoto}/>
+                <Button title={`Take a photo`} onPress={this.takePhoto} />
               </View>
               <View style={styles.button} >
-                  <Button title={`Photo from library`} onPress={this.pickPhoto} />
+                <Button title={`Photo from library`} onPress={this.pickPhoto} />
               </View>
               <View style={styles.button} >
-                  <Button title={`Close`} onPress={() => {this.showModal(!this.state.visibleModal)}} />
+                <Button title={`Close`} onPress={() => { this.showModal(!this.state.visibleModal) }} />
               </View>
             </View>
           </View>
         </Modal>
       </View>
     );
-  }
+  }
 }
 
 const sprites = [
