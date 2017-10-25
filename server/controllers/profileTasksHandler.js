@@ -8,12 +8,13 @@ const handleProfileTasks = (req, res) => {
     let taskStr =
     `Select t.*,
     m.Marker_Title,
-    m.Avatar
+    m.Avatar,
+    m.PositivePoints,
+    m.NegativePoints
     FROM Tasks t
     LEFT JOIN Marker m
     ON t.Marker_ID = m.Marker_ID
     WHERE t.User_ID = ${userID}
-    GROUP BY 1,2,3
     `;
 
     db.query(taskStr, (err, result) => {

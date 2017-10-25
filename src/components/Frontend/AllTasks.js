@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Alert, Button, Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
+import convertDate from './convertDate';
+
 
 export default class AllTasks extends Component {
 
@@ -9,12 +11,13 @@ export default class AllTasks extends Component {
     this.state = {
       showEdit: false,
       completionTime: '',
-      completion: null
+      completion: null,
+      submit: false
     }
   }
 
   componentWillReceiveProps() {
-    this.setState({showEdit: false})
+    this.setState({ showEdit: false })
   }
 
   showEdit(task) {
@@ -26,25 +29,79 @@ export default class AllTasks extends Component {
         completion: task.Completion
       })
     }
-    this.setState({showEdit: !this.state.showEdit})
+    this.setState({ showEdit: !this.state.showEdit })
   }
+
+  markCompleted(task) {
+    if (task.Completion === "True") {
+      Alert.alert('Dont try to cheat');
+      return;
+    }
+    var end = task.End;
+    if (convertDate(end) > new Date()) {
+      Alert.alert('the task deadline has not ended yet. Wait!')
+      return;
+    }
+
+    let positivePoints = task.PositivePoints + 1;
+    axios.put('http://10.16.1.233:3000/yayTask', {
+      taskId: task.Task_ID,
+      markerId: task.Marker_ID,
+      positivePoints: positivePoints
+    })
+      .then((res) => {
+        this.setState({
+          submit: true
+        })
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+  }
+
+  markFailed(task) {
+    if (task.Completion === "True") {
+      Alert.alert('Dont try to cheat');
+      return;
+    }
+    var end = task.End;
+    if (convertDate(end) > new Date()) {
+      Alert.alert('the task deadline has not ended yet. Wait!')
+      return;
+    }
+
+    let negativePoints = task.NegativePoints + 1;
+    axios.put('http://10.16.1.233:3000/nayTask', {
+      taskId: task.Task_ID,
+      markerId: task.Marker_ID,
+      negativePoints: negativePoints
+    })
+    .then((res) => {
+      this.setState({
+        submit: true
+      })
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }
+
 
   render() {
     let taskStatus = this.props.task.Completion;
-    console.log('ALL TASKSKSKSKS', taskStatus)
     if (taskStatus === "True") {
-      taskStatus = <Image source={sprites[2][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
-    } else if (taskStatus === "False"){
-      taskStatus = <Image source={sprites[0][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
+      taskStatus = <Image source={sprites[2][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+    } else if (taskStatus === "False") {
+      taskStatus = <Image source={sprites[0][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
     } else {
-      taskStatus = <Image source={sprites[1][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
+      taskStatus = <Image source={sprites[1][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
     }
     return (
       <View>
         <TouchableOpacity onPress={() => this.showEdit(this.props.task)}>
-          <View style={{display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-            <Image source={location[this.props.task.Avatar][1]} style={{height: 50, width:50, flex: 1}}/>
-            <View style={{flex: 4, alignItems: 'center', justifyContent: 'center'}}>
+          <View style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={location[this.props.task.Avatar][1]} style={{ height: 50, width: 50, flex: 1 }} />
+            <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}>
               <Text style={styles.title}>
                 {this.props.task.Task_Title}
               </Text>
@@ -56,7 +113,7 @@ export default class AllTasks extends Component {
           </View>
         </TouchableOpacity>
         {this.state.showEdit ? (
-          <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 15, marginBottom: 15}}>
+          <View style={{ display: 'flex', marginTop: 15, marginBottom: 15, justifyContent: 'center', alignItems: 'center' }}>
             {this.state.completion === "True" ? (
               <Text>
                 Completed on: {this.state.completionTime}
@@ -65,12 +122,26 @@ export default class AllTasks extends Component {
               <Text>
                 Failed Task on: {this.state.completionTime}
               </Text>
+            ) : (!this.state.submit ? (
+              <View>
+                <Text>
+                  Task in Progress! Hold to edit!
+                    </Text>
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <TouchableOpacity onPress={() => { this.markFailed(this.props.task) }}>
+                    <Image source={sprites[0][1]} style={{ height: 35, width: 35 }} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => { this.markCompleted(this.props.task) }}>
+                    <Image source={sprites[2][1]} style={{ height: 35, width: 35 }} />
+                  </TouchableOpacity>
+                </View>
+              </View>
             ) : (
               <Text>
-                Task in Progress! Hold to edit!
-              </Text>
-            )}
-          </View>
+                Task Completed!
+              </Text> 
+            ))}
+            </View>
         ) : null}
       </View>
     )
