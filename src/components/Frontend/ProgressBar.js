@@ -31,17 +31,13 @@ export default class ProgressBar extends Component {
       let { Start } = props.task;
       let { End } = props.task;
       let currentTime = new Date();
-      console.log('START TIME', convertDate(Start).getTime())
-      console.log('End TIME', convertDate(End).getTime())
       let duration = convertDate(End).getTime() - convertDate(Start).getTime();
       let timePassed = currentTime.getTime() - convertDate(Start).getTime();
       // console.log('TIME PASSED', timePassed);
       // console.log('DURATION', duration)
       let percentage = (timePassed / duration);
 
-      this.setState({
-        fill: percentage
-      })
+      this.setState({ fill: percentage })
     }
 
     eachPie(percentage) {
