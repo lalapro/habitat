@@ -49,7 +49,7 @@ class Chart extends React.Component {
 
   constructor(props: Props) {
     super(props);
-    this.state = { 
+    this.state = {
       highlightedIndex: 0,
       colors: this.props.colors
     };
@@ -104,33 +104,40 @@ class Chart extends React.Component {
     const y = this.props.pieHeight / 2 + margin;
 
     return (
-      <View width={this.props.width} height={this.props.height}>
-        <Surface width={this.props.width} height={this.props.height}>
-          <Group x={x} y={y}>
+      <View>
+        <View style={{alignItems: 'center'}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', top: margin}}>
+            Distribution of Categories
+          </Text>
+        </View>
+        <View width={this.props.width} height={this.props.height} style={{top: margin * 2}}>
+          <Surface width={this.props.width} height={this.props.height}>
+            <Group x={x} y={y}>
+              {
+                this.props.data.map((item, index) => {
+                  return (<AnimShape
+                    key={'pie_shape_' + index}
+                    color={this._color(index)}
+                    d={() => this._createPieChart(index)}
+                  />)
+                })
+              }
+            </Group>
+          </Surface>
+          <View style={{ position: 'absolute', top: margin, left: 3 * margin + this.props.pieWidth }}>
             {
               this.props.data.map((item, index) => {
-                return (<AnimShape
-                  key={'pie_shape_' + index}
-                  color={this._color(index)}
-                  d={() => this._createPieChart(index)}
-                />)
-                })
+                var fontWeight = this.state.highlightedIndex == index ? 'bold' : 'normal';
+                return (
+                  <TouchableWithoutFeedback key={index} onPress={() => this._onPieItemSelected(index)}>
+                    <View>
+                      <Text style={[styles.label, { color: this._color(index), fontWeight: fontWeight }]}>{this._label(item)}: {this._value(item)}%</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                );
+              })
             }
-          </Group>
-        </Surface>
-        <View style={{ position: 'absolute', top: margin, left: 2 * margin + this.props.pieWidth }}>
-          {
-            this.props.data.map((item, index) => {
-              var fontWeight = this.state.highlightedIndex == index ? 'bold' : 'normal';
-              return (
-                <TouchableWithoutFeedback key={index} onPress={() => this._onPieItemSelected(index)}>
-                  <View>
-                    <Text style={[styles.label, { color: this._color(index), fontWeight: fontWeight }]}>{this._label(item)}: {this._value(item)}%</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              );
-            })
-          }
+          </View>
         </View>
       </View>
     );
@@ -142,7 +149,7 @@ const styles = {
     margin: 20,
   },
   label: {
-    fontSize: 15,
+    fontSize: 18,
     marginTop: 5,
     fontWeight: 'normal',
   }
@@ -151,4 +158,3 @@ const styles = {
 
 
 export default Chart;
-

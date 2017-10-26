@@ -30,7 +30,8 @@ export default class Profile extends Component {
       activeIndex: 0,
       orderedColors: [],
       dayByDay: [],
-      selectedLocation: null
+      selectedLocation: null,
+      upcomingTasks: 0
     }
     this.showModal = this.showModal.bind(this);
     this.uploadPhoto = this.uploadPhoto.bind(this);
@@ -39,7 +40,14 @@ export default class Profile extends Component {
 
   componentDidMount() {
     this.setState({
-      username: this.props.screenProps.userID
+      username: this.props.screenProps.userID,
+      dailyTasks: [],
+      categoryPercentage: [],
+      activeIndex: 0,
+      dayByDay: [],
+      daysWithTask: {},
+      orderedColors: [],
+      upcomingTasks: 0
     })
     this.getPicture();
     this.getCompletedTask();
@@ -47,7 +55,7 @@ export default class Profile extends Component {
   }
 
   getPicture() {
-      axios.get('http://10.16.1.131:3000/pictures', { params: { username: this.props.screenProps.userID }})
+      axios.get('http://10.16.1.152:3000/pictures', { params: { username: this.props.screenProps.userID }})
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })
@@ -58,6 +66,10 @@ export default class Profile extends Component {
     var dateFormat = 'YYYY-MM-DD HH:mm:ss';
     var testDateUtc = moment.utc(new Date());
     var localDate = testDateUtc.local();
+
+    let current = new Date();
+
+    console.log(localDate, 'al;skdjflaksjdflkasjfklajs')
     axios.get('http://10.16.1.152:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
       .then(res => {
         this.setState({
@@ -79,6 +91,8 @@ export default class Profile extends Component {
           this.state.daysWithTask[key] ? this.state.daysWithTask[key].push(task) : this.state.daysWithTask[key] = [task];
           // creates an object with keys of locations and values of
           this.state.locations[task.Marker_Title] ? this.state.locations[task.Marker_Title].push(task) : this.state.locations[task.Marker_Title] = [task];
+
+          convertDate(task.Start) > current ? this.state.upcomingTasks++ : null;
         })
         this.grabDailyTasks(JSON.stringify(localDate).slice(1, 11))
       })
@@ -181,6 +195,10 @@ export default class Profile extends Component {
     }
   }
 
+  reRender() {
+    this.componentDidMount()
+  }
+
 
   render() {
 
@@ -215,6 +233,9 @@ export default class Profile extends Component {
             <Text style={styles.title}>
               Failed Tasks: {this.state.failed}
             </Text>
+            <Text style={styles.title}>
+              Upcoming tasks: {this.state.upcomingTasks}
+            </Text>
           </View>
         </View>
         <View style={{ flex: 0.7, alignItems: 'flex-end' }}>
@@ -237,7 +258,7 @@ export default class Profile extends Component {
               <ScrollView style={{ marginTop: 15 }}>
                 {this.state.dailyTasks.map((task, i) => {
                   return (
-                    <AllTasks task={task} key={i} />
+                    <AllTasks task={task} key={i} reRender={this.reRender.bind(this)}/>
                   )
                 })}
               </ScrollView>
@@ -245,7 +266,7 @@ export default class Profile extends Component {
           ) : (
             // render based on what selected location is
             <View style={{ flex: 4, borderTopWidth: 1, borderColor: 'black'}}>
-              <View >
+              <View>
                 {this.state.selectedLocation[0] === "Overview" ? (
                   <Chart
                     pieWidth={150}
@@ -255,17 +276,18 @@ export default class Profile extends Component {
                     width={180}
                     height={180}
                     data={this.state.categoryPercentage} />
-                ) : (
-                  <View>
-                    {this.state.selectedLocation[1].map((task, i) => {
-                      return (
-                        <Text key={i}>
-                          {task.Task_Title}
-                        </Text>
-                      )
-                    })}
-                  </View>
-                )}
+                  ) : (
+                    <View style={{alignItems: 'center'}}>
+                      <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{width: 75, height: 75}}/>
+                      {this.state.selectedLocation[1].map((task, i) => {
+                        return (
+                          <Text key={i}>
+                            {task.Task_Title}
+                          </Text>
+                        )
+                      })}
+                    </View>
+                  )}
               </View>
             </View>
 
@@ -327,6 +349,13 @@ const sprites = [
   [0, require("../assets/Ecosystem/tree0.png")],
   [1, require("../assets/Ecosystem/tree1.png")],
   [2, require("../assets/Ecosystem/tree2.png")]
+]
+
+const images = [
+  [0, require("../assets/Ecosystem/home.png")],
+  [1, require("../assets/Ecosystem/work.png")],
+  [2, require("../assets/Ecosystem/gym.png")],
+  [3, require("../assets/Ecosystem/currentlocation.png")]
 ]
 
 const styles = StyleSheet.create({
