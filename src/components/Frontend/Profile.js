@@ -55,7 +55,7 @@ export default class Profile extends Component {
   }
 
   getPicture() {
-      axios.get('http://10.16.1.152:3000/pictures', { params: { username: this.props.screenProps.userID }})
+      axios.get('http://10.16.1.233:3000/pictures', { params: { username: this.props.screenProps.userID }})
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })
@@ -69,8 +69,7 @@ export default class Profile extends Component {
 
     let current = new Date();
 
-    console.log(localDate, 'al;skdjflaksjdflkasjfklajs')
-    axios.get('http://10.16.1.152:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
+    axios.get('http://10.16.1.233:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
       .then(res => {
         this.setState({
           categoryPercentage: res.data
@@ -79,7 +78,10 @@ export default class Profile extends Component {
           this.state.orderedColors.push(category.color);
         })
       })
-    axios.get('http://10.16.1.152:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
+      .catch(err => {
+        console.log(err)
+      })
+    axios.get('http://10.16.1.233:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
         tasks.data.forEach(task => {
           let eachDate = task.Start.split(' ').slice(0, 3).reduce((acc, task) => {
@@ -96,11 +98,14 @@ export default class Profile extends Component {
         })
         this.grabDailyTasks(JSON.stringify(localDate).slice(1, 11))
       })
+      .catch(err => {
+        console.log(err)
+      })
 
 }
 
   countTasks() {
-    axios.get('http://10.16.1.152:3000/countTasks', { params: { username: this.props.screenProps.userID } })
+    axios.get('http://10.16.1.233:3000/countTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
         tasks.data.forEach(task => {
           if (task.Completion === "False") {
@@ -153,7 +158,7 @@ export default class Profile extends Component {
   uploadPhoto(picture) {
     let uri = picture.base64;
     let pictureText = 'data:image/jpg;base64,' + uri;
-    axios.post('http://10.16.1.152:3000/pictures', { picture: uri, username: this.state.username })
+    axios.post('http://10.16.1.233:3000/pictures', { picture: uri, username: this.state.username })
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })

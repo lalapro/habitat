@@ -25,20 +25,22 @@ export default class AddLocation extends React.Component {
       // user: this.props.navigation.state.params.user_ID,
       avatar: this.props.navigation.state.params.avatar,
       title: this.props.navigation.state.params.title,
-      description: this.props.navigation.state.params.description
+      description: this.props.navigation.state.params.description,
+      eco: this.props.navigation.state.params.eco
     })
   }
 
   newLocation(coords) {
     let longitude = coords.lng;
     let latitude = coords.lat;
-    axios.post('http://10.16.1.152:3000/newLocation', {
+    axios.post('http://10.16.1.233:3000/newLocation', {
       user_ID: this.state.user,
       avatar: this.state.avatar,
       title: this.state.title,
       description: this.state.description,
       longitude: longitude,
-      latitude: latitude
+      latitude: latitude,
+      eco: this.state.eco
     })
     .then(res => console.log('posted'))
     .catch(err => console.error(err))
