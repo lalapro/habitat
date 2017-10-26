@@ -47,7 +47,7 @@ export default class Profile extends Component {
   }
 
   getPicture() {
-    axios.get('http://10.16.1.152:3000/pictures', { params: { username: this.props.screenProps.userID } })
+      axios.get('http://10.16.1.131:3000/pictures', { params: { username: this.props.screenProps.userID }})
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })

@@ -29,7 +29,7 @@ export default class Login extends Component {
   }
 
   handleRegularLogin() {
-    axios.get(`http://10.16.1.152:3000/login`, {
+    axios.get(`http://10.16.1.131:3000/login`, {
       params: {
         username: this.state.username,
         password: this.state.password
@@ -50,7 +50,7 @@ export default class Login extends Component {
       if (type === 'success') {
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`)
         const user = await response.json()
-        axios.post(`http://10.16.1.152:3000/token`, {
+        axios.post(`http://10.16.1.131:3000/token`, {
           name: user.name,
           username: user.id,
           token: token
