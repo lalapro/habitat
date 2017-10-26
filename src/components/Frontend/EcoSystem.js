@@ -55,8 +55,9 @@ export default class EcoSystem extends Component {
 
 
   getMarkers() {
-    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
+    axios.get('http://10.16.1.233:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
     .then(res => {
+      console.log(res.data,' IHHIHIHIHHI')
       let locations = res.data;
       this.setState({locations})
     })
@@ -108,7 +109,7 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.233:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
@@ -126,7 +127,7 @@ export default class EcoSystem extends Component {
     }
 
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    axios.put('http://10.16.1.152:3000/yayTask', {
+    axios.put('http://10.16.1.233:3000/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
@@ -152,7 +153,7 @@ export default class EcoSystem extends Component {
     }
 
     let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
-    axios.put('http://10.16.1.152:3000/nayTask', {
+    axios.put('http://10.16.1.233:3000/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       negativePoints: negativePoints
@@ -223,18 +224,19 @@ export default class EcoSystem extends Component {
           >
 
             {this.state.locations.map((location, index) => {
+              console.log(location, 'LOCATION')
               var upgradeImageNumber = Math.floor(location.PositivePoints/10);
               var positiveImageNumber = location.PositivePoints%10;
               var downgradeImageNumber = Math.floor(location.NegativePoints/4);
               var negativeImageNumber = location.NegativePoints%4;
               upgradeImages = new Array(upgradeImageNumber);
-              upgradeImages.fill(1);
+              upgradeImages.fill(location.Ecosystem);
               posImages = new Array(positiveImageNumber);
-              posImages.fill(2)
+              posImages.fill(location.Ecosystem)
               downgradeImages = new Array(downgradeImageNumber);
-              downgradeImages.fill(3);
+              downgradeImages.fill(location.Ecosystem);
               negImages = new Array(negativeImageNumber);
-              negImages.fill(0)
+              negImages.fill(location.Ecosystem)
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -252,28 +254,30 @@ export default class EcoSystem extends Component {
                 <Image style={{height: '60%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
                 <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
                 {location.tasks ? (
-                  location.tasks.map((task, i) => (
-                    <Image
+                  location.tasks.map((task, i) => {
+                    
+                    return (<Image
                       key={i}
-                      source={toast[1][1]}
+                      source={ecobuddies[task.Ecosystem][1][1]}
                       style={{width: 50, height: 50}}
                     />
-                  ))
+                  )})
                 ) : null}
                 {upgradeImageNumber > 0 ?
-                  upgradeImages.map((img, i) => (
-                      <Image
+                  upgradeImages.map((img, i) => {
+                      console.log(img, 'OMG RETURN')
+                      return (<Image
                         key={i}
-                        source={toast[2][1]}
+                        source={ecobuddies[img][2][1]}
                         style={{width: 100, height: 100}}
                       />
-                    ))
+                   )})
                  : null}
                 {location.PositivePoints ?
                   posImages.map((img, i) => (
                       <Image
                         key={i}
-                        source={toast[2][1]}
+                        source={ecobuddies[img][2][1]}
                         style={{width: 50, height: 50}}
                       />
                     ))
@@ -282,7 +286,7 @@ export default class EcoSystem extends Component {
                   downgradeImages.map((img, i) => (
                       <Image
                         key={i}
-                        source={toast[0][1]}
+                        source={ecobuddies[img][0][1]}
                         style={{width: 100, height: 100}}
                       />
                     ))
@@ -291,7 +295,7 @@ export default class EcoSystem extends Component {
                   negImages.map((img, i) => (
                       <Image
                         key={i}
-                        source={toast[0][1]}
+                        source={ecobuddies[img][0][1]}
                         style={{width: 50, height: 50}}
                       />
                     ))
@@ -353,6 +357,19 @@ export default class EcoSystem extends Component {
   }
 }
 
+const ecobuddies = [
+  [
+    [0, require("../assets/Ecosystem/toast0.png")],
+    [1, require("../assets/Ecosystem/toast1.png")],
+    [2, require("../assets/Ecosystem/toast2.png")]
+  ],
+  [
+    [0, require("../assets/Ecosystem/tree0.png")],
+    [1, require("../assets/Ecosystem/tree1.png")],
+    [2, require("../assets/Ecosystem/tree2.png")]
+  ] 
+]
+
 const images = [
   [0, require("../assets/Ecosystem/home.png")],
   [1, require("../assets/Ecosystem/work.png")],
@@ -410,3 +427,4 @@ const styles = StyleSheet.create({
     // marginLeft: 15
   }
 })
+

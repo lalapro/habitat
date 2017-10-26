@@ -46,6 +46,7 @@ const getMapMarkers = (req, res) => {
                     if (task.Category_ID === category.ID) {
                       task.Category = category.Category;
                       task.Color = category.Color;
+                      task.Ecosystem = results[i].Ecosystem;
                       // task.Completion = category.Completion_Points;
                       if (task.Marker_ID === marker.Marker_ID) {
                         marker.tasks = marker.tasks || [];

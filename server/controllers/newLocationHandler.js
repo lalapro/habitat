@@ -8,7 +8,8 @@ const handleNewLocation = (req, res) => {
   let avatar = req.body.avatar;
   let lng = req.body.longitude;
   let lat = req.body.latitude;
-  let query = `INSERT INTO Marker (Marker_ID, Marker_Title, Marker_Description, Avatar, Latitude, Longitude, Radius, User_ID) VALUES (NULL, '${title}', '${description}', '${avatar}', '${lat}', '${lng}', ${50}, '${user}')`;
+  let eco = req.body.eco;
+  let query = `INSERT INTO Marker (Marker_ID, Marker_Title, Marker_Description, Ecosystem, Avatar, Latitude, Longitude, Radius, User_ID) VALUES (NULL, '${title}', '${description}', '${eco}','${avatar}', '${lat}', '${lng}', ${50}, '${user}')`;
   
   db.query(query, null, (err, results) => {
     if (err) {
