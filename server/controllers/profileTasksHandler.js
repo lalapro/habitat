@@ -10,10 +10,14 @@ const handleProfileTasks = (req, res) => {
     m.Marker_Title,
     m.Avatar,
     m.PositivePoints,
-    m.NegativePoints
+    m.NegativePoints,
+    c.Category,
+    c.Color
     FROM Tasks t
     LEFT JOIN Marker m
     ON t.Marker_ID = m.Marker_ID
+    LEFT JOIN CategoryDeets c
+    ON t.category_ID = c.ID
     WHERE t.User_ID = ${userID}
     `;
 

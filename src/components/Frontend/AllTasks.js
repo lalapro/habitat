@@ -116,7 +116,7 @@ export default class AllTasks extends Component {
           <View style={{ display: 'flex', marginTop: 15, marginBottom: 15, justifyContent: 'center', alignItems: 'center' }}>
             {this.state.completion === "True" ? (
               <Text>
-                Completed on: {this.state.completionTime}
+                Completed Task on: {this.state.completionTime}
               </Text>
             ) : this.state.completion === "False" ? (
               <Text>
