@@ -31,7 +31,7 @@ export default class AllTasks extends Component {
 
   render() {
     let taskStatus = this.props.task.Completion;
-    console.log('ALL TASKSKSKSKS', taskStatus)
+    console.log('All Tasks', taskStatus)
     if (taskStatus === "True") {
       taskStatus = <Image source={sprites[2][1]} style={{height: 45, width: 45, alignItems: 'flex-end'}}/>
     } else if (taskStatus === "False"){

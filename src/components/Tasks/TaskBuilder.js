@@ -19,7 +19,8 @@ class TaskBuilder extends Component {
       endTime: null,
       location: '',
       category: '',
-      frequency: '',
+      frequency: 'Does not repeat',
+      numberRecurrences: 0,
       saved: null,
       categoryID: '',
       markerID: '',
@@ -37,6 +38,7 @@ class TaskBuilder extends Component {
     this.handleCheck = this.handleCheck.bind(this);
     this.saveTask = this.saveTask.bind(this);
     this.cancelTask = this.cancelTask.bind(this);
+    this.handleMultipleTasks = this.handleMultipleTasks.bind(this);
   }
 
   componentDidMount() {
@@ -90,10 +92,15 @@ class TaskBuilder extends Component {
     this.setState({frequency})
   }
 
+  handleMultipleTasks(numberRecurrences) {
+    this.setState({numberRecurrences},()=> {
+      console.log('handleMultipleTasks', this.state.numberRecurrences);
+    })
+  }
+
   handleCheck(day) {
 
   }
-
 
   saveTask() {
     let oldTitle = this.state.oldTitle;
@@ -104,9 +111,11 @@ class TaskBuilder extends Component {
     let markerID = this.state.markerID;
     let category = this.state.category;
     let frequency = this.state.frequency;
+    let numberRecurrences = this.state.numberRecurrences;
     let userID = this.state.userID;
     let taskID = this.state.taskID;
     let readyToSend = false;
+    
 
     if (
       title.length < 1 ||
@@ -121,30 +130,35 @@ class TaskBuilder extends Component {
         [{text: 'OK', onPress: () => console.log('OK Pressed')}],
         { cancelable: false }
         )
+    } else if (frequency !== 'Does not repeat' && numberRecurrences === 0) {
+      Alert.alert(
+        'Oops',
+        `Looks like you didn't let us know how many times you wanted the task to reoccur.`,
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        { cancelable: false }
+      )
+    } else if (frequency === 'Does not repeat' && numberRecurrences > 0) {
+      Alert.alert(
+        'Oops',
+        `Looks like you didn't let us know how often you wanted the task to reoccur.`,
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        { cancelable: false }
+      ) 
     } else if (!this.state.editTask) {
-      axios.post('http://10.16.1.152:3000/newTask', {title, description, startTime, markerID, endTime, category, frequency, userID})
-        .then((response) => this.setState({
-          saved: 'Task Saved',
-          title: '',
-          description: '',
-          startTime: null,
-          endTime: null,
-          category: '',
-          frequency: '',
-          markerID: ''
-        }))
+      axios.post('http://10.16.1.131:3000/newTask', {numberRecurrences, title, description, startTime, markerID, endTime, category, frequency, userID})
         .then(res => {
+          console.log('taskbuilder fires and gets something', res.body)
           this.props.navigation.goBack();
         })
         .catch((err) => console.error('taskbuilderjs. line 82', err))
-      } else {
-        axios.put('http://10.16.1.152:3000/editTask', {taskID, title, description, startTime, endTime, markerID, category, frequency, userID})
-        .then((res) => {
-          this.props.navigation.state.params = ''
-          this.props.navigation.goBack();
-        })
-        .catch(err => console.error(err))
-      }
+    } else {
+      axios.put('http://10.16.1.131:3000/editTask', {numberRecurrences, taskID, title, description, startTime, endTime, markerID, category, frequency, userID})
+      .then((res) => {
+        this.props.navigation.state.params = ''
+        this.props.navigation.goBack();
+      })
+      .catch(err => console.error(err))
+    }
   }
 
   cancelTask() {
@@ -196,6 +210,7 @@ class TaskBuilder extends Component {
             handleLocationChange={this.handleLocationChange.bind(this)}
             handleCategoryChange={this.handleCategoryChange}
             handleFrequencyChange={this.handleFrequencyChange}
+            handleMultipleTasks={this.handleMultipleTasks}
             reRender={this.reRender.bind(this)}
             saveTask={this.saveTask}
             cancel={this.cancelTask}

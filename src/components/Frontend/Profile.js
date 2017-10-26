@@ -38,7 +38,7 @@ export default class Profile extends Component {
   }
 
   getPicture() {
-      axios.get('http://10.16.1.152:3000/pictures', { params: { username: this.props.screenProps.userID }})
+      axios.get('http://10.16.1.131:3000/pictures', { params: { username: this.props.screenProps.userID }})
       .then(res => {
           let jpg = 'data:image/jpg;base64,' + res.data.picture;
           this.setState({ image: jpg })
@@ -50,7 +50,7 @@ export default class Profile extends Component {
     var testDateUtc = moment.utc(new Date());
     var localDate = testDateUtc.local();
 
-    axios.get('http://10.16.1.152:3000/completedTasks', { params: { username: this.props.screenProps.userID }})
+    axios.get('http://10.16.1.131:3000/completedTasks', { params: { username: this.props.screenProps.userID }})
     .then(tasks => {
       tasks.data.forEach(task => {
         let eachDate = task.Start.split(' ').slice(0, 3).reduce((acc, task) => {
@@ -68,7 +68,7 @@ export default class Profile extends Component {
   }
 
   countTasks() {
-    axios.get('http://10.16.1.152:3000/countTasks', {params: {username: this.props.screenProps.userID}})
+    axios.get('http://10.16.1.131:3000/countTasks', {params: {username: this.props.screenProps.userID}})
       .then(tasks => {
         tasks.data.forEach(task => {
           if (task.Completion === "False") {
@@ -121,7 +121,7 @@ export default class Profile extends Component {
   uploadPhoto(picture) {
       let uri = picture.base64;
       let pictureText = 'data:image/jpg;base64,' + uri;
-      axios.post('http://10.16.1.152:3000/pictures', { picture: uri, username: this.state.username })
+      axios.post('http://10.16.1.131:3000/pictures', { picture: uri, username: this.state.username })
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })
