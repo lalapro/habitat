@@ -17,7 +17,7 @@ const handleProfileTasks = (req, res) => {
     LEFT JOIN Marker m
     ON t.Marker_ID = m.Marker_ID
     LEFT JOIN CategoryDeets c
-    ON t.category_ID = c.ID
+    ON t.Category_ID = c.ID
     WHERE t.User_ID = ${userID}
     `;
 

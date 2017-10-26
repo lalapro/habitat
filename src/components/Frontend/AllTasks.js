@@ -26,9 +26,11 @@ export default class AllTasks extends Component {
       time = time.slice(0, -9);
       this.setState({
         completionTime: time,
-        completion: task.Completion
+        completion: task.Completion,
+        showEdit: !this.state.showEdit
       })
     }
+<<<<<<< HEAD
     this.setState({ showEdit: !this.state.showEdit })
   }
 
@@ -57,6 +59,8 @@ export default class AllTasks extends Component {
       .catch((err) => {
         console.error(err);
       })
+=======
+>>>>>>> merge
   }
 
   markFailed(task) {
