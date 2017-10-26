@@ -12,15 +12,21 @@ export default class AllTasks extends Component {
       showEdit: false,
       completionTime: '',
       completion: null,
-      submit: false
+      hasStarted: true,
+      rerender: 0
     }
   }
 
-  componentWillReceiveProps() {
-    this.setState({ showEdit: false })
+  componentWillReceiveProps(oldprops, newprops) {
+    this.setState({ showEdit: false})
   }
 
   showEdit(task) {
+    // console.log(convertDate(task.Start), 'INSIDE ALL TASK ON CLICK')
+    let currentTime = new Date();
+
+    currentTime > convertDate(task.Start) ? null : this.setState({ hasStarted: false });
+
     if (task.Completion === "True" || task.Completion === "False") {
       let time = task.Time;
       time = time.slice(0, -9);
@@ -50,14 +56,12 @@ export default class AllTasks extends Component {
       markerId: task.Marker_ID,
       positivePoints: positivePoints
     })
-      .then((res) => {
-        this.setState({
-          submit: true
-        })
-      })
-      .catch((err) => {
-        console.error(err);
-      })
+    .then(res => {
+      this.props.reRender()
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   }
 
   markFailed(task) {
@@ -77,14 +81,50 @@ export default class AllTasks extends Component {
       markerId: task.Marker_ID,
       negativePoints: negativePoints
     })
-    .then((res) => {
-      this.setState({
-        submit: true
-      })
+    .then(res => {
+      this.props.reRender()
     })
     .catch((err) => {
       console.error(err);
     })
+  }
+
+  test() {
+    if (this.state.completion === "True") {
+      return (
+        <Text>
+          Completed Task on: {this.state.completionTime}
+        </Text>
+      )
+    } else if (this.state.completion === "False") {
+      return (
+        <Text>
+          Failed Task on: {this.state.completionTime}
+        </Text>
+      )
+    } else if (!this.state.hasStarted) {
+        return (
+          <Text>
+            Task has not been started yet!
+          </Text>
+        )
+    } else {
+      return (
+        <View>
+          <Text>
+            Task in Progress! Hold to edit!
+          </Text>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <TouchableOpacity onPress={() => { this.markFailed(this.props.task) }}>
+              <Image source={sprites[0][1]} style={{ height: 35, width: 35 }} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { this.markCompleted(this.props.task) }}>
+              <Image source={sprites[2][1]} style={{ height: 35, width: 35 }} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    }
   }
 
 
@@ -115,34 +155,8 @@ export default class AllTasks extends Component {
         </TouchableOpacity>
         {this.state.showEdit ? (
           <View style={{ display: 'flex', marginTop: 15, marginBottom: 15, justifyContent: 'center', alignItems: 'center' }}>
-            {this.state.completion === "True" ? (
-              <Text>
-                Completed Task on: {this.state.completionTime}
-              </Text>
-            ) : this.state.completion === "False" ? (
-              <Text>
-                Failed Task on: {this.state.completionTime}
-              </Text>
-            ) : (!this.state.submit ? (
-              <View>
-                <Text>
-                  Task in Progress! Hold to edit!
-                    </Text>
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <TouchableOpacity onPress={() => { this.markFailed(this.props.task) }}>
-                    <Image source={sprites[0][1]} style={{ height: 35, width: 35 }} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => { this.markCompleted(this.props.task) }}>
-                    <Image source={sprites[2][1]} style={{ height: 35, width: 35 }} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : (
-              <Text>
-                Task Completed!
-              </Text>
-            ))}
-            </View>
+            {this.test()}
+          </View>
         ) : null}
       </View>
     )
