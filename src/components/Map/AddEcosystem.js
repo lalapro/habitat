@@ -7,7 +7,6 @@ export default class AddEcosystem extends Component {
   }
 
   render() {
-    console.log(this.props.navigation, 'NAVIGATION?')
     const { navigate } = this.props.navigation;
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }} >

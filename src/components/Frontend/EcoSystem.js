@@ -224,7 +224,6 @@ export default class EcoSystem extends Component {
           >
 
             {this.state.locations.map((location, index) => {
-              console.log(location, 'LOCATION')
               var upgradeImageNumber = Math.floor(location.PositivePoints/10);
               var positiveImageNumber = location.PositivePoints%10;
               var downgradeImageNumber = Math.floor(location.NegativePoints/4);
@@ -265,7 +264,6 @@ export default class EcoSystem extends Component {
                 ) : null}
                 {upgradeImageNumber > 0 ?
                   upgradeImages.map((img, i) => {
-                      console.log(img, 'OMG RETURN')
                       return (<Image
                         key={i}
                         source={ecobuddies[img][2][1]}
