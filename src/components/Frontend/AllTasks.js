@@ -26,7 +26,8 @@ export default class AllTasks extends Component {
       time = time.slice(0, -9);
       this.setState({
         completionTime: time,
-        completion: task.Completion
+        completion: task.Completion,
+        showEdit: !this.state.showEdit
       })
     }
     this.setState({ showEdit: !this.state.showEdit })
@@ -139,7 +140,7 @@ export default class AllTasks extends Component {
             ) : (
               <Text>
                 Task Completed!
-              </Text> 
+              </Text>
             ))}
             </View>
         ) : null}
