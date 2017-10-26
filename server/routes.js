@@ -18,6 +18,8 @@ const handleNayTask = require('./controllers/nayTaskHandler.js');
 const handleProfileTasks = require('./controllers/profileTasksHandler.js');
 const countTasks = require('./controllers/countTasks.js');
 
+const categoryPercentage = require('./controllers/categoryPercentage');
+
 routes.post('/signup', handleSignup);
 routes.get('/login', handleLogin);
 routes.post('/newTask', handlenNewTask);
@@ -39,5 +41,6 @@ routes.put('/yayTask', handleYayTask);
 routes.put('/nayTask', handleNayTask);
 routes.get('/completedTasks', handleProfileTasks);
 routes.get('/countTasks', countTasks);
+routes.get('/categoryPercentage', categoryPercentage)
 
 module.exports = routes;

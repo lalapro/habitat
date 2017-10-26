@@ -30,7 +30,6 @@ export default class AllTasks extends Component {
         showEdit: !this.state.showEdit
       })
     }
-<<<<<<< HEAD
     this.setState({ showEdit: !this.state.showEdit })
   }
 
@@ -46,7 +45,7 @@ export default class AllTasks extends Component {
     }
 
     let positivePoints = task.PositivePoints + 1;
-    axios.put('http://10.16.1.233:3000/yayTask', {
+    axios.put('http://10.16.1.152:3000/yayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       positivePoints: positivePoints
@@ -59,8 +58,6 @@ export default class AllTasks extends Component {
       .catch((err) => {
         console.error(err);
       })
-=======
->>>>>>> merge
   }
 
   markFailed(task) {
@@ -75,7 +72,7 @@ export default class AllTasks extends Component {
     }
 
     let negativePoints = task.NegativePoints + 1;
-    axios.put('http://10.16.1.233:3000/nayTask', {
+    axios.put('http://10.16.1.152:3000/nayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       negativePoints: negativePoints
@@ -143,7 +140,7 @@ export default class AllTasks extends Component {
             ) : (
               <Text>
                 Task Completed!
-              </Text> 
+              </Text>
             ))}
             </View>
         ) : null}
