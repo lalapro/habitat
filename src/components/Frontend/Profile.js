@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { AsyncStorage, Modal, ImageStore, StyleSheet, Text, View, Image, TextInput, Button, Clipboard, TouchableOpacity, TouchableHighlight, Alert, ScrollView } from 'react-native';
+import { ART, AsyncStorage, Modal, ImageStore, StyleSheet, Text, View, Image, TextInput, Button, Clipboard, TouchableOpacity, TouchableHighlight, Alert, ScrollView } from 'react-native';
 import Expo, { Asset, Camera, Permissions, ImagePicker } from 'expo';
 import axios from 'axios';
 import AllTasks from './AllTasks.js';
+import Chart from './Chart.js';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
-import convertKey from './convertKey'
+import convertKey from './convertKey';
+import Area from './Area';
+import convertDate from  './convertDate';
 
 export default class Profile extends Component {
   constructor(props) {
@@ -22,6 +25,14 @@ export default class Profile extends Component {
       inProgress: 0,
       completed: 0,
       failed: 0,
+      graphs: false,
+      chart: {},
+      color: {},
+      total: 0,
+      categoryPercentage: [],
+      activeIndex: 0,
+      orderedColors: [],
+      dayByDay: []
     }
     this.showModal = this.showModal.bind(this);
     this.uploadPhoto = this.uploadPhoto.bind(this);
@@ -62,7 +73,57 @@ export default class Profile extends Component {
           this.state.daysWithTask[key] ? this.state.daysWithTask[key].push(task) : this.state.daysWithTask[key] = [task];
           // creates an object with keys of locations and values of
           this.state.locations[task.Marker_Title] ? this.state.locations[task.Marker_Title].push(task) : this.state.locations[task.Marker_Title] = [task];
+          
+          this.state.chart[task.Category] ? this.state.chart[task.Category]++ : this.state.chart[task.Category] = 1  
+        
+          if (!this.state.color[task.Category]) {
+            this.state.color[task.Category] = { color: task.Color, frequency: []};
+            if (this.state.color[task.Category].frequency.length === 0) {
+              let copy = template.slice().map(ele => {
+                let temp = {};
+                  return Object.assign(temp, ele)
+              });
+              this.state.color[task.Category].frequency = copy;
+            } 
+          }
+          let duration = convertDate(task.End).getTime() - convertDate(task.Start).getTime();
+          let day = task.Time.slice(0, 3);
+          this.state.color[task.Category].frequency.forEach(dailyValues => {
+            if (dailyValues.day === day) {
+              duration = (duration / (1000 * 60 * 60)) % 24 * 5
+              dailyValues.value += duration;
+            }
+          })
+
+          console.log(this.state.color, 'COLOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+          this.state.total++;
+
         })
+        let categoryPercentage = [];
+        
+        for (var key in this.state.chart) {
+          let percentage = Math.floor(this.state.chart[key]/this.state.total * 100)
+          categoryPercentage.push({ "number": percentage, "name": key })
+        }
+        categoryPercentage.sort((a, b) => {
+          return b.number - a.number;
+        }).forEach(category => {
+          if (!this.state.orderedColors.includes(this.state.color[category.name].color)) {
+            this.state.orderedColors.push(this.state.color[category.name].color)
+          }
+        })
+        this.setState({
+          categoryPercentage: categoryPercentage
+        })
+
+        for (key in this.state.color) {
+          if (this.state.color[key].color === this.state.orderedColors[0]) {
+            this.setState({
+              dayByDay: this.state.color[key].frequency
+            })
+          }
+        }
+        console.log(this.state.dayByDay, 'DAYBYDAY')
       })
       .then(res => this.grabDailyTasks(JSON.stringify(localDate).slice(1, 11)))
   }
@@ -128,7 +189,6 @@ export default class Profile extends Component {
       });
   }
 
-
   showModal(stat) {
     this.setState({ visibleModal: stat })
   }
@@ -136,18 +196,51 @@ export default class Profile extends Component {
   grabDailyTasks(date) {
     date = JSON.stringify(date).slice(1, 11);
     this.setState({
-      dailyTasks: this.state.daysWithTask[date] || []
+      dailyTasks: this.state.daysWithTask[date] || [],
+      graphs: false
     })
   }
 
   changeLocation(location) {
-    console.log(location,' LOCATION')
+    this.setState({
+      graphs: true
+    })
+  }
+
+  _onPieItemSelected(newIndex){
+    for (key in this.state.color) {
+        console.log(this.state.color[key].color, 'STATE COLOR')
+        console.log(this.state.orderedColors[newIndex], 'NEWINDEXORDERED')
+      if (this.state.color[key].color === this.state.orderedColors[newIndex]) {
+        console.log(newIndex, 'AFTER')
+       
+        this.setState({
+          dayByDay: this.state.color[key].frequency,
+          activeIndex: newIndex
+        })
+        break;
+      }
+    }
+  }
+
+  _shuffle(a) {
+      for (let i = a.length; i; i--) {
+          let j = Math.floor(Math.random() * i);
+          [a[i - 1], a[j]] = [a[j], a[i - 1]];
+      }
+      return a;
   }
 
   render() {
+
     
+    // console.log(this.state.dayByDay, 'DAYBYDAY')
+
     let tabs = Object.entries(this.state.locations)
-    console.log(tabs)
+    tabs.unshift(['Overview'])
+
+    console.log(this.state.orderedColors, 'THIS IS ORERED')
+
     return (
       <View style={{ flex: 1, backgroundColor: '#ddd' }}>
         <View style={{ marginLeft: 5, marginTop: 20, alignItems: 'flex-start' }}>
@@ -189,15 +282,41 @@ export default class Profile extends Component {
           ) : null }
         </ScrollView>
         </View>
-        <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
-          <ScrollView style={{ marginTop: 15 }}>
-            {this.state.dailyTasks.map((task, i) => {
-              return (
-                <AllTasks task={task} key={i} />
-              )
-            })}
-          </ScrollView>
-        </View>
+          {!this.state.graphs ? (
+            <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
+              <ScrollView style={{ marginTop: 15 }}>
+                {this.state.dailyTasks.map((task, i) => {
+                  return (
+                    <AllTasks task={task} key={i} />
+                  )
+                })}
+              </ScrollView>
+            </View>
+          ) : (
+
+            <View style={{ flex: 4, borderTopWidth: 1, borderColor: 'black'}}>
+            <View style={{ flex:1}}>
+              <Chart
+              pieWidth={130}
+              pieHeight={130}
+              colors={this.state.orderedColors}
+              onItemSelected={this._onPieItemSelected.bind(this)}
+              width={180}
+              height={180}
+              data={this.state.categoryPercentage} />
+              </View>
+              <View style={{ flex:1, alignItems: 'center', justifyContent: 'center'}}>
+              <Area 
+                width={200}
+                height={200}
+                data={this.state.dayByDay}
+                color={this.state.orderedColors[this.state.activeIndex]}               
+              />
+              </View>
+            </View>
+            
+          )}
+
         <CalendarStrip
           calendarAnimation={{ type: 'sequence', duration: 30 }}
           daySelectionAnimation={{ type: 'background', duration: 300, highlightColor: '#9265DC' }}
@@ -238,6 +357,31 @@ export default class Profile extends Component {
     );
   }
 }
+
+const template = [
+  {day: 'Mon', value: 0},
+  {day: 'Tue', value: 0},
+  {day: 'Wed', value: 0},
+  {day: 'Thu', value: 0},
+  {day: 'Fri', value: 0},
+  {day: 'Sat', value: 0},
+  {day: 'Sun', value: 0},
+  {day: 'Mon', value: 0},
+  {day: 'Tue', value: 0},
+  {day: 'Wed', value: 0},
+  {day: 'Thu', value: 0},
+  {day: 'Fri', value: 0},
+  {day: 'Sat', value: 0},
+  {day: 'Sun', value: 0},
+  {day: 'Mon', value: 0},
+  {day: 'Tue', value: 0},
+  {day: 'Wed', value: 0},
+  {day: 'Thu', value: 0},
+  {day: 'Fri', value: 0},
+  {day: 'Sat', value: 0},
+  {day: 'Sun', value: 0}
+]
+
 
 const sprites = [
   [0, require("../assets/Ecosystem/tree0.png")],
@@ -289,3 +433,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   }
 })
+
+const theme = {
+    colors: [
+    ]
+  }

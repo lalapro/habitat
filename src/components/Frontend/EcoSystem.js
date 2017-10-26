@@ -261,8 +261,9 @@ export default class EcoSystem extends Component {
                   ))
                 ) : null}
                 {upgradeImageNumber > 0 ? 
-                  upgradeImages.map((img) => (
+                  upgradeImages.map((img, i) => (
                       <Image 
+                        key={i}
                         source={toast[2][1]}
                         style={{width: 100, height: 100}}
                       />
