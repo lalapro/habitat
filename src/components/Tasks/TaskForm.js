@@ -73,8 +73,12 @@ class TaskForm extends Component {
           <Picker.Item label="Daily" value="daily" />
           <Picker.Item label="Weekly" value="weekly" />
           <Picker.Item label="Monthly" value="monthly" />
-          <Picker.Item label="Yearly" value="yearly" />
         </Picker>
+        <TextInput 
+          onChangeText={(multiples) => {this.props.handleMultipleTasks(multiples)}}
+          placeholder='Number of reoccurrences?'
+          style={styles.input}
+          keyboardType='numeric'/>
         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
           <TouchableHighlight onPress={() => {this.props.saveTask()}}><Text style={{fontSize: 30, textAlign: 'right'}}>&#x2714;</Text></TouchableHighlight>
           <TouchableHighlight onPress={() => {this.props.cancel()}}><Text style={{fontSize: 30, textAlign: 'right'}}>&#x274c;</Text></TouchableHighlight>
