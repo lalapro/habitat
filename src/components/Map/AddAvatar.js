@@ -14,7 +14,7 @@ export default class AddAvatar extends React.Component {
       <View style={styles.container}>
         {images.map((pic, key) => {
           return (
-            <TouchableOpacity key={key} onPress={() => navigate('Title', {avatar: pic[0]})}>
+            <TouchableOpacity key={key} onPress={() => navigate('Eco', {avatar: pic[0]})}>
               <Image
                 source={pic[1]}
                 style={styles.ecobuds}

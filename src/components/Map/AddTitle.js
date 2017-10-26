@@ -19,7 +19,8 @@ export default class Title extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    let avatar = this.props.navigation.state.params.avatar
+    let avatar = this.props.navigation.state.params.avatar;
+    let eco = this.props.navigation.state.params.eco;
     return (
       <View style={styles.container}>
         <Image source={images[avatar][1]} style={styles.ecobuds}/>
@@ -34,7 +35,7 @@ export default class Title extends React.Component {
           value={this.state.description}
         />
         <Button
-          onPress={() => navigate('Location', {avatar: avatar, title: this.state.title, description: this.state.description})}
+          onPress={() => navigate('Location', {eco: eco, avatar: avatar, title: this.state.title, description: this.state.description})}
           title="Next"
           color="#841584"
         />
@@ -42,6 +43,10 @@ export default class Title extends React.Component {
     );
   }
 }
+const sprites = [
+  [0, require("../assets/Ecosystem/toast1.png")],
+  [1, require("../assets/Ecosystem/tree1.png")]
+]
 
 const images = [
   [0, require("../assets/Ecosystem/home.png")],
@@ -53,7 +58,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   ecobuds: {
     width: 100,

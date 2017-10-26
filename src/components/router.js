@@ -48,7 +48,7 @@ export const SignedIn = DrawerNavigator(
 	{
 		initialRouteName: 'Home',
 		drawerPosition: 'left',
-		drawerWidth: 100,
+		drawerWidth: 120,
 		alignItems: 'center',
 		contentOptions: {
 			activeTintColor: 'rgba(0, 0, 0, 0.3)'
