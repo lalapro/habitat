@@ -12,13 +12,15 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       user: null,
-      currentLocation: {}
+      currentLocation: {},
+      fbPic: null
     }
   }
 
-  handleLogIn = (user) => {
+  handleLogIn = (user, fbPic) => {
     this.setState({
-      user: user
+      user: user,
+      fbPic: fbPic
     })
   }
 
@@ -30,7 +32,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.checkAsyncStorage().then(token => {
-      axios.get(`http://10.16.1.233:3000/token`, {
+      axios.get(`http://10.16.1.152:3000/token`, {
         params: {
           token: token
         }
@@ -55,7 +57,8 @@ export default class App extends React.Component {
     if (this.state.user !== null) {
       return <SignedIn screenProps={{
         userID: this.state.user,
-        handleLogout: this.handleLogout
+        handleLogout: this.handleLogout,
+        fbPic: this.state.fbPic
       }}/>
     } else {
       return <SignedOut screenProps={{

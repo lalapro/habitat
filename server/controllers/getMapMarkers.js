@@ -34,6 +34,8 @@ const getMapMarkers = (req, res) => {
               sortedByTime = sortedByTime.filter(task => {
                 let taskDate = convertDate(task.Start);
                 let today = new Date()
+                // console.log(taskDate.getFullYear() === today.getFullYear() && taskDate.getMonth() === today.getMonth() && taskDate.getDate() === today.getDate())
+                console.log(task)
                 return taskDate.getFullYear() === today.getFullYear() && taskDate.getMonth() === today.getMonth() && taskDate.getDate() === today.getDate()
               })
             }

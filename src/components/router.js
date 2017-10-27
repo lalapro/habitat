@@ -26,6 +26,7 @@ import EcoSystem from './Frontend/EcoSystem';
 import TaskBuilder from './Tasks/TaskBuilder';
 import Logout from './Login/Logout.js';
 import TaskItem from './TaskView/TaskItem.js';
+import Friends from './Friends/Friends.js'
 
 export const SignedIn = DrawerNavigator(
 	{
@@ -41,6 +42,9 @@ export const SignedIn = DrawerNavigator(
 		TaskBuilder: {
 			screen: props => <TaskBuilder {...props}/>
 		},
+    Friends: {
+      screen: Friends
+    },
 		Logout: {
 			screen: Logout
 		}

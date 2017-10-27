@@ -145,14 +145,14 @@ class TaskBuilder extends Component {
         { cancelable: false }
       ) 
     } else if (!this.state.editTask) {
-      axios.post('http://10.16.1.233:3000/newTask', {numberRecurrences, title, description, startTime, markerID, endTime, category, frequency, userID})
+      axios.post('http://10.16.1.152:3000/newTask', {numberRecurrences, title, description, startTime, markerID, endTime, category, frequency, userID})
         .then(res => {
           console.log('taskbuilder fires and gets something', res.body)
           this.props.navigation.goBack();
         })
         .catch((err) => console.error('taskbuilderjs. line 82', err))
     } else {
-      axios.put('http://10.16.1.233:3000/editTask', {numberRecurrences, taskID, title, description, startTime, endTime, markerID, category, frequency, userID})
+      axios.put('http://10.16.1.152:3000/editTask', {numberRecurrences, taskID, title, description, startTime, endTime, markerID, category, frequency, userID})
       .then((res) => {
         this.props.navigation.state.params = ''
         this.props.navigation.goBack();
