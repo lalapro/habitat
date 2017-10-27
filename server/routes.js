@@ -17,8 +17,10 @@ const handleYayTask = require('./controllers/yayTaskHandler.js');
 const handleNayTask = require('./controllers/nayTaskHandler.js');
 const handleProfileTasks = require('./controllers/profileTasksHandler.js');
 const countTasks = require('./controllers/countTasks.js');
-
+const saveFriends = require('./controllers/saveFriends.js');
+const getFriends = require('./controllers/getFriends.js');
 const categoryPercentage = require('./controllers/categoryPercentage');
+const updateLocation = require('./controllers/updateLocation');
 
 routes.post('/signup', handleSignup);
 routes.get('/login', handleLogin);
@@ -41,6 +43,10 @@ routes.put('/yayTask', handleYayTask);
 routes.put('/nayTask', handleNayTask);
 routes.get('/completedTasks', handleProfileTasks);
 routes.get('/countTasks', countTasks);
-routes.get('/categoryPercentage', categoryPercentage)
+routes.get('/categoryPercentage', categoryPercentage);
+routes.post('/friends', saveFriends);
+routes.get('/friends', getFriends);
+routes.put('/updateLocation', updateLocation);
+
 
 module.exports = routes;

@@ -29,7 +29,7 @@ export default class Login extends Component {
   }
 
   handleRegularLogin() {
-    axios.get(`http://10.16.1.233:3000/login`, {
+    axios.get(`http://10.16.1.152:3000/login`, {
       params: {
         username: this.state.username,
         password: this.state.password
@@ -44,22 +44,52 @@ export default class Login extends Component {
   login = async () => {
       const APP_ID = "1729141044061993"
       const options = {
-          permissions: ['public_profile', 'email', 'user_friends'],
+          permissions: ['public_profile', 'email', 'user_friends', 'user_photos', 'user_location'],
       }
+
       const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(APP_ID, options)
       if (type === 'success') {
+
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`)
-        const user = await response.json()
-        axios.post(`http://10.16.1.233:3000/token`, {
+        const user = await response.json();
+        // let user_fb_pic = null;
+        // this.getFBPic().then(pic => user_fb_pic = pic)
+
+        const response2 = await fetch(`https://graph.facebook.com/${user.id}/friends?access_token=${token}`)
+        const friends = await response2.json();
+
+        axios.post(`http://10.16.1.152:3000/token`, {
           name: user.name,
           username: user.id,
           token: token
         })
         .then(res => {
-          this.props.screenProps.handleLogIn(res.data.user)
+          this.getFBPic(user.id).then(pic => {
+            this.props.screenProps.handleLogIn(res.data.user, pic);
+          })
+          AsyncStorage.setItem(`user_token`, token);
+          friends.data.forEach(friend => {
+            this.getFBPic(friend.id).then(pic => {
+              axios.post('http://10.16.1.152:3000/friends', {
+                user: res.data.user,
+                username: user.name,
+                userfbID: user.id,
+                friend: friend,
+                pic: pic
+              })
+              .then(res => console.log('success'))
+              .catch(err => console.error(err))
+            })
+          })
         })
-        AsyncStorage.setItem(`user_token`, token);
-    }
+      }
+  }
+
+  getFBPic = async (id) => {
+    const response3 = await fetch(`https://graph.facebook.com/${id}/picture?type=normal`)
+    let pic = await response3.url;
+    return pic
+
   }
 
   checkAsyncStorage = async () => {

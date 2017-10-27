@@ -16,12 +16,7 @@ const handleToken = (req, res) => {
 
 const checkAuthExists = (username) => {
   let exists = false;
-
 }
-// name: user.name,
-// username: user.id,
-// token: token
-// `INSERT INTO User (ID, Name, Username, Email, Hash_Password, Photo_Url) VALUES (NULL, '${name}', '${username}', '${email}', '${hash}', NULL)`
 
 const handleAuth = (req, res) => {
   let token = req.body.token;

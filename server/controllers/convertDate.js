@@ -1,6 +1,5 @@
 const convertDate = (string) => {
 
-
   let idx = string.indexOf(',');
   let date = string.slice(0, idx).split(' ');
   let month = DATEKEY[date[0]];
