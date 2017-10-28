@@ -7,7 +7,7 @@ const convertDate = require('./convertDate')
 
 
 const getMapMarkers = (req, res) => {
-  let userID = req.query.userID || 59;
+  let userID = req.query.userID;
   let currentDay = req.query.currentDay;
   let today = new Date();
   today = moment(today).format("MMMM Do YYYY");
@@ -15,13 +15,7 @@ const getMapMarkers = (req, res) => {
   let query = `SELECT * FROM Marker WHERE User_ID = ${userID}`;
   let innerQuery = `SELECT * FROM Tasks WHERE User_ID = ${userID} AND LEFT(Start, LOCATE(',', START) -1)='${today}'`;
   let categoryQuery = `SELECT * FROM CategoryDeets WHERE User_ID = ${userID}`;
-  // db.query(innerQuery, null, (err, results) => {
-  //   if (err) {
-  //     res.send(err)
-  //   } else {
-  //     res.send(results)
-  //   }
-  // })
+  
   db.query(query, null, (err, results) => {
     if (err) {
       res.status(404).send(`We encountered an error looking up the locations ${err}`);

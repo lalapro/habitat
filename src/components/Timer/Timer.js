@@ -1,23 +1,3 @@
-// import React, { Component } from 'react';
-// import{ StyleSheet, View, Image, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native';
-// import axios from 'axios';
-
-// export default class Timer extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//     }
-//   }
-
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Text>Build Habitats by keeping Good Habits</Text>
-//       </View>
-//     )
-//   }
-// }
-
 import React, { Component } from 'react';
 import { Constants } from 'expo';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Picker } from 'react-native';
@@ -28,22 +8,21 @@ export default class Timer extends Component {
     constructor(props) {
         super (props);
         this.state = {
-          // hours: ['1', '2', '3'],
-          
           fill: 0,
           hour: 0,
           minute: 0,
           second: 0,
           toggleTimer: false,
-          duration: 0
+          duration: 0,
+          interval: null,
+          setTimeout: null
       }
-      // this.calculateTime = this.calculateTime.bind(this);
+      this.calculateTime = this.calculateTime.bind(this);
       this.eachPie = this.eachPie.bind(this);
       this.startTimer = this.startTimer.bind(this);
     }
 
     startTimer() {
-      
       var hoursInMSec = this.state.hour * 3600000;
       var minsInMSec = this.state.minute * 60000;
       var secsInMSec = this.state.second * 1000;
@@ -55,13 +34,41 @@ export default class Timer extends Component {
         if (this.state.toggleTimer) {
           let startTime = new Date();
           console.log('startTimer', startTime);
-          interval = setInterval(this.calculateTime.bind(this, startTime, duration), 500);
-          console.log('interval', interval);
-          setTimeout(() => { clearInterval(interval) }, duration + 500);
+          this.setState({
+            interval: setInterval(this.calculateTime.bind(this, startTime, duration), 500)
+          }, () => {
+            this.setState({
+              setTimeout: setTimeout(() => { 
+                clearInterval(this.state.interval)
+                this.setState({
+                  hour: 0,
+                  minute: 0,
+                  second: 0,
+                  fill: 0
+                }, () => {
+                  this.setState({
+                    duration: 0,
+                    toggleTimer: false
+                  })
+                })
+              }, duration + 500)
+            })
+          })
         } else {
           console.log('im in here now');
-          console.log(interval);
-          clearInterval(interval);
+          console.log(this.state.interval);
+          clearInterval(this.state.interval);
+          clearTimeout(this.state.setTimeout);
+          this.setState({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            fill: 0
+          }, () => {
+            this.setState({
+              duration: 0
+            })
+          })
         } 
       });
     }
