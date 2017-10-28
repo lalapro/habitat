@@ -106,7 +106,7 @@ export default class MapScreen extends Component {
       }
     })
     .catch(err => {
-      console.log('error in updateCurrentLocation', err);
+      console.error('error in updateCurrentLocation', err);
     })
   }
 

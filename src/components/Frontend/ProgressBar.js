@@ -21,20 +21,23 @@ export default class ProgressBar extends Component {
       this.calculateTime()
     }
     componentWillReceiveProps(oldprops, newprops) {
-      // console.log('RECEIVING PROPS', oldprops)
       this.calculateTime(oldprops)
     }
 
     calculateTime(props) {
-      // console.log('RECEIVING PROPS', props)
       props = props || this.props;
       let { Start } = props.task;
+      console.log('start', Start);
+      console.log(convertDate(Start));
       let { End } = props.task;
+      console.log('end', End);
+      console.log(convertDate(End));
       let currentTime = new Date();
+      console.log('currentTime', currentTime)
       let duration = convertDate(End).getTime() - convertDate(Start).getTime();
+      console.log('duration', duration);
       let timePassed = currentTime.getTime() - convertDate(Start).getTime();
-      // console.log('TIME PASSED', timePassed);
-      // console.log('DURATION', duration)
+      console.log('timePassed', timePassed)
       let percentage = (timePassed / duration);
 
       this.setState({ fill: percentage })
@@ -91,7 +94,7 @@ const clocks = [
     [12, require("../assets/clocks/twelve.png")]
   ]
 
-  const styels = StyleSheet.create({
+  const styles = StyleSheet.create({
     circle: {
         width: 120,
         height: 120,

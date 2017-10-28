@@ -18,10 +18,8 @@ const handleNewTask = (req, res) => {
   let Marker_ID = req.body.markerID;
   let User_ID = req.body.userID;
 
-  console.log("multiples", Multiple);
   if (Multiple > 0) {
     if (Frequency === 'daily') {
-      console.log('triggering newTaskHandler');
       var lastStartTime = new Date(Start.setDate(Start.getDate()+ Multiple));
       var startingTimes = [];
       var endingTimes = [];
@@ -59,7 +57,6 @@ const handleNewTask = (req, res) => {
 
       for (var d = firstEndTime; d <= lastEndTime; d.setDate(d.getDate() + 7)) {
         let eachEndTime = new Date(d);
-        console.log(eachEndTime);
         endingTimes.push(moment(eachEndTime).format("MMMM Do YYYY, h:mm a"));
       }
       for (var i = 0; i < Multiple; i++) {
@@ -85,7 +82,6 @@ const handleNewTask = (req, res) => {
 
       for (var d = firstEndTime; d <= lastEndTime; d.setDate(d.getDate() + 30)) {
         let eachEndTime = new Date(d);
-        console.log(eachEndTime);
         endingTimes.push(moment(eachEndTime).format("MMMM Do YYYY, h:mm a"));
       }
       for (var i = 0; i < Multiple; i++) {

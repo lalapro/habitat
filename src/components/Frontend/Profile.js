@@ -79,7 +79,7 @@ export default class Profile extends Component {
         })
       })
       .catch(err => {
-        console.log(err)
+        console.error(err)
       })
     axios.get('http://10.16.1.152:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
@@ -99,7 +99,7 @@ export default class Profile extends Component {
         this.grabDailyTasks(JSON.stringify(localDate).slice(1, 11))
       })
       .catch(err => {
-        console.log(err)
+        console.error(err)
       })
 
 }
@@ -137,7 +137,7 @@ export default class Profile extends Component {
       aspect: [4, 3],
       base64: true,
     })
-      .catch(err => console.log(err, 'ERR!!!'))
+      .catch(err => console.error(err, 'ERR!!!'))
     this.handlePicture(picture);
   }
 
@@ -147,7 +147,7 @@ export default class Profile extends Component {
       if (!picture.cancelled) {
       }
     } catch (e) {
-      console.log({ e }, 'error!');
+      console.error({ e }, 'error!');
       alert('This is not working');
     } finally {
       this.setState({ uploading: false });
@@ -186,10 +186,7 @@ export default class Profile extends Component {
 
   _onPieItemSelected(newIndex){
     for (key in this.state.color) {
-        console.log(this.state.color[key].color, 'STATE COLOR')
-        console.log(this.state.orderedColors[newIndex], 'NEWINDEXORDERED')
       if (this.state.color[key].color === this.state.orderedColors[newIndex]) {
-        console.log(newIndex, 'AFTER')
 
         this.setState({
           dayByDay: this.state.color[key].frequency,
@@ -206,10 +203,6 @@ export default class Profile extends Component {
 
 
   render() {
-
-
-    // console.log(this.state.dayByDay, 'DAYBYDAY')
-
     let tabs = Object.entries(this.state.locations)
     tabs.unshift(['Overview'])
 

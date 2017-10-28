@@ -16,10 +16,6 @@ export default class Login extends Component {
     this.handlePasswordInput = this.handlePasswordInput.bind(this);
   }
 
-  componentDidMount() {
-    // console.log(this.props.screenProps)
-  }
-
   handleUserInput(event) {
     this.setState({ username: event })
   }

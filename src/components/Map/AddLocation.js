@@ -42,7 +42,6 @@ export default class AddLocation extends React.Component {
       latitude: latitude,
       eco: this.state.eco
     })
-    .then(res => console.log('posted'))
     .catch(err => console.error(err))
   }
 
@@ -66,7 +65,6 @@ export default class AddLocation extends React.Component {
               types: 'address' // default: 'geocode'
             }}
             onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-            //  console.log('on press', details.geometry.location);
             this.newLocation(details.geometry.location);
             this.props.navigation.dispatch(NavigationActions.reset({
               index: 0,

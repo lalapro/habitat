@@ -33,13 +33,10 @@ export default class EcosystemViewPractice extends Component {
     }
 
     componentDidMount() {
-        console.log('in component did mount')
         this.animate()
   }
     animate(){
         return this.animations.map((ele, i) => {
-            console.log('in animate', ele)
-            console.log(this.panResponder)
             let height = 300 * Math.random() * 0.6;
             let width = 300 * Math.random() * 0.9;
             Animated.timing(ele, {
@@ -54,7 +51,6 @@ export default class EcosystemViewPractice extends Component {
     }
 
     render() {
-        console.log('in render')
         setInterval(this.animate, 1500);
         return (
             <View>

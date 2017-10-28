@@ -22,7 +22,6 @@ export default class AllTasks extends Component {
   }
 
   showEdit(task) {
-    // console.log(convertDate(task.Start), 'INSIDE ALL TASK ON CLICK')
     let currentTime = new Date();
 
     currentTime > convertDate(task.Start) ? null : this.setState({ hasStarted: false });

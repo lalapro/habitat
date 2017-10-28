@@ -38,8 +38,6 @@ export default class EcosystemView extends Component {
     downgradeImages.fill(3);
     negImages = new Array(negativeImageNumber);
     negImages.fill(0);
-    // this.setState({ upgradeImages, posImages, downgradeImages, negImages})
-    // console.log(this.state.upgradeImages);
     return (
       <Image style={{height: '60%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
         <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>

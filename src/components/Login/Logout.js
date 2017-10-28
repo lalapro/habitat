@@ -15,7 +15,6 @@ export default class Logout extends React.Component {
 
 	toggleModal() {
 		this.setState({modalVisible: false});
-		// console.log('logouting', this.props)
 		this.props.screenProps.handleLogout()
 		this.props.navigation.navigate("SignedOut")
 		AsyncStorage.removeItem('user_token');

@@ -23,7 +23,6 @@ const handleProfileTasks = (req, res) => {
 
     db.query(taskStr, (err, result) => {
       if (err) throw err;
-      console.log('PROFILE TASK HANDLER', result)
       res.send(result)
     })
 }

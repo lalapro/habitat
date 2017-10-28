@@ -2,7 +2,6 @@ const express = require('express');
 const db = require('../../db/index.js');
 
 const countTasks = (req, res) => {
-    console.log(req.query)
     let userID = req.query.username;
     let tru = "True";
 
@@ -18,7 +17,6 @@ const countTasks = (req, res) => {
 
     db.query(taskStr, (err, result) => {
       if (err) throw err;
-      console.log('PROFILE TASK HANDLER', result)
       res.send(result)
     })
 }

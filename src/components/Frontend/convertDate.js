@@ -17,6 +17,10 @@ const convertDate = (string) => {
     hour = Number(hour) + 12;
     hour.toString()
   }
+  if (time[1] === 'am' && hour === "12") {
+    hour = 0;
+    hour.toString()
+  }
 
 
   let convert = month + day + year + ' ' + hour + minute;

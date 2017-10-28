@@ -11,6 +11,5 @@ var config = {
 
 
 const firebaseApp = firebase.initializeApp(config);
-console.log('its working');
 
 module.exports = firebaseApp.database();
