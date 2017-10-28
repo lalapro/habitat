@@ -93,9 +93,7 @@ class TaskBuilder extends Component {
   }
 
   handleMultipleTasks(numberRecurrences) {
-    this.setState({numberRecurrences},()=> {
-      console.log('handleMultipleTasks', this.state.numberRecurrences);
-    })
+    this.setState({numberRecurrences})
   }
 
   handleCheck(day) {
@@ -147,7 +145,6 @@ class TaskBuilder extends Component {
     } else if (!this.state.editTask) {
       axios.post('http://10.16.1.152:3000/newTask', {numberRecurrences, title, description, startTime, markerID, endTime, category, frequency, userID})
         .then(res => {
-          console.log('taskbuilder fires and gets something', res.body)
           this.props.navigation.goBack();
         })
         .catch((err) => console.error('taskbuilderjs. line 82', err))

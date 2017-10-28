@@ -1,17 +1,27 @@
 const express = require('express');
 const db = require('../../db/index.js');
-var Promise = require("bluebird");
+const Promise = require("bluebird");
+const moment = require('moment');
 
 const convertDate = require('./convertDate')
 
 
 const getMapMarkers = (req, res) => {
-  let userID = req.query.userID;;
+  let userID = req.query.userID || 59;
   let currentDay = req.query.currentDay;
+  let today = new Date();
+  today = moment(today).format("MMMM Do YYYY");
 
   let query = `SELECT * FROM Marker WHERE User_ID = ${userID}`;
-  let innerQuery = `SELECT * FROM Tasks WHERE User_ID = ${userID}`;
-  let categoryQuery = `SELECT * FROM CategoryDeets WHERE User_ID = ${userID}`
+  let innerQuery = `SELECT * FROM Tasks WHERE User_ID = ${userID} AND LEFT(Start, LOCATE(',', START) -1)='${today}'`;
+  let categoryQuery = `SELECT * FROM CategoryDeets WHERE User_ID = ${userID}`;
+  // db.query(innerQuery, null, (err, results) => {
+  //   if (err) {
+  //     res.send(err)
+  //   } else {
+  //     res.send(results)
+  //   }
+  // })
   db.query(query, null, (err, results) => {
     if (err) {
       res.status(404).send(`We encountered an error looking up the locations ${err}`);
@@ -20,58 +30,74 @@ const getMapMarkers = (req, res) => {
       let count = 0;
       if (length === 0 ) {
         res.send();
-      }
-      for (let i = 0; i < results.length; i++) {
-        let marker = results[i]
-        db.query(innerQuery, null, (err, tasks) => {
-          if (err) {
-            res.status(404).send(`We encountered an error looking up the tasks ${err}`);
-          } else {
-            let sortedByTime = tasks.sort((a,b) => {
-              return convertDate(a.Start).getTime() - convertDate(b.Start).getTime()
-            });
-            if (currentDay) {
-              sortedByTime = sortedByTime.filter(task => {
-                let taskDate = convertDate(task.Start);
-                let today = new Date()
-                // console.log(taskDate.getFullYear() === today.getFullYear() && taskDate.getMonth() === today.getMonth() && taskDate.getDate() === today.getDate())
-                console.log(task)
-                return taskDate.getFullYear() === today.getFullYear() && taskDate.getMonth() === today.getMonth() && taskDate.getDate() === today.getDate()
-              })
-            }
-            db.query(categoryQuery, null, (err, categories) => {
-              if (err) {
-                res.status(404).send(`We encountered an error looking up the categories ${err}`);
-              } else {
-                sortedByTime.forEach(task => {
-                  categories.forEach(category => {
-                    if (task.Category_ID === category.ID) {
-                      task.Category = category.Category;
-                      task.Color = category.Color;
-                      task.Ecosystem = results[i].Ecosystem;
-                      // task.Completion = category.Completion_Points;
-                      if (task.Marker_ID === marker.Marker_ID) {
-                        marker.tasks = marker.tasks || [];
-                        marker.tasks.push(task)
+      } else {
+        for (let i = 0; i < results.length; i++) {
+          let marker = results[i]
+          db.query(innerQuery, null, (err, tasks) => {
+            if (err) {
+              res.status(404).send(`We encountered an error looking up the tasks ${err}`);
+            } else {
+              let copy = tasks.slice(0)
+              let sortedByTime = copy.sort((a, b) => {
+                let astart = a.Start.split(',')
+                let astartTime = astart[1].split(' ');
+                let ahour = Number(astartTime[1].split(':')[0]);
+                
+                if (astartTime[2] === 'pm' && ahour !== 12) {
+                  ahour += 12
+                } 
+                if (astartTime[2] === 'am' && ahour === 12) {
+                  ahour = 0;
+                }
+                let bstart = b.Start.split(',')
+                let bstartTime = bstart[1].split(' ');
+                let bhour = Number(bstartTime[1].split(':')[0]);
+                
+                if (bstartTime[2] === 'pm' && bhour !== 12) {
+                  bhour += 12
+                }
+                if (bstartTime[2] === 'am' && bhour === 12) {
+                  bhour = 0;
+                }
+                if (ahour < bhour) {
+                  return -1;
+                } else if (ahour > bhour) {
+                  return 1;
+                } else {
+                  return 0;
+                }
+              });
+             
+              db.query(categoryQuery, null, (err, categories) => {
+                if (err) {
+                  res.status(404).send(`We encountered an error looking up the categories ${err}`);
+                } else {
+                  sortedByTime.forEach(task => {
+                    categories.forEach(category => {
+                      if (task.Category_ID === category.ID) {
+                        task.Category = category.Category;
+                        task.Color = category.Color;
+                        task.Ecosystem = results[i].Ecosystem;
+                        if (task.Marker_ID === marker.Marker_ID) {
+                          marker.tasks = marker.tasks || [];
+                          marker.tasks.push(task)
+                        }
                       }
-                    }
+                    })
                   })
-                })
-              }
-              count++;
-              if (count === length) {
-                res.send(results)
-              }
-            })
+                  count++;
+                  if (count === length) {
+                    res.send(results)
+                  }
+                }
+              })
 
-          }
-        });
+            }
+          });
+        }
       }
     }
   })
 }
-
-
-
 
 module.exports = getMapMarkers;

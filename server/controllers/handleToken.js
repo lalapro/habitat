@@ -38,7 +38,6 @@ const handleAuth = (req, res) => {
           if (err) {
             res.send('error in updating existing auth-er', err);
           } else {
-            // console.log(user[0].ID)
             res.status(200).send({
               user: user[0].ID
             });

@@ -59,7 +59,6 @@ export default class EcoSystem extends Component {
   getMarkers() {
     axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
     .then(res => {
-      console.log(res.data,' IHHIHIHIHHI')
       let locations = res.data;
       this.setState({locations})
     })
@@ -69,11 +68,10 @@ export default class EcoSystem extends Component {
 
   showCurrentLocation() {
     let locations = this.state.locations;
-    // console.log('SHOW LOCATIONS',locations)
     if (locations.length > 0) {
       for (let i = 0; i < locations.length; i++) {
         let dist = geodist({lat: locations[i].Latitude, lon: locations[i].Longitude}, {lat: this.state.currentLocation.latitude, lon: this.state.currentLocation.longitude}, {exact: true, unit: 'km'})
-        // setTimeout(() => {console.log('DISTANCE', this.state.currentLocation)}, 2000);
+       
         if (dist < 0.05) {
           this.setState({
             index: i,
@@ -89,8 +87,6 @@ export default class EcoSystem extends Component {
       this.setState({render: true})
     }
   }
-
-
 
   showTask(task, specificTask, indexOfTask) {
     this.setState({
@@ -143,7 +139,6 @@ export default class EcoSystem extends Component {
   }
 
   nayTask() {
-    console.log('NAY TASK', this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion)
     if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === "True") {
       Alert.alert('Dont try to cheat');
       return;
@@ -174,9 +169,7 @@ export default class EcoSystem extends Component {
     this.setState({
       locations: newLocation,
     })
-    // , ()=> console.log(this.state.locations[this.state.index].tasks, 'checking if task was changed in yayTask'))
   }
-
 
   render() {
     const { height, width } = Dimensions.get('window');
@@ -221,10 +214,9 @@ export default class EcoSystem extends Component {
           <Swiper
             index={this.state.index}
             horizontal={true}
-            onIndexChanged={(index) => this.setState({index: index, currentTask: '', currentDescription: ''})}
+            onIndexChanged={(index) => this.setState({index: index, toggleShow: false})}
             loop={false}
           >
-
             {this.state.locations.map((location, index) => {
               console.log(location, 'ecosystem')
               var upgradeImageNumber = Math.floor(location.PositivePoints/10);
@@ -254,7 +246,7 @@ export default class EcoSystem extends Component {
                   {location.Marker_Description}
                 </Text>
 
-                <Image style={{height: '60%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
+                <Image style={{height: '60%', width: '100%', position: 'relative'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
                 <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
                 {location.tasks ? (
                   location.tasks.map((task, i) => {
@@ -308,7 +300,7 @@ export default class EcoSystem extends Component {
             )})}
           </Swiper>
           {this.state.toggleShow ? (
-          <View style={{height: 140}}>
+          <View style={{height: 80, backgroundColor: 'rgba(52, 52, 52, 0.05)'}}>
             <View style={styles.separator} />
             <Swipeout
               right={swipeRightBtns}
@@ -316,14 +308,14 @@ export default class EcoSystem extends Component {
               autoClose={true}
               backgroundColor= 'transparent'
             >
-              <View style={{margin: 10, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 20}}>
-                  {this.state.currentTask} {"\n"}
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{marginTop: 20, fontSize: 16, fontWeight: 'bold'}}>
+                  {this.state.currentTask} 
                 </Text>
-                <Text stlye={{fontSize: 14}}>
+                <Text style={{fontSize: 14, marginTop: 2, lineHeight: 0.5, lineHeight: 8}}>
                   {this.state.currentDescription}
                 </Text>
-                <Text style={{marginTop: 2}}>{this.state.currentTaskCategory}</Text>
+                <Text style={{margin: 2, lineHeight: 0.5}}>{this.state.currentTaskCategory}</Text>
               </View>
             </Swipeout>
             <View style={styles.separator} />
