@@ -21,6 +21,9 @@ const saveFriends = require('./controllers/saveFriends.js');
 const getFriends = require('./controllers/getFriends.js');
 const categoryPercentage = require('./controllers/categoryPercentage');
 const updateLocation = require('./controllers/updateLocation');
+const getTimer = require('./controllers/timerGetHandler');
+const putPosTimerPoints = require('./controllers/timerPosPointsHandler');
+const putNegTimerPoints = require('./controllers/timerNegPointsHandler');
 
 routes.post('/signup', handleSignup);
 routes.get('/login', handleLogin);
@@ -47,6 +50,8 @@ routes.get('/categoryPercentage', categoryPercentage);
 routes.post('/friends', saveFriends);
 routes.get('/friends', getFriends);
 routes.put('/updateLocation', updateLocation);
-
+routes.get('/timer', getTimer);
+routes.put('/postimer', putPosTimerPoints);
+routes.put('/negtimer', putNegTimerPoints)
 
 module.exports = routes;
