@@ -227,7 +227,6 @@ export default class MapScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
-    console.log(this.state.markers, 'markermakermakers')
     return this.state.render ? (
       <View style={styles.container}>
           <TouchableOpacity
