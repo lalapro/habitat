@@ -3,6 +3,7 @@ const db = require('../../db/index.js');
 
 const handleCategories = (req, res) => {
   let User_ID = req.query.userID;
+  console.log('in handleCategories User_id')
   let selectCats = `SELECT ID, Category, Color FROM CategoryDeets WHERE User_ID = ${User_ID}`;
   db.query(selectCats, null, (err, results) => {
     if (err) {

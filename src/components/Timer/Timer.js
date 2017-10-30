@@ -1,49 +1,33 @@
-// import React, { Component } from 'react';
-// import{ StyleSheet, View, Image, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native';
-// import axios from 'axios';
-
-// export default class Timer extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//     }
-//   }
-
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Text>Build Habitats by keeping Good Habits</Text>
-//       </View>
-//     )
-//   }
-// }
-
 import React, { Component } from 'react';
-import { Constants } from 'expo';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Picker } from 'react-native';
+import { Constants, Audio } from 'expo';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Picker, Button } from 'react-native';
 import * as Progress from 'react-native-progress';
+import axios from 'axios';
 // import convertDate from '../Frontend/convertDate'
 
 export default class Timer extends Component {
     constructor(props) {
         super (props);
         this.state = {
-          // hours: ['1', '2', '3'],
-          
           fill: 0,
           hour: 0,
           minute: 0,
           second: 0,
           toggleTimer: false,
-          duration: 0
+          duration: 0,
+          timeRemaining: 0,
+          interval: null,
+          setTimeout: null,
+          userID: null,
+          negativePoints: null,
+          positivePoints: null
       }
-      // this.calculateTime = this.calculateTime.bind(this);
+      this.calculateTime = this.calculateTime.bind(this);
       this.eachPie = this.eachPie.bind(this);
       this.startTimer = this.startTimer.bind(this);
     }
 
     startTimer() {
-      
       var hoursInMSec = this.state.hour * 3600000;
       var minsInMSec = this.state.minute * 60000;
       var secsInMSec = this.state.second * 1000;
@@ -52,16 +36,61 @@ export default class Timer extends Component {
         toggleTimer: !this.state.toggleTimer
       }, () => {
         
-        if (this.state.toggleTimer) {
+        if (this.state.toggleTimer && duration !== 0) {
           let startTime = new Date();
           console.log('startTimer', startTime);
-          interval = setInterval(this.calculateTime.bind(this, startTime, duration), 500);
-          console.log('interval', interval);
-          setTimeout(() => { clearInterval(interval) }, duration + 500);
+          this.setState({
+            interval: setInterval(this.calculateTime.bind(this, startTime, duration), 500)
+          }, () => {
+            this.setState({
+              setTimeout: setTimeout(() => {
+                this.trainWhistle()
+                clearInterval(this.state.interval);
+                this.setState({
+                  hour: 0,
+                  minute: 0,
+                  second: 0,
+                  fill: 0,
+                  timePassed: 0
+                }, () => {
+                  this.setState({
+                    duration: 0,
+                    toggleTimer: false,
+                    positivePoints: this.state.positivePoints + 1
+                  }, () => {
+                    axios.put('http://10.16.1.131:3000/postimer', {
+                      user_ID: this.state.userID,
+                      Positive_Points: this.state.positivePoints
+                    })
+                    .then(res => console.log(res))
+                    .catch(err => console.error(err))
+                  })
+                })
+              }, duration + 500)
+            })
+          })
         } else {
-          console.log('im in here now');
-          console.log(interval);
-          clearInterval(interval);
+          clearInterval(this.state.interval);
+          clearTimeout(this.state.setTimeout);
+          this.setState({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            fill: 0,
+            timePassed: 0
+          }, () => {
+            this.setState({
+              duration: 0,
+              negativePoints: this.state.negativePoints + 1
+            }, () => {
+              axios.put('http://10.16.1.131:3000/negtimer', {
+                user_ID: this.state.userID,
+                Negative_Points: this.state.negativePoints
+              })
+              .then(res => console.log('axios put worked'))
+              .catch(err => console.error(err))
+            })
+          })
         } 
       });
     }
@@ -72,12 +101,50 @@ export default class Timer extends Component {
       this.setState({duration});
       let timePassed = currentTime.getTime() - startTime.getTime();
       console.log('timePassed', timePassed);
+      let timeRemaining = Math.round((duration - timePassed + 400) / 1000);
+      if (timeRemaining < 23 && timeRemaining > 21) {
+        this.clockTick();
+      }
+      this.setState({timeRemaining})
       let percentage = (timePassed / duration);
       this.setState({ fill: percentage })
     }
 
     eachPie(percentage) {
       return <Progress.Pie style={{alignItems: 'center', opacity: 0.3, marginTop: 32}} progress={percentage} size={130} />
+    }
+
+    trainWhistle = async () => {
+      await Audio.setIsEnabledAsync(true);
+      let sound = new Audio.Sound();
+      await sound.loadAsync(sounds[1][1]);
+      await sound.playAsync();
+    };
+
+    clockTick = async () => {
+      await Audio.setIsEnabledAsync(true);
+      let sound = new Audio.Sound();
+      await sound.loadAsync(sounds[0][1]);
+      await sound.playAsync();
+    };
+
+    componentDidMount() {
+      this.setState({
+        userID: this.props.screenProps.userID
+      }, () => {
+        axios.get('http://10.16.1.131:3000/timer', {
+          params: {
+            User_ID: this.state.userID
+          }
+        })
+        .then(res => {
+          this.setState({
+            negativePoints: res.data[0].Negative_Points,
+            positivePoints: res.data[0].Positive_Points
+          }, () => { console.log(this.state)})
+        })
+        .catch(err => console.error(err));
+      })
     }
 
     render() {
@@ -105,7 +172,7 @@ export default class Timer extends Component {
                 <Picker.Item key={i} label={hour} value={hour}/>
               ))}
             </Picker>
-              <Text>Hours</Text>
+            <Text>Hours</Text>
             <Picker
               style={[styles.picker]} itemStyle={styles.pickerItem}
               selectedValue={this.state.minute}
@@ -115,7 +182,7 @@ export default class Timer extends Component {
                 <Picker.Item key={i} label={minute} value={minute}/>
               ))}
             </Picker>
-              <Text>Minutes</Text>
+            <Text>Minutes</Text>
             <Picker
               style={[styles.picker]} itemStyle={styles.pickerItem}
               selectedValue={this.state.second}
@@ -125,7 +192,12 @@ export default class Timer extends Component {
                 <Picker.Item key={i} label={second} value={second}/>
               ))}
             </Picker>
-              <Text>Seconds</Text>
+            <Text>Seconds</Text>
+          </View>
+          <View>
+            <Text>
+              COUNTDOWN: Award In T-MINUS {this.state.timeRemaining} Seconds
+            </Text>
           </View>
         </View>
       )
@@ -181,3 +253,10 @@ const styles = StyleSheet.create({
     color: 'red',
   }
 })
+
+const sounds = [
+  [0, require("../assets/sounds/tickingclock.mp3")],
+  [1, require("../assets/sounds/trainwhistle.mp3")],
+  [2, require("../assets/Ecosystem/gym.png")],
+  [3, require("../assets/Ecosystem/currentlocation.png")]
+];

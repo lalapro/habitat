@@ -11,7 +11,6 @@ const handleSignup = (req, res) => {
   let password = req.body.password;
 
   let select = `SELECT ID FROM User WHERE Username = '${username}'`;
-
   db.query(select, null, (err, results) => {
     if (err) {
       res.status(404).send(`Encountered error during post ${err}`);
@@ -35,10 +34,16 @@ const handleSignup = (req, res) => {
                   if (err) {
                     res.status(404).send(`Encountered error during post ${err}`);
                   } else {
-                    res.send({
-                      userID: wantedUser[0].ID,
-                      token: token
-                    });
+                    db.query(`INSERT INTO TimerEcosystem (User_ID) VALUES (${wantedUser[0].ID})`, null, (err, user) => {
+                      if (err) {
+                        res.status(404).send('timerecosystem not created', err)
+                      } else {
+                        res.send({
+                          userID: wantedUser[0].ID,
+                          token: token
+                        });
+                      }
+                    })
                   }
                 })
               }
