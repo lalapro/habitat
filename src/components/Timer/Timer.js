@@ -20,12 +20,16 @@ export default class Timer extends Component {
           setTimeout: null,
           userID: null,
           negativePoints: null,
-          positivePoints: null
+          mdPositivePoints: null,
+          lgPositivePoints: null,
+          currentImageIndex: null,
+          mdUpgrade: false,
+          lgUpgrade: false
       }
       this.calculateTime = this.calculateTime.bind(this);
       this.eachPie = this.eachPie.bind(this);
       this.startTimer = this.startTimer.bind(this);
-    }
+    };
 
     startTimer() {
       var hoursInMSec = this.state.hour * 3600000;
@@ -38,7 +42,6 @@ export default class Timer extends Component {
         
         if (this.state.toggleTimer && duration !== 0) {
           let startTime = new Date();
-          console.log('startTimer', startTime);
           this.setState({
             interval: setInterval(this.calculateTime.bind(this, startTime, duration), 500)
           }, () => {
@@ -53,14 +56,24 @@ export default class Timer extends Component {
                   fill: 0,
                   timePassed: 0
                 }, () => {
+                  if (this.state.mdUpgrade) {
+                    var mdPositivePoints = this.state.mdPositivePoints + 1;
+                    var lgPositivePoints = this.state.lgPositivePoints;
+                  } else if (this.state.lgUpgrade) {
+                    var mdPositivePoints = this.state.mdPositivePoints;
+                    var lgPositivePoints = this.state.lgPositivePoints + 1;
+                  }
                   this.setState({
                     duration: 0,
                     toggleTimer: false,
-                    positivePoints: this.state.positivePoints + 1
+                    mdPositivePoints: mdPositivePoints,
+                    lgPositivePoints: lgPositivePoints 
                   }, () => {
-                    axios.put('http://10.16.1.131:3000/postimer', {
+                    console.log('in timer', this.state)
+                    axios.put('http://10.16.1.218:3000/postimer', {
                       user_ID: this.state.userID,
-                      Positive_Points: this.state.positivePoints
+                      Medium_Positive_Points: this.state.mdPositivePoints,
+                      Large_Positive_Points: this.state.lgPositivePoints
                     })
                     .then(res => console.log(res))
                     .catch(err => console.error(err))
@@ -83,7 +96,8 @@ export default class Timer extends Component {
               duration: 0,
               negativePoints: this.state.negativePoints + 1
             }, () => {
-              axios.put('http://10.16.1.131:3000/negtimer', {
+              console.log(this.state.negativePoints,'neg')
+              axios.put('http://10.16.1.218:3000/negtimer', {
                 user_ID: this.state.userID,
                 Negative_Points: this.state.negativePoints
               })
@@ -93,14 +107,17 @@ export default class Timer extends Component {
           })
         } 
       });
-    }
+    };
 
     calculateTime(startTime, duration) {
       //get start time which is current time when onpress of timer dude
       let currentTime = new Date();
-      this.setState({duration});
+      this.setState({
+        duration,
+        mdUpgrade: (duration < 1800000),
+        lgUpgrade: (duration >= 1800000)
+      });
       let timePassed = currentTime.getTime() - startTime.getTime();
-      console.log('timePassed', timePassed);
       let timeRemaining = Math.round((duration - timePassed + 400) / 1000);
       if (timeRemaining < 23 && timeRemaining > 21) {
         this.clockTick();
@@ -108,11 +125,11 @@ export default class Timer extends Component {
       this.setState({timeRemaining})
       let percentage = (timePassed / duration);
       this.setState({ fill: percentage })
-    }
+    };
 
     eachPie(percentage) {
       return <Progress.Pie style={{alignItems: 'center', opacity: 0.3, marginTop: 32}} progress={percentage} size={130} />
-    }
+    };
 
     trainWhistle = async () => {
       await Audio.setIsEnabledAsync(true);
@@ -130,9 +147,10 @@ export default class Timer extends Component {
 
     componentDidMount() {
       this.setState({
-        userID: this.props.screenProps.userID
+        userID: this.props.screenProps.userID,
+        currentImageIndex: Math.floor(Math.random()*3)
       }, () => {
-        axios.get('http://10.16.1.131:3000/timer', {
+        axios.get('http://10.16.1.218:3000/timer', {
           params: {
             User_ID: this.state.userID
           }
@@ -140,20 +158,77 @@ export default class Timer extends Component {
         .then(res => {
           this.setState({
             negativePoints: res.data[0].Negative_Points,
-            positivePoints: res.data[0].Positive_Points
+            mdPositivePoints: res.data[0].Medium_Positive_Points,
+            lgPositivePoints: res.data[0].Large_Positive_Points
           }, () => { console.log(this.state)})
         })
         .catch(err => console.error(err));
       })
-    }
+    };
 
     render() {
       const hours = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'],
       minutes = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27','28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60'],
       seconds = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27','28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60'];
         // let clock = this.props.task.Start.split(' ')[3].split(':')[0];
+      let lgImageNumber = this.state.lgPositivePoints;
+      let mdImageNumber = this.state.mdPositivePoints;
+      let grayImageNumber = this.state.negativePoints;
+      let lgImageArray = new Array(lgImageNumber);
+      lgImageArray.fill(2);
+      let mdImageArray = new Array(mdImageNumber);
+      mdImageArray.fill(1)
+      let grayImageArray = new Array(grayImageNumber);
+      grayImageArray.fill('boo');
+
       return (
-        <View style={styles.container}>
+        <View>
+          <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
+          <Button
+            onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
+            title="&#9776;"
+          />
+        </View>
+          <View style={styles.container}> 
+            <View style={styles.ecosystem}>
+              <Image style={{height: 300, width: 300}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
+                <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
+                  {this.state.duration ? 
+                    <Image
+                      style={{height: 50, width: 50}}
+                      source={ecobuddies[this.state.currentImageIndex].images[0][1]}
+                    /> : null
+                  }
+                  {this.state.lgPositivePoints ? 
+                    lgImageArray.map((lgImage, i) => (
+                      <Image
+                      key={i}
+                      style={{height: 50, width: 50}}
+                      source={ecobuddies[this.state.currentImageIndex].images[2][1]} /> 
+                    ))
+                  : null
+                  }
+                  {this.state.mdPositivePoints ? 
+                    mdImageArray.map((mdImage, i) => (
+                      <Image
+                      key={i}
+                      style={{height: 50, width: 50}}
+                      source={ecobuddies[this.state.currentImageIndex].images[1][1]} /> 
+                    ))
+                  : null
+                  }
+                  {this.state.negativePoints ? 
+                    grayImageArray.map((grayImage, i) => (
+                      <Image
+                      key={i}
+                      style={{height: 50, width: 50}}
+                      source={ecobuddies[this.state.currentImageIndex].images[3][1]} /> 
+                    ))
+                  : null
+                  }
+                </View>
+              </Image>
+            </View>
           <View>
             <TouchableOpacity
               onPress={this.startTimer}>
@@ -199,10 +274,35 @@ export default class Timer extends Component {
               COUNTDOWN: Award In T-MINUS {this.state.timeRemaining} Seconds
             </Text>
           </View>
+          </View>
         </View>
       )
     }
 }
+
+const ecobuddies = [
+  {buddy: 'Butterflies',
+   images: [
+    [0, require("../assets/Ecosystem/butterfly-sm.png")],
+    [1, require("../assets/Ecosystem/butterfly-md.png")],
+    [2, require("../assets/Ecosystem/butterfly-lg.png")],
+    [3, require("../assets/Ecosystem/butterfly-gray.png")]
+  ]},
+  {buddy: 'LadyBugs', 
+   images: [
+    [0, require("../assets/Ecosystem/ladybug-sm.png")],
+    [1, require("../assets/Ecosystem/ladybug-md.png")],
+    [2, require("../assets/Ecosystem/ladybug-lg.png")],
+    [3, require("../assets/Ecosystem/ladybug-gray.png")]
+  ]},
+  {buddy: 'SeaStars',
+   images: [
+    [0, require("../assets/Ecosystem/starfish-sm.png")],
+    [1, require("../assets/Ecosystem/starfish-md.png")],
+    [2, require("../assets/Ecosystem/starfish-lg.png")],
+    [3, require("../assets/Ecosystem/starfish-gray.png")]
+  ]}
+];
 
 const styles = StyleSheet.create({
   circle: {
@@ -218,7 +318,7 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   container: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     padding: Constants.statusBarHeight,
     backgroundColor: 'white',
@@ -232,7 +332,7 @@ const styles = StyleSheet.create({
     // backgroundColor: '#FFF0E0',
     // borderColor: 'red',
     borderBottomWidth: 2,
-    flex: 90
+    flex: 1
   },
   
   pickerItem: {
