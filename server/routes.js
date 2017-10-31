@@ -24,7 +24,6 @@ const updateLocation = require('./controllers/updateLocation');
 const getTimer = require('./controllers/timerGetHandler');
 const putPosTimerPoints = require('./controllers/timerPosPointsHandler');
 const putNegTimerPoints = require('./controllers/timerNegPointsHandler');
-const syncCalendar = require('./controllers/syncCalendar');
 const calendarHandler = require('./controllers/calendarHandler');
 const handleGetUserInfo = require('./controllers/getUserInfo');
 const handleGoogle = require('./controllers/checkGoogle');
@@ -57,8 +56,7 @@ routes.get('/friends', getFriends);
 routes.put('/updateLocation', updateLocation);
 routes.get('/timer', getTimer);
 routes.put('/postimer', putPosTimerPoints);
-routes.put('/negtimer', putNegTimerPoints)
-routes.get('/syncCalendar', syncCalendar);
+routes.put('/negtimer', putNegTimerPoints);
 routes.post('/calendar', calendarHandler);
 routes.get('/getUserInfo', handleGetUserInfo);
 routes.get('/checkGoogle', handleGoogle);
