@@ -170,7 +170,7 @@ export default class CalendarTasks extends Component {
 					return <TaskFromGoogle notImport={this.notImport} userID={this.state.userID} eachIndex={i} key={i} task={task} markers={this.state.markers} categories={this.state.categories} />
 				}) : null}
 				</View>
-				<View>
+				<View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 30 }}>
 					<Button onPress={() => this.saveAllTasks()} title="Save" /> 
 				</View>
 			</View>

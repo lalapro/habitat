@@ -53,6 +53,9 @@ export const SignedIn = DrawerNavigator(
 		SyncGoogleCalendar: {
 			screen: CalendarSetup
 		},
+		SyncGoogleCalendar: {
+			screen: CalendarSetup
+		},
 		Logout: {
 			screen: Logout
 		}

@@ -25,7 +25,8 @@ export default class Login extends Component {
   }
 
   handleRegularLogin() {
-    axios.get(`http://10.16.1.218:3000/login`, {
+
+    axios.get(`http://10.16.1.233:3000/login`, {
       params: {
         username: this.state.username,
         password: this.state.password
