@@ -3,10 +3,12 @@ const db = require('../../db/index.js');
 
 const putPosTimerPoints = (req, res) => {
   let user = req.body.user_ID;
-  let Positive_Points = req.body.Positive_Points
+  let Medium_Positive_Points = req.body.Medium_Positive_Points;
+  let Large_Positive_Points = req.body.Large_Positive_Points;
   
   let update = `UPDATE TimerEcosystem SET
-    Positive_Points='${Positive_Points}'
+    Medium_Positive_Points='${Medium_Positive_Points}',
+    Large_Positive_Points='${Large_Positive_Points}'
     WHERE User_ID='${user}'`;
 
   db.query(update, null, (err, results) => {
