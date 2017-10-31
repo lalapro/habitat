@@ -29,6 +29,7 @@ export default class CalendarTasks extends Component {
 	}
 
 	getToken = async () => {
+		console.log('calling google',config.redirect_url, config.client_id)
 		await AuthSession.startAsync({
 			authUrl:
 			`https://accounts.google.com/o/oauth2/v2/auth` +
@@ -38,11 +39,13 @@ export default class CalendarTasks extends Component {
 			`&client_id=${config.client_id}`
 		})
 			.then(result => {
+				console.log(result, 'result from google call')
 				if (result.type !== 'success') {
 					alert('Uh oh, something went wrong');
 					return;
 				} else {
 					let token = result.params.access_token;
+					console.log(token, 'token from getToken')
 					this.axiosCall(token);
 					return result
 				}
@@ -159,7 +162,7 @@ export default class CalendarTasks extends Component {
       tasksFromGoogle: this.state.tasksFromGoogle
     })
   }
-	
+
 	render() {
 		return (
 			<View style={{ backgroundColor: 'green', flex: 1, width: '100%', marginTop: 50 }}>
@@ -169,7 +172,7 @@ export default class CalendarTasks extends Component {
 				}) : null}
 				</View>
 				<View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 30 }}>
-					<Button onPress={() => this.saveAllTasks()} title="Save" /> 
+					<Button onPress={() => this.saveAllTasks()} title="Save" />
 				</View>
 			</View>
 		)
