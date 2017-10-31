@@ -35,7 +35,6 @@ class TaskBuilder extends Component {
     this.handleEndChange = this.handleEndChange.bind(this);
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
     this.handleFrequencyChange = this.handleFrequencyChange.bind(this);
-    this.handleCheck = this.handleCheck.bind(this);
     this.saveTask = this.saveTask.bind(this);
     this.cancelTask = this.cancelTask.bind(this);
     this.handleMultipleTasks = this.handleMultipleTasks.bind(this);
@@ -96,10 +95,6 @@ class TaskBuilder extends Component {
     this.setState({numberRecurrences})
   }
 
-  handleCheck(day) {
-
-  }
-
   saveTask() {
     let oldTitle = this.state.oldTitle;
     let title = this.state.title;
@@ -113,7 +108,6 @@ class TaskBuilder extends Component {
     let userID = this.state.userID;
     let taskID = this.state.taskID;
     let readyToSend = false;
-    
 
     if (
       title.length < 1 ||
@@ -159,17 +153,6 @@ class TaskBuilder extends Component {
   }
 
   cancelTask() {
-    this.setState({
-      saved: '',
-      title: '',
-      description: '',
-      startTime: null,
-      endTime: null,
-      location: 'none',
-      category: 'none',
-      frequency: '',
-      editTask: ''
-    });
     this.props.navigation.state.params = ''
     this.props.navigation.goBack();
   }
@@ -213,6 +196,7 @@ class TaskBuilder extends Component {
             cancel={this.cancelTask}
             task={this.state.editTask}
             userID={this.state.userID}
+            frequency={this.state.frequency}
           />
         </ScrollView>
       </View>

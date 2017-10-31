@@ -16,7 +16,6 @@ class TaskForm extends Component {
       readyToRender: false,
       currentColor: '#ffffff'
     }
-    this.changeFrequency = this.changeFrequency.bind(this);
   }
 
   componentWillUnmount() {
@@ -27,11 +26,6 @@ class TaskForm extends Component {
     this.setState({
       userID: this.props.userID
     })
-  }
-
-  changeFrequency(itemValue) {
-    this.setState({frequency: itemValue})
-    this.props.handleFrequencyChange(itemValue)
   }
 
   componentWillReceiveProps(oldone, newone) {
@@ -66,8 +60,8 @@ class TaskForm extends Component {
         <CategoryPicker style={styles.picker} task={this.props.task} onSelect={this.props.handleCategoryChange} userID={this.state.userID} reRender={this.props.reRender} renderReady={this.renderReady.bind(this)} currentColor={this.currentColor.bind(this)}/>
         <Picker
           style={[styles.onePicker]} itemStyle={styles.onePickerItem}
-          selectedValue={this.state.frequency}
-          onValueChange={(itemValue) => this.changeFrequency(itemValue)}
+          selectedValue={this.props.frequency}
+          onValueChange={(itemValue) =>  this.props.handleFrequencyChange(itemValue)}
         >
           <Picker.Item label="Does not repeat" value="no-repeat" />
           <Picker.Item label="Daily" value="daily" />
