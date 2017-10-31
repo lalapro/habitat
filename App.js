@@ -13,7 +13,8 @@ export default class App extends React.Component {
     this.state = {
       user: null,
       currentLocation: {},
-      fbPic: null
+      fbPic: null,
+      giftPoints: 0
     }
   }
 
@@ -40,8 +41,9 @@ export default class App extends React.Component {
       .then(user => {
         if(user.data[0]) {
           this.setState({
-            user: user.data[0].ID
-          })
+            user: user.data[0].ID,
+            giftPoints: user.data[0].Gift_Points,
+          }, () => {console.log('in app at auto login', this.state)})
         }
       })
       .catch(err => console.error(err))
@@ -57,6 +59,7 @@ export default class App extends React.Component {
     if (this.state.user !== null) {
       return <SignedIn screenProps={{
         userID: this.state.user,
+        giftPoints: this.state.giftPoints,
         handleLogout: this.handleLogout,
         fbPic: this.state.fbPic
       }}/>
