@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Linking, StyleSheet, View, Text, Separator, Dimensions, ScrollView, Button, Image, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
+import { StyleSheet, View, Text, Separator, Dimensions, ScrollView, Button, Image, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
 import Swiper from 'react-native-swiper';
 import Swipeout from 'react-native-swipeout';
 import { StackNavigator, NavigationActions } from 'react-navigation';
@@ -12,7 +12,6 @@ import ProgressBar from './ProgressBar'
 import convertDate from '../../../server/controllers/convertDate';
 import EcosystemView from './EcosystemView.js'
 import EcosystemViewPractice from './EcosystemViewPractice';
-
 
 export default class EcoSystem extends Component {
   constructor(props) {
@@ -51,25 +50,28 @@ export default class EcoSystem extends Component {
         }
       })
     })
+    .catch(err => console.error(err))
     this.setState({
       userID: this.props.screenProps.userID,
     }, () => this.getMarkers())
   }
 
+
   getMarkers() {
-    axios.get('http://10.16.1.233:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
-      .then(res => {
-        this.setState({ locations: res.data })
-      })
-      .then(res => this.showCurrentLocation())
-      .catch(err => console.error(err))
+    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
+    .then(res => {
+      let locations = res.data;
+      this.setState({locations})
+    })
+    .then(res => this.showCurrentLocation())
+    .catch(err => console.error(err))
   }
 
   showCurrentLocation() {
     let locations = this.state.locations;
     if (locations.length > 0) {
       for (let i = 0; i < locations.length; i++) {
-        let dist = geodist({ lat: locations[i].Latitude, lon: locations[i].Longitude }, { lat: this.state.currentLocation.latitude, lon: this.state.currentLocation.longitude }, { exact: true, unit: 'km' })
+        let dist = geodist({lat: locations[i].Latitude, lon: locations[i].Longitude}, {lat: this.state.currentLocation.latitude, lon: this.state.currentLocation.longitude}, {exact: true, unit: 'km'})
         if (dist < 0.05) {
           this.setState({
             index: i,
@@ -78,14 +80,14 @@ export default class EcoSystem extends Component {
           break;
         }
         if (i === locations.length - 1) {
-          this.setState({ render: true })
+          this.setState({render: true})
         }
       }
     } else {
-      this.setState({ render: true })
+      this.setState({render: true})
     }
   }
-  
+
   showTask(task, specificTask, indexOfTask) {
     this.setState({
       toggleShow: !this.state.toggleShow,
@@ -105,12 +107,13 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.233:3000/deleteTask', { params: { userID: this.state.userID, taskTitle: this.state.currentTask } })
-      .then(res => this.getMarkers())
-      .catch(err => console.error(err))
+    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    .then(res => this.getMarkers())
+    .catch(err => console.error(err))
   }
 
   yayTask() {
+
     if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === "True") {
       Alert.alert('Dont try to cheat');
       return;
@@ -122,17 +125,17 @@ export default class EcoSystem extends Component {
     }
 
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    axios.put('http://10.16.1.218:3000/yayTask', {
+    axios.put('http://10.16.1.152:3000/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
     })
-      .then((res) => {
-        this.markTaskComplete();
-      })
-      .catch((err) => {
-        console.error(err);
-      })
+    .then((res) => {
+      this.markTaskComplete();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   }
 
   nayTask() {
@@ -147,17 +150,17 @@ export default class EcoSystem extends Component {
     }
 
     let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
-    axios.put('http://10.16.1.218:3000/nayTask', {
+    axios.put('http://10.16.1.152:3000/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       negativePoints: negativePoints
     })
-      .then((res) => {
-        this.markTaskComplete();
-      })
-      .catch((err) => {
-        console.error(err);
-      })
+    .then((res) => {
+      this.markTaskComplete();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
   }
 
   markTaskComplete() {
@@ -166,17 +169,6 @@ export default class EcoSystem extends Component {
     this.setState({
       locations: newLocation,
     })
-  }
-
-  importCalendar() {
-    let currentInfo = this.state.locations[this.state.index];
-    // Calendar(currentInfo.Marker_ID, currentInfo.User_ID)
-    // .then(res => {
-      console.log('hi')
-      this.props.navigation.navigate('CalendarSetup', {
-        Marker_ID: currentInfo.Marker_ID,
-        User_ID: currentInfo.User_ID })
-    // })
   }
 
   render() {
@@ -188,13 +180,13 @@ export default class EcoSystem extends Component {
         backgroundColor: '#f4a316',
         underlayColor: 'rgba(0, 0, 0, 0.6)',
         onPress: () => { this.editTask() }
-      },
+     },
       {
         text: 'Delete',
         backgroundColor: 'red',
         underlayColor: 'rgba(0, 0, 0, 0.6)',
         onPress: () => { this.deleteTask() }
-      }
+     }
     ];
     const swipeLeftBtns = [
       {
@@ -202,23 +194,23 @@ export default class EcoSystem extends Component {
         backgroundColor: 'green',
         underlayColor: 'rgba(0, 0, 0, 0.6)',
         onPress: () => { this.yayTask() }
-      },
+     },
       {
         text: 'Nay',
         backgroundColor: 'brown',
         underlayColor: 'rgba(0, 0, 0, 0.6)',
         onPress: () => { this.nayTask() }
-      }
+     }
     ];
     return this.state.render ? (this.state.locations.length > 0 ? (
       <View style={styles.wrapper}>
-        <View style={{ margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start' }}>
+        <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
           <Button
-            onPress={() => navigate('DrawerToggle', { memes: true })}
+            onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
             title="&#9776;"
           />
         </View>
-        <View style={{ flex: 8 }}>
+        <View style={{flex: 8}}>
           <Swiper
             index={this.state.index}
             horizontal={true}
@@ -226,10 +218,11 @@ export default class EcoSystem extends Component {
             loop={false}
           >
             {this.state.locations.map((location, index) => {
-              var upgradeImageNumber = Math.floor(location.PositivePoints / 10);
-              var positiveImageNumber = location.PositivePoints % 10;
-              var downgradeImageNumber = Math.floor(location.NegativePoints / 4);
-              var negativeImageNumber = location.NegativePoints % 4;
+              // console.log(location, 'ecosystem')
+              var upgradeImageNumber = Math.floor(location.PositivePoints/10);
+              var positiveImageNumber = location.PositivePoints%10;
+              var downgradeImageNumber = Math.floor(location.NegativePoints/4);
+              var negativeImageNumber = location.NegativePoints%4;
               upgradeImages = new Array(upgradeImageNumber);
               upgradeImages.fill(location.Ecosystem);
               posImages = new Array(positiveImageNumber);
@@ -238,10 +231,10 @@ export default class EcoSystem extends Component {
               downgradeImages.fill(location.Ecosystem);
               negImages = new Array(negativeImageNumber);
               negImages.fill(location.Ecosystem)
-              console.log(upgradeImages, posImages, downgradeImages, negImages, 'ECOSYSTMEM OF: ', location.Marker_Title)
+              // console.log(upgradeImages, posImages, downgradeImages, negImages, 'ECOSYSTMEM OF: ', location.Marker_Title)
               return (
               // put backgroundImage in the style
-              <View key={index} style={{alignItems: 'center', justifyContent:   'center'}}>
+              <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Image
                   source={images[location.Avatar][1]}
                   style={{width: 50, height: 50}}
@@ -317,7 +310,7 @@ export default class EcoSystem extends Component {
             >
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={{marginTop: 20, fontSize: 16, fontWeight: 'bold'}}>
-                  {this.state.currentTask} 
+                  {this.state.currentTask}
                 </Text>
                 <Text style={{fontSize: 14, marginTop: 2, lineHeight: 0.5, lineHeight: 8}}>
                   {this.state.currentDescription}
@@ -328,33 +321,33 @@ export default class EcoSystem extends Component {
             <View style={styles.separator} />
           </View>) : null }
         </View>
-        <View style={{ flex: 3 }}>
+        <View style={{flex: 3}}>
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, i) => {
                 return <ProgressBar key={i} task={task} locations={this.state.locations}
                   index={this.state.index} showTask={this.showTask} specificIndex={i}
-                  showTask={() => this.showTask(task, this.state.locations[this.state.index].tasks[i], i)} />
+                  showTask={() => this.showTask(task, this.state.locations[this.state.index].tasks[i], i)}/>
               })
-            ) : null}
-            <TouchableOpacity onPress={() => { navigate('TaskBuilder') }}>
-              <Image source={require('../assets/plus.png')} style={{ height: 150, width: 150 }} />
+          ) : null}
+            <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
+              <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
             </TouchableOpacity>
           </ScrollView>
         </View>
       </View>
     ) :
-      <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <TutorialView />
-        <Button
-          title="Map"
-          onPress={() => navigate('Map')}
-        />
-      </View>
-    ) :
-      <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Image source={require('../assets/loading.gif')} style={{ width: 400, height: 400 }} />
-      </View>
+    <View style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+      <TutorialView />
+      <Button
+        title="Map"
+        onPress={() => navigate('Map')}
+      />
+    </View>
+  ) :
+  <View style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+    <Image source={require('../assets/loading.gif')} style={{width: 400, height: 400}}/>
+  </View>
   }
 }
 
@@ -392,6 +385,7 @@ const styles = StyleSheet.create({
   },
   cardtitle: {
     fontSize: 50,
+    // marginTop: 5,
     fontWeight: "bold",
   },
   cardDescription: {
@@ -399,19 +393,21 @@ const styles = StyleSheet.create({
     color: "#444",
   },
   circle: {
-    width: 120,
-    height: 120,
-    borderRadius: 120,
-    borderWidth: 0.5,
-    margin: 5,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
+   width: 120,
+   height: 120,
+   borderRadius: 120,
+  //  borderColor: 'red',
+   borderWidth: 0.5,
+   margin: 5,
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center'
+ },
   separator: {
     flex: .005,
     height: 1,
 
     backgroundColor: '#8A7D80',
+    // marginLeft: 15
   }
 })
