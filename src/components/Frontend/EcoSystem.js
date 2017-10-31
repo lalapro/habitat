@@ -237,8 +237,7 @@ export default class EcoSystem extends Component {
               downgradeImages = new Array(downgradeImageNumber);
               downgradeImages.fill(location.Ecosystem);
               negImages = new Array(negativeImageNumber);
-              negImages.fill(location.Ecosystem)
-              console.log(upgradeImages, posImages, downgradeImages, negImages, 'ECOSYSTMEM OF: ', location.Marker_Title)
+              negImages.fill(location.Ecosystem);
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent:   'center'}}>
