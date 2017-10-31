@@ -53,7 +53,7 @@ export default class Login extends Component {
         // this.getFBPic().then(pic => user_fb_pic = pic)
 
         const response2 = await fetch(`https://graph.facebook.com/${user.id}/friends?access_token=${token}`)
-        const friends = await response2.json();
+        const  friends= await response2.json();
 
         axios.post(`http://10.16.1.233:3000/token`, {
           name: user.name,

@@ -9,9 +9,12 @@ export default class Friends extends Component {
     super(props);
     this.state = {
       userId: this.props.screenProps.userID,
+      giftPoints: this.props.screenProps.giftPoints,
       friends: [],
       userToken: null,
       selectedFriend: null,
+      selectedLocationId: null,
+      locationIsClicked: false,
       loadingEcosystem: false,
       selectedLocations: [],
       upgradeImages: [],
@@ -20,6 +23,7 @@ export default class Friends extends Component {
       negImages: [],
       normalImages: []
     }
+    this.giveGift = this.giveGift.bind(this);
   }
 
   componentDidMount() {
@@ -37,16 +41,19 @@ export default class Friends extends Component {
       posImages: [],
       downgradeImages: [],
       negImages: [],
-      normalImages: []
+      normalImages: [],
+      selectedFriend: friend.Friend
     })
     axios.get(`http://10.16.1.233:3000/mapMarkers`, { params: { userID: friend.Friend}})
     .then(res => {
-      this.setState({selectedLocations: res.data || []})
+      this.setState({
+        selectedLocations: res.data || [],
+      })
     })
+    .catch(err => console.error(err));
   }
 
   showEcosystem(location) {
-    console.log(location, 'location clicked')
     let upgradeImageNumber = Math.floor(location.PositivePoints/10);
     let positiveImageNumber = location.PositivePoints%10;
     let downgradeImageNumber = Math.floor(location.NegativePoints/4);
@@ -60,12 +67,30 @@ export default class Friends extends Component {
     negImages = new Array(negativeImageNumber);
     negImages.fill(location.Ecosystem);
     this.setState({
+      selectedLocation: location.Marker_ID,
+      locationIsClicked: true,
       upgradeImages: upgradeImages || [],
       posImages: posImages || [],
       downgradeImages: downgradeImages || [],
       negImages: negImages || [],
       normalImages: location.tasks || []
     })
+  }
+
+  giveGift() {
+    if (this.state.giftPoints <= 0) {
+      Alert.alert(`you don't have any giftpoints to give out. Please wait till tomorrow`);
+      return;
+    }
+    this.setState({
+      giftPoints: this.state.giftPoints - 1
+    })
+    axios.put('http://10.16.1.131:3000/gift', {
+      userId: this.state.userId,
+      friendEcosystem: this.state.selectedLocation
+    })
+    .then(res => console.log(res.data))
+    .catch(err => console.error(err))
   }
 
   checkAsyncStorage = async () => {
@@ -91,6 +116,7 @@ export default class Friends extends Component {
           })}
         </ScrollView>
         <View>
+          <Text>Current Amount of GiftPoints: {this.state.giftPoints}</Text>
           {this.state.loadingEcosystem ? (
             <View>
               <Image source={require('../assets/loading.gif')} style={{width: 200, height: 200}}/>
@@ -114,51 +140,57 @@ export default class Friends extends Component {
                 </ScrollView>
               </View>
               <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                  {this.state.normalImages.map((task, i) => {
-                    return (
-                      <Image
-                        key={i}
-                        source={ecobuddies[task.Ecosystem][1][1]}
-                        style={{width: 50, height: 50}}
-                      />
-                    )
-                  })}
-                  {this.state.upgradeImages.map((img, i) => {
-                    return (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][2][1]}
-                        style={{width: 100, height: 100}}
-                      />
-                    )
-                  })}
-                  {this.state.posImages.map((img, i) => {
-                    return (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][2][1]}
-                        style={{width: 100, height: 100}}
-                      />
-                    )
-                  })}
-                  {this.state.downgradeImages.map((img, i) => {
-                    return (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][0][1]}
-                        style={{width: 100, height: 100}}
-                      />
-                    )
-                  })}
-                  {this.state.negImages.map((img, i) => {
-                    return (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][0][1]}
-                        style={{width: 100, height: 100}}
-                      />
-                    )
-                  })}
+                {this.state.normalImages.map((task, i) => {
+                  return (
+                    <Image
+                      key={i}
+                      source={ecobuddies[task.Ecosystem][1][1]}
+                      style={{width: 50, height: 50}}
+                    />
+                  )
+                })}
+                {this.state.upgradeImages.map((img, i) => {
+                  return (
+                    <Image
+                      key={i}
+                      source={ecobuddies[img][2][1]}
+                      style={{width: 100, height: 100}}
+                    />
+                  )
+                })}
+                {this.state.posImages.map((img, i) => {
+                  return (
+                    <Image
+                      key={i}
+                      source={ecobuddies[img][2][1]}
+                      style={{width: 100, height: 100}}
+                    />
+                  )
+                })}
+                {this.state.downgradeImages.map((img, i) => {
+                  return (
+                    <Image
+                      key={i}
+                      source={ecobuddies[img][0][1]}
+                      style={{width: 100, height: 100}}
+                    />
+                  )
+                })}
+                {this.state.negImages.map((img, i) => {
+                  return (
+                    <Image
+                      key={i}
+                      source={ecobuddies[img][0][1]}
+                      style={{width: 100, height: 100}}
+                    />
+                  )
+                })}
+              </View>
+              <View style={styles.giftbutton}>
+                {this.state.locationIsClicked ? <Button
+                  title="Give Gift"
+                  onPress={this.giveGift}
+                  /> : null}
               </View>
             </View>
           )}
