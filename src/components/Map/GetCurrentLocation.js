@@ -14,7 +14,11 @@ export default GetCurrentLocation = async (userID) => {
 
   let location = await Location.getCurrentPositionAsync({});
 
+<<<<<<< HEAD
   axios.put(`http://10.16.1.233:3000/updateLocation`, { userID: userID, location: location})
+=======
+  axios.put(`http://10.16.1.233:3000/updateLocation`, { userID: userID, location: location})
+>>>>>>> merge
   .then(res => console.log('update success'))
   return location;
 }

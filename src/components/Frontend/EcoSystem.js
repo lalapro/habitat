@@ -58,7 +58,7 @@ export default class EcoSystem extends Component {
 
 
   getMarkers() {
-    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
+    axios.get('http://10.16.1.233:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
     .then(res => {
       let locations = res.data;
       this.setState({locations})
@@ -107,7 +107,7 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.233:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }

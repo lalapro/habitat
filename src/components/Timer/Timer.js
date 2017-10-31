@@ -70,7 +70,11 @@ export default class Timer extends Component {
                     lgPositivePoints: lgPositivePoints 
                   }, () => {
                     console.log('in timer', this.state)
+<<<<<<< HEAD
                     axios.put('http://10.16.1.233:3000/postimer', {
+=======
+                    axios.put('http://10.16.1.233:3000/postimer', {
+>>>>>>> merge
                       user_ID: this.state.userID,
                       Medium_Positive_Points: this.state.mdPositivePoints,
                       Large_Positive_Points: this.state.lgPositivePoints
@@ -97,7 +101,11 @@ export default class Timer extends Component {
               negativePoints: this.state.negativePoints + 1
             }, () => {
               console.log(this.state.negativePoints,'neg')
+<<<<<<< HEAD
               axios.put('http://10.16.1.233:3000/negtimer', {
+=======
+              axios.put('http://10.16.1.233:3000/negtimer', {
+>>>>>>> merge
                 user_ID: this.state.userID,
                 Negative_Points: this.state.negativePoints
               })
@@ -150,7 +158,11 @@ export default class Timer extends Component {
         userID: this.props.screenProps.userID,
         currentImageIndex: Math.floor(Math.random()*3)
       }, () => {
+<<<<<<< HEAD
         axios.get('http://10.16.1.233:3000/timer', {
+=======
+        axios.get('http://10.16.1.233:3000/timer', {
+>>>>>>> merge
           params: {
             User_ID: this.state.userID
           }
