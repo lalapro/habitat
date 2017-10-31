@@ -39,12 +39,11 @@ export default class CalendarTasks extends Component {
 		})
 			.then(result => {
 				if (result.type !== 'success') {
-					alert('Uh oh, something went wrong');
-					return;
+					this.props.goBack();
 				} else {
-					let token = result.params.access_token;
+          console.log(result.data, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+          let token = result.params.access_token;
 					this.axiosCall(token);
-					return result
 				}
 			})
 			.catch(err => {
@@ -53,6 +52,7 @@ export default class CalendarTasks extends Component {
 	}
 
 	axiosCall = async (token) => {
+    let userID;
     let today = moment().format();
     let timeZone = today.slice(-6);
 		let filtered = [];
@@ -62,13 +62,15 @@ export default class CalendarTasks extends Component {
 		let maxTime = new Date(endOfDay);
 
     var getEachCalendar = async (IDs) => {
-			console.log(IDs, 'my calendars?')
+      let id = IDs.filter(ele => {
+        return ele === userID
+      });
 			let tasks = [];
 			// IDs.map(id => {
 			// Only receiving user's own calendar.
 			axios({
 				method: 'get',
-				url: `https://www.googleapis.com/calendar/v3/calendars/${IDs[0]}/events`,
+				url: `https://www.googleapis.com/calendar/v3/calendars/${id[0]}/events`,
 				headers: {
 					Authorization: `Bearer ${token}`
 				},
@@ -91,16 +93,11 @@ export default class CalendarTasks extends Component {
 							};
 							if (ele.end) {
 								if (ele.end.dateTime) {
-                  console.log(ele, 'ele!');
-                  var b = new Date();
-                  console.log(b, 'current TIME!@@@@@@@@@@@@')
-                  var a = new Date(ele.end.dateTime);
-                  console.log(a, 'time@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
                   temp.time = ele.start.dateTime.slice(-5);
 									temp.title = ele.summary;
                   temp.start = ele.start.dateTime.slice(0, 10) + ' ' + ele.start.dateTime.slice(11, 16);
                   temp.end = ele.end.dateTime.slice(0, 10) + ' ' + ele.end.dateTime.slice(11, 16);
-									temp.Google = ele.id;
+                  temp.Google = ele.id;
 									filtered.push(temp);
 								}
 							}
@@ -120,6 +117,7 @@ export default class CalendarTasks extends Component {
 				}
 			})
 				.then(result => {
+          console.log(result.data, 'CALENDARS?S?')
 					let temp = [];
 					result.data.items.map(ele => {
 						temp.push(ele.id)
@@ -134,7 +132,7 @@ export default class CalendarTasks extends Component {
 
 		axios.get(`https://www.googleapis.com/calendar/v3/users/me/calendarList/primary?access_token=${token}`)
 			.then(res => {
-				let userID = res.data.id;
+        userID = res.data.id;
 				return getCalendarID(userID);
 			})
 			.catch(err => {
@@ -162,7 +160,7 @@ export default class CalendarTasks extends Component {
 	
 	render() {
 		return (
-			<View style={{ backgroundColor: 'green', flex: 1, width: '100%', marginTop: 50 }}>
+			<View style={{ flex: 1, width: '100%', marginTop: 50 }}>
 				<View style={{ flex: 9 }}>
 				{this.state.tasksFromGoogle ? this.state.tasksFromGoogle.map((task, i) => {
 					return <TaskFromGoogle notImport={this.notImport} userID={this.state.userID} eachIndex={i} key={i} task={task} markers={this.state.markers} categories={this.state.categories} />
