@@ -33,11 +33,7 @@ export default class AddLocation extends React.Component {
   newLocation(coords) {
     let longitude = coords.lng;
     let latitude = coords.lat;
-<<<<<<< HEAD
     axios.post('http://10.16.1.233:3000/newLocation', {
-=======
-    axios.post('http://10.16.1.233:3000/newLocation', {
->>>>>>> merge
       user_ID: this.state.user,
       avatar: this.state.avatar,
       title: this.state.title,

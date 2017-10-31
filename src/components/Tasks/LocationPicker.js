@@ -18,11 +18,7 @@ class LocationPicker extends Component {
   }
 
   componentDidMount() {
-<<<<<<< HEAD
     axios.get('http://10.16.1.233:3000/markers', {params: {userID: this.props.userID}})
-=======
-    axios.get('http://10.16.1.233:3000/markers', {params: {userID: this.props.userID}})
->>>>>>> merge
       .then((response) => {
         let markers = response.data;
         this.setState({markers});

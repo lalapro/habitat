@@ -55,11 +55,7 @@ export default class Profile extends Component {
   }
 
   getPicture() {
-<<<<<<< HEAD
     axios.get('http://10.16.1.233:3000/pictures', { params: { username: this.props.screenProps.userID }})
-=======
-    axios.get('http://10.16.1.233:3000/pictures', { params: { username: this.props.screenProps.userID }})
->>>>>>> merge
     .then(res => {
       let jpg = 'data:image/jpg;base64,' + res.data.picture;
       this.setState({ image: jpg })
@@ -73,11 +69,7 @@ export default class Profile extends Component {
 
     let current = new Date();
 
-<<<<<<< HEAD
     axios.get('http://10.16.1.233:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
-=======
-    axios.get('http://10.16.1.233:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
->>>>>>> merge
       .then(res => {
         this.setState({
           categoryPercentage: res.data
@@ -89,11 +81,7 @@ export default class Profile extends Component {
       .catch(err => {
         console.error(err)
       })
-<<<<<<< HEAD
     axios.get('http://10.16.1.233:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
-=======
-    axios.get('http://10.16.1.233:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
->>>>>>> merge
       .then(tasks => {
         tasks.data.forEach(task => {
           let eachDate = task.Start.split(' ').slice(0, 3).reduce((acc, task) => {
@@ -117,11 +105,8 @@ export default class Profile extends Component {
 }
 
   countTasks() {
-<<<<<<< HEAD
+
     axios.get('http://10.16.1.233:3000/countTasks', { params: { username: this.props.screenProps.userID } })
-=======
-    axios.get('http://10.16.1.233:3000/countTasks', { params: { username: this.props.screenProps.userID } })
->>>>>>> merge
       .then(tasks => {
         tasks.data.forEach(task => {
           if (task.Completion === "False") {
@@ -174,11 +159,7 @@ export default class Profile extends Component {
   uploadPhoto(picture) {
     let uri = picture.base64;
     let pictureText = 'data:image/jpg;base64,' + uri;
-<<<<<<< HEAD
     axios.post('http://10.16.1.233:3000/pictures', { picture: uri, username: this.state.username })
-=======
-    axios.post('http://10.16.1.233:3000/pictures', { picture: uri, username: this.state.username })
->>>>>>> merge
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })

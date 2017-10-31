@@ -36,10 +36,10 @@ export default class Timer extends Component {
       var minsInMSec = this.state.minute * 60000;
       var secsInMSec = this.state.second * 1000;
       var duration = hoursInMSec + minsInMSec + secsInMSec;
-      this.setState({ 
+      this.setState({
         toggleTimer: !this.state.toggleTimer
       }, () => {
-        
+
         if (this.state.toggleTimer && duration !== 0) {
           let startTime = new Date();
           this.setState({
@@ -67,14 +67,10 @@ export default class Timer extends Component {
                     duration: 0,
                     toggleTimer: false,
                     mdPositivePoints: mdPositivePoints,
-                    lgPositivePoints: lgPositivePoints 
+                    lgPositivePoints: lgPositivePoints
                   }, () => {
                     console.log('in timer', this.state)
-<<<<<<< HEAD
                     axios.put('http://10.16.1.233:3000/postimer', {
-=======
-                    axios.put('http://10.16.1.233:3000/postimer', {
->>>>>>> merge
                       user_ID: this.state.userID,
                       Medium_Positive_Points: this.state.mdPositivePoints,
                       Large_Positive_Points: this.state.lgPositivePoints
@@ -101,11 +97,7 @@ export default class Timer extends Component {
               negativePoints: this.state.negativePoints + 1
             }, () => {
               console.log(this.state.negativePoints,'neg')
-<<<<<<< HEAD
               axios.put('http://10.16.1.233:3000/negtimer', {
-=======
-              axios.put('http://10.16.1.233:3000/negtimer', {
->>>>>>> merge
                 user_ID: this.state.userID,
                 Negative_Points: this.state.negativePoints
               })
@@ -113,7 +105,7 @@ export default class Timer extends Component {
               .catch(err => console.error(err))
             })
           })
-        } 
+        }
       });
     };
 
@@ -158,11 +150,7 @@ export default class Timer extends Component {
         userID: this.props.screenProps.userID,
         currentImageIndex: Math.floor(Math.random()*3)
       }, () => {
-<<<<<<< HEAD
         axios.get('http://10.16.1.233:3000/timer', {
-=======
-        axios.get('http://10.16.1.233:3000/timer', {
->>>>>>> merge
           params: {
             User_ID: this.state.userID
           }
@@ -201,43 +189,43 @@ export default class Timer extends Component {
             title="&#9776;"
           />
         </View>
-          <View style={styles.container}> 
+          <View style={styles.container}>
             <View style={styles.ecosystem}>
               <Image style={{height: 300, width: 300}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
                 <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-                  {this.state.duration ? 
+                  {this.state.duration ?
                     <Image
                       style={{height: 50, width: 50}}
                       source={ecobuddies[this.state.currentImageIndex].images[0][1]}
                     /> : null
                   }
-                  {this.state.lgPositivePoints ? 
+                  {this.state.lgPositivePoints ?
                     lgImageArray.map((lgImage, i) => (
                       <Image
                       key={i}
                       style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[2][1]} 
-                      /> 
+                      source={ecobuddies[this.state.currentImageIndex].images[2][1]}
+                      />
                     ))
                   : null
                   }
-                  {this.state.mdPositivePoints ? 
+                  {this.state.mdPositivePoints ?
                     mdImageArray.map((mdImage, i) => (
                       <Image
                       key={i}
                       style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[1][1]} 
-                      /> 
+                      source={ecobuddies[this.state.currentImageIndex].images[1][1]}
+                      />
                     ))
                   : null
                   }
-                  {this.state.negativePoints ? 
+                  {this.state.negativePoints ?
                     grayImageArray.map((grayImage, i) => (
                       <Image
                       key={i}
                       style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[3][1]} 
-                      /> 
+                      source={ecobuddies[this.state.currentImageIndex].images[3][1]}
+                      />
                     ))
                   : null
                   }
@@ -250,7 +238,7 @@ export default class Timer extends Component {
                 <Image source={require("../assets/cuteClock.png")} >
                   {this.eachPie(this.state.fill)}
                 </Image>
-              </TouchableOpacity> 
+              </TouchableOpacity>
             </View>
             <View style={styles.pickerContainer}>
               <Picker
@@ -303,7 +291,7 @@ const ecobuddies = [
     [2, require("../assets/Ecosystem/butterfly-lg.png")],
     [3, require("../assets/Ecosystem/butterfly-gray.png")]
   ]},
-  {buddy: 'LadyBugs', 
+  {buddy: 'LadyBugs',
    images: [
     [0, require("../assets/Ecosystem/ladybug-sm.png")],
     [1, require("../assets/Ecosystem/ladybug-md.png")],
@@ -349,12 +337,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     flex: 1
   },
-  
+
   pickerItem: {
     height: 100,
     color: 'red'
   },
-  
+
   arrowWrapper: {
     // backgroundColor: '#FFF0E0',
     flex: 10,
@@ -362,7 +350,7 @@ const styles = StyleSheet.create({
     marginLeft: -28,
     justifyContent: 'center'
   },
-  
+
   arrow: {
     textAlign: 'center',
     color: 'red',

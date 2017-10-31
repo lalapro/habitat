@@ -28,11 +28,7 @@ class CategoryPicker extends Component {
   }
 
 	grabCategories(specific) {
-<<<<<<< HEAD
 		axios.get('http://10.16.1.233:3000/categories', {params: {userID: this.props.userID}})
-=======
-		axios.get('http://10.16.1.233:3000/categories', {params: {userID: this.props.userID}})
->>>>>>> merge
 			.then((response) => {
 				let categories = response.data;
 				this.setState({
@@ -98,11 +94,7 @@ class CategoryPicker extends Component {
     let category = this.state.newCategory;
 		let color = this.state.color;
 		if (category.length > 1) {
-<<<<<<< HEAD
 			axios.post('http://10.16.1.233:3000/categories', {category, color, userID: this.props.userID})
-=======
-			axios.post('http://10.16.1.233:3000/categories', {category, color, userID: this.props.userID})
->>>>>>> merge
 			.then(response => {
 				this.grabCategories(category)
 				this.setState({ newCategory: '' })
