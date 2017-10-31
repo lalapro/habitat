@@ -28,6 +28,7 @@ const syncCalendar = require('./controllers/syncCalendar');
 const calendarHandler = require('./controllers/calendarHandler');
 const handleGetUserInfo = require('./controllers/getUserInfo');
 const handleGoogle = require('./controllers/checkGoogle');
+const friendLocations = require('./controllers/friendLocations');
 
 routes.post('/signup', handleSignup);
 routes.get('/login', handleLogin);
@@ -61,5 +62,6 @@ routes.get('/syncCalendar', syncCalendar);
 routes.post('/calendar', calendarHandler);
 routes.get('/getUserInfo', handleGetUserInfo);
 routes.get('/checkGoogle', handleGoogle);
+routes.get('/friendLocations', friendLocations);
 
 module.exports = routes;
