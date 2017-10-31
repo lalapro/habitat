@@ -204,7 +204,8 @@ export default class Timer extends Component {
                       <Image
                       key={i}
                       style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[2][1]} /> 
+                      source={ecobuddies[this.state.currentImageIndex].images[2][1]} 
+                      /> 
                     ))
                   : null
                   }
@@ -213,7 +214,8 @@ export default class Timer extends Component {
                       <Image
                       key={i}
                       style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[1][1]} /> 
+                      source={ecobuddies[this.state.currentImageIndex].images[1][1]} 
+                      /> 
                     ))
                   : null
                   }
@@ -222,58 +224,59 @@ export default class Timer extends Component {
                       <Image
                       key={i}
                       style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[3][1]} /> 
+                      source={ecobuddies[this.state.currentImageIndex].images[3][1]} 
+                      /> 
                     ))
                   : null
                   }
                 </View>
               </Image>
             </View>
-          <View>
-            <TouchableOpacity
-              onPress={this.startTimer}>
-              <Image source={require("../assets/cuteClock.png")} >
-                {this.eachPie(this.state.fill)}
-              </Image>
-            </TouchableOpacity> 
-          </View>
-          <View style={styles.pickerContainer}>
-            <Picker
-              style={[styles.picker]} itemStyle={styles.pickerItem}
-              selectedValue={this.state.hour}
-              onValueChange={(itemValue) => this.setState({hour: itemValue})}
-            >
-              {hours.map((hour, i) => (
-                <Picker.Item key={i} label={hour} value={hour}/>
-              ))}
-            </Picker>
-            <Text>Hours</Text>
-            <Picker
-              style={[styles.picker]} itemStyle={styles.pickerItem}
-              selectedValue={this.state.minute}
-              onValueChange={(itemValue) => this.setState({minute: itemValue})}
-            >
-              {minutes.map((minute, i) => (
-                <Picker.Item key={i} label={minute} value={minute}/>
-              ))}
-            </Picker>
-            <Text>Minutes</Text>
-            <Picker
-              style={[styles.picker]} itemStyle={styles.pickerItem}
-              selectedValue={this.state.second}
-              onValueChange={(itemValue) => this.setState({second: itemValue})}
-            >
-              {seconds.map((second, i) => (
-                <Picker.Item key={i} label={second} value={second}/>
-              ))}
-            </Picker>
-            <Text>Seconds</Text>
-          </View>
-          <View>
-            <Text>
-              COUNTDOWN: Award In T-MINUS {this.state.timeRemaining} Seconds
-            </Text>
-          </View>
+            <View>
+              <TouchableOpacity
+                onPress={this.startTimer}>
+                <Image source={require("../assets/cuteClock.png")} >
+                  {this.eachPie(this.state.fill)}
+                </Image>
+              </TouchableOpacity> 
+            </View>
+            <View style={styles.pickerContainer}>
+              <Picker
+                style={[styles.picker]} itemStyle={styles.pickerItem}
+                selectedValue={this.state.hour}
+                onValueChange={(itemValue) => this.setState({hour: itemValue})}
+              >
+                {hours.map((hour, i) => (
+                  <Picker.Item key={i} label={hour} value={hour}/>
+                ))}
+              </Picker>
+              <Text>Hours</Text>
+              <Picker
+                style={[styles.picker]} itemStyle={styles.pickerItem}
+                selectedValue={this.state.minute}
+                onValueChange={(itemValue) => this.setState({minute: itemValue})}
+              >
+                {minutes.map((minute, i) => (
+                  <Picker.Item key={i} label={minute} value={minute}/>
+                ))}
+              </Picker>
+              <Text>Minutes</Text>
+              <Picker
+                style={[styles.picker]} itemStyle={styles.pickerItem}
+                selectedValue={this.state.second}
+                onValueChange={(itemValue) => this.setState({second: itemValue})}
+              >
+                {seconds.map((second, i) => (
+                  <Picker.Item key={i} label={second} value={second}/>
+                ))}
+              </Picker>
+              <Text>Seconds</Text>
+            </View>
+            <View>
+              <Text>
+                COUNTDOWN: Award In T-MINUS {this.state.timeRemaining} Seconds
+              </Text>
+            </View>
           </View>
         </View>
       )
