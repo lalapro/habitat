@@ -57,7 +57,6 @@ routes.get('/friends', getFriends);
 routes.put('/updateLocation', updateLocation);
 routes.get('/timer', getTimer);
 routes.put('/postimer', putPosTimerPoints);
-routes.put('/negtimer', putNegTimerPoints)
 routes.put('/negtimer', putNegTimerPoints);
 routes.post('/calendar', calendarHandler);
 routes.get('/getUserInfo', handleGetUserInfo);
