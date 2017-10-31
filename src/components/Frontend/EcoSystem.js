@@ -316,10 +316,10 @@ export default class EcoSystem extends Component {
               backgroundColor= 'transparent'
             >
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{marginTop: 20, fontSize: 16, fontWeight: 'bold'}}>
+                <Text style={{marginTop: 20,  lineHeight: 0.5, fontSize: 16, fontWeight: 'bold'}}>
                   {this.state.currentTask} 
                 </Text>
-                <Text style={{fontSize: 14, marginTop: 2, lineHeight: 0.5, lineHeight: 8}}>
+                <Text style={{fontSize: 14, lineHeight: 0.5}}>
                   {this.state.currentDescription}
                 </Text>
                 <Text style={{margin: 2, lineHeight: 0.5}}>{this.state.currentTaskCategory}</Text>
@@ -378,8 +378,6 @@ const images = [
   [3, require("../assets/Ecosystem/currentlocation.png")]
 ];
 
-
-
 const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
@@ -411,7 +409,6 @@ const styles = StyleSheet.create({
   separator: {
     flex: .005,
     height: 1,
-
     backgroundColor: '#8A7D80',
   }
 })
