@@ -22,7 +22,7 @@ const getMapMarkers = (req, res) => {
         res.send();
       }
       for (let i = 0; i < results.length; i++) {
-        let marker = results[i]
+        let marker = results[i];
         db.query(innerQuery, null, (err, tasks) => {
           if (err) {
             res.status(404).send(`We encountered an error looking up the tasks ${err}`);
@@ -47,7 +47,6 @@ const getMapMarkers = (req, res) => {
                       task.Category = category.Category;
                       task.Color = category.Color;
                       task.Ecosystem = results[i].Ecosystem;
-                      // task.Completion = category.Completion_Points;
                       if (task.Marker_ID === marker.Marker_ID) {
                         marker.tasks = marker.tasks || [];
                         marker.tasks.push(task)
@@ -61,7 +60,6 @@ const getMapMarkers = (req, res) => {
                 res.send(results)
               }
             })
-
           }
         });
       }

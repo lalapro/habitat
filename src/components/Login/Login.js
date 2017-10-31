@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import{ StyleSheet, View, Image, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native';
 import axios from 'axios';
 import LoginForm from './LoginForm';
 import { onSignIn } from '../auth.js'
@@ -25,40 +25,65 @@ export default class Login extends Component {
   }
 
   handlePasswordInput(event) {
-    this.setState({ password: event})
+    this.setState({ password: event })
   }
 
   handleRegularLogin() {
+
     axios.get(`http://10.16.1.233:3000/login`, {
       params: {
         username: this.state.username,
         password: this.state.password
       }
     })
-    .then(userData => {
-      this.props.screenProps.handleLogIn(userData.data.user);
-      AsyncStorage.setItem(`user_token`, userData.data.token);
-    })
+      .then(userData => {
+        this.props.screenProps.handleLogIn(userData.data.user);
+        AsyncStorage.setItem(`user_token`, userData.data.token);
+      })
   }
 
+  // googleLogin = async () => {
+  //   try {
+  //     const result = await Expo.Google.logInAsync({
+  //       androidClientId: '899144873193-oo8liloc1c6umegp4tmg02u8b7jn2ckn.apps.googleusercontent.com',
+  //       iosClientId: '899144873193-jneous07vbsq09ie72f8omumqfvfv6sg.apps.googleusercontent.com',
+  //       scopes: ['profile', 'email'],
+  //     });
+
+  //     if (result.type === 'success') {
+  //       axios.post('http://10.16.1.233:3000/token', {
+  //         name: result.user.name
+  //       })        
+
+
+
+  //       return result.accessToken;
+  //     } else {
+  //       return { cancelled: true };
+  //     }
+  //   } catch (e) {
+  //     return { error: true };
+  //   }
+  // }
+
   login = async () => {
-      const APP_ID = "1729141044061993"
-      const options = {
-          permissions: ['public_profile', 'email', 'user_friends'],
-      }
-      const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(APP_ID, options)
-      if (type === 'success') {
-        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`)
-        const user = await response.json()
-        axios.post(`http://10.16.1.233:3000/token`, {
-          name: user.name,
-          username: user.id,
-          token: token
-        })
+    const APP_ID = "1729141044061993"
+    const options = {
+      permissions: ['public_profile', 'email', 'user_friends'],
+    }
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(APP_ID, options)
+    if (type === 'success') {
+      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`)
+      const user = await response.json()
+      axios.post(`http://10.16.1.233:3000/token`, {
+        name: user.name,
+        username: user.id,
+        token: token
+      })
         .then(res => {
           this.props.screenProps.handleLogIn(res.data.user)
         })
-        AsyncStorage.setItem(`user_token`, token);
+      AsyncStorage.setItem(`user_token`, token);
     }
   }
 
@@ -82,25 +107,25 @@ export default class Login extends Component {
           <LoginForm
             handleUserInput={this.handleUserInput}
             handlePasswordInput={this.handlePasswordInput}
-            />
+          />
         </View>
         <TouchableOpacity
           onPress={() => {
             username = this.state.username
             password = this.state.password
             this.handleRegularLogin()
-            }}
+          }}
           style={styles.buttonContainer}
-          >
+        >
           <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
         <Button
-           onPress={this.login}
-           title='Login with facebook' />
+          onPress={this.login}
+          title='Login with facebook' />
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("SignUp")}
           style={styles.buttonContainer}
-          >
+        >
           <Text style={styles.buttonText}>SIGNUP</Text>
         </TouchableOpacity>
       </View>

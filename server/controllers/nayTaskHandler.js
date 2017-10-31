@@ -3,7 +3,6 @@ const db = require('../../db/index.js');
 const moment = require('moment');
 
 const handleNayTask = (req, res) => {
-  console.log(req.body, 'HIHIHIHIHIHI')
 
   let NegativePoints = req.body.negativePoints;
   let Marker_ID = req.body.markerId;

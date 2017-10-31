@@ -17,8 +17,11 @@ const handleYayTask = require('./controllers/yayTaskHandler.js');
 const handleNayTask = require('./controllers/nayTaskHandler.js');
 const handleProfileTasks = require('./controllers/profileTasksHandler.js');
 const countTasks = require('./controllers/countTasks.js');
-
 const categoryPercentage = require('./controllers/categoryPercentage');
+const syncCalendar = require('./controllers/syncCalendar');
+const calendarHandler = require('./controllers/calendarHandler');
+const handleGetUserInfo = require('./controllers/getUserInfo');
+const handleGoogle = require('./controllers/checkGoogle');
 
 routes.post('/signup', handleSignup);
 routes.get('/login', handleLogin);
@@ -41,6 +44,10 @@ routes.put('/yayTask', handleYayTask);
 routes.put('/nayTask', handleNayTask);
 routes.get('/completedTasks', handleProfileTasks);
 routes.get('/countTasks', countTasks);
-routes.get('/categoryPercentage', categoryPercentage)
+routes.get('/categoryPercentage', categoryPercentage);
+routes.get('/syncCalendar', syncCalendar);
+routes.post('/calendar', calendarHandler);
+routes.get('/getUserInfo', handleGetUserInfo);
+routes.get('/checkGoogle', handleGoogle);
 
 module.exports = routes;
