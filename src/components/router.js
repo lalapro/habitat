@@ -28,6 +28,7 @@ import Logout from './Login/Logout.js';
 import TaskItem from './TaskView/TaskItem.js';
 import Friends from './Friends/Friends.js'
 import Timer from './Timer/Timer.js'
+import CalendarSetup from './Calendar/CalendarSetup'
 
 export const SignedIn = DrawerNavigator(
 	{
@@ -47,7 +48,10 @@ export const SignedIn = DrawerNavigator(
       screen: Friends
     },
 		Timer: {
-			screen: Timer
+			screen: Timer,
+		},
+		SyncGoogleCalendar: {
+			screen: CalendarSetup
 		},
 		Logout: {
 			screen: Logout
