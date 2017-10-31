@@ -250,7 +250,6 @@ export default class EcoSystem extends Component {
                 <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
                 {location.tasks ? (
                   location.tasks.map((task, i) => {
-
                     return (<Image
                       key={i}
                       source={ecobuddies[task.Ecosystem][1][1]}
@@ -269,11 +268,12 @@ export default class EcoSystem extends Component {
                  : null}
                 {location.PositivePoints ?
                   posImages.map((img, i) => (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][2][1]}
-                        style={{width: 50, height: 50}}
-                      />
+                      // <Image
+                      //   key={i}
+                      //   source={ecobuddies[img][2][1]}
+                      //   style={{width: 200, height: 200}}
+                      // />
+                      <EcosystemViewPractice img={img} key={i}/>
                     ))
                  : null}
                  {downgradeImageNumber > 0 ?
