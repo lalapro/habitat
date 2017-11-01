@@ -14,11 +14,15 @@ const convertCalendar = (string) => {
   } else if (day.split('')[day.length-1] === '3') {
     day += 'rd';
   } else if (day.split('')[day.length-1] === '1' && day !== '11' ) {
+
     day += 'st'
   }
+
+  let newDay = undefined;
   if (day.split('')[0] === '0') {
-    console.log('why not working?')
-    day.split('').shift();
+    newDay = day.split('');
+    newDay.shift();
+    newDay = newDay.join('')
   }
 
   let converter = 'am'
@@ -26,6 +30,8 @@ const convertCalendar = (string) => {
     hour = Number(hour) - 12;
     converter = 'pm'
   }
+
+  day = newDay || day;
 
   let converted = `${Months[month]} ${day} ${year}, ${hour}:${minute} ${converter}`;
   return converted;
