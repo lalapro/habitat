@@ -28,7 +28,7 @@ export default class Friends extends Component {
 
   componentDidMount() {
     // this.checkAsyncStorage();
-    axios.get(`http://10.16.1.152:3000/friends`, { params: { user: this.state.userId }})
+    axios.get(`http://10.16.1.218:3000/friends`, { params: { user: this.state.userId }})
     .then(friends => {
       this.setState({ friends: friends.data })
     })
@@ -44,7 +44,7 @@ export default class Friends extends Component {
       normalImages: [],
       selectedFriend: friend.Friend
     })
-    axios.get(`http://10.16.1.152:3000/mapMarkers`, { params: { userID: friend.Friend}})
+    axios.get(`http://10.16.1.218:3000/mapMarkers`, { params: { userID: friend.Friend}})
     .then(res => {
       this.setState({
         selectedLocations: res.data || [],
@@ -101,6 +101,12 @@ export default class Friends extends Component {
   render() {
     return (
       <View>
+        <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
+          <Button
+            onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
+            title="&#9776;"
+          />
+        </View>
         <ScrollView horizontal={true} style={{borderBottomWidth: 1, borderColor: "black"}}>
           {this.state.friends.map((friend, key) => {
             return (

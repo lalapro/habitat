@@ -43,7 +43,7 @@ export default class MapScreen extends Component {
   }
 
   getMarkers() {
-    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID}})
+    axios.get('http://10.16.1.218:3000/mapMarkers', {params: {userID: this.state.userID}})
      .then(markers => {
        this.setState({markers: markers.data})
      })
@@ -62,7 +62,7 @@ export default class MapScreen extends Component {
   }
 
   getFriends() {
-    axios.get(`http://10.16.1.152:3000/friendLocations`, { params: { user: this.state.userID }})
+    axios.get(`http://10.16.1.218:3000/friendLocations`, { params: { user: this.state.userID }})
     .then(friends => {
       this.setState({ friends: friends.data || [] })
     })
