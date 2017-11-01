@@ -12,7 +12,7 @@ export default class AddEcosystem extends Component {
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }} >
         {ecobuddies.map((ele, i) => {
           return (
-            <TouchableOpacity key={i} onPress={() => {navigate('Title', { 
+            <TouchableOpacity key={i} onPress={() => {navigate('Title', {
               avatar: this.props.navigation.state.params.avatar,
               eco: i
             })}}>

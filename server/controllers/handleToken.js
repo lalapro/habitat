@@ -2,20 +2,24 @@ const express = require('express');
 const db = require('../../db/index.js');
 const moment = require('moment');
 
+
+//EAAYkpQWypykBANFJyEC2aODh6GYzCcCTBZCt8nk3yKUbumZAYJzT8SDVflZBPtFYq9S5czpHxVZCVDyeZAvBXVH3Eswhv4UJtCMjQZCDxljLgtFEBntnGvlhZCJQzCwkx4UU53fMtMqcZBdIJkqTj62ZAY6h2lj9FgMaCYx0o4ICNXkBRqbKZAf2v44ine1J6POym3zJG05lTMynNWzQCSzqiO
+//EAAYkpQWypykBANFJyEC2aODh6GYzCcCTBZCt8nk3yKUbumZAYJzT8SDVflZBPtFYq9S5czpHxVZCVDyeZAvBXVH3Eswhv4UJtCMjQZCDxljLgtFEBntnGvlhZCJQzCwkx4UU53fMtMqcZBdIJkqTj62ZAY6h2lj9FgMaCYx0o4ICNXkBRqbKZAf2v44ine1J6POym3zJG05lTMynNWzQCSzqiO
 const handleToken = (req, res) => {
   let token = req.query.token;
+  console.log(token, 'token in body')
   let currentVisit = moment();
   let select = `SELECT * FROM User WHERE Token ='${token}'`;
   db.query(select, null, (err, user) => {
     if (err) {
       res.send('error in login query', err);
-    } else {
-      console.log(user[0].Last_Visit)
+    } else if(user[0]) {
+      console.log(user, 'handle token')
       if (moment(user[0].Last_Visit).isBefore(currentVisit, 'day')) {
         user[0].Gift_Points = user[0].Gift_Points + 1;
       }
       currentVisit = currentVisit.format('YYYY/MM/DD HH:mm:ss');
-      let updatePointsDate = `UPDATE User SET 
+      let updatePointsDate = `UPDATE User SET
         Gift_Points = '${user[0].Gift_Points}',
         Last_Visit = '${currentVisit}'
         WHERE Token ='${token}'`
@@ -58,7 +62,7 @@ const handleAuth = (req, res) => {
               user[0].Gift_Points = user[0].Gift_Points + 1;
             }
             currentVisit = currentVisit.format('YYYY/MM/DD HH:mm:ss');
-            let updatePointsDate = `UPDATE User SET 
+            let updatePointsDate = `UPDATE User SET
               Gift_Points = '${user[0].Gift_Points}',
               Last_Visit = '${currentVisit}'
               WHERE Token ='${token}'`

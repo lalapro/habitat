@@ -24,7 +24,7 @@ export default class CalendarSetup extends Component {
     });
     this.getUserInfo();
   }
-  
+
   getUserInfo() {
     axios.get('http://10.16.1.218:3000/getUserInfo', { params: { userID: this.props.screenProps.userID }})
       .then(information => {
@@ -44,6 +44,7 @@ export default class CalendarSetup extends Component {
   }
 
   render() {
+    console.log('setup!!!')
     return (
       <View>
         <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
@@ -58,7 +59,7 @@ export default class CalendarSetup extends Component {
             </TouchableOpacity>
             : (
             <CalendarTasks goBack={this.goBack} markers={this.state.markers} categories={this.state.categories} userID={this.state.userID}/>
-          )}        
+          )}
         </View>
       </View>
     )
