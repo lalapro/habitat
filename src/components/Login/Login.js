@@ -96,10 +96,14 @@ export default class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/habit@/logo.png")}
+        />  
         <View style={styles.logoContainer}>
           <Image
             style={styles.logo}
-            source={require("../assets/toastlogo.png")}
+            source={require("../assets/habit@/login.png")}
           />
           <Text>Build Habitats by keeping Good Habits</Text>
         </View>

@@ -32,7 +32,7 @@ export default class Logout extends React.Component {
         >
 					<View style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, marginTop: 22, marginHorizontal: 22, backgroundColor: 'purple'}}>
 						{/* <View style={{ marginTop: 15, marginHorizontal: 22, backgroundColor: 'white', height: 250, width: 250}}> */}
-							<Image source={require("../assets/Ecosystem/toast0.png")} style={{width: 150, height: 150}}/>
+							<Image source={require("../assets/habit@/logout.png")} style={{width: 150, height: 150}}/>
 						{/* </View> */}
 						<Text>Are you sure you want to leave?</Text>
 						<Button

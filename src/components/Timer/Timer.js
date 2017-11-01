@@ -286,24 +286,24 @@ export default class Timer extends Component {
 const ecobuddies = [
   {buddy: 'Butterflies',
    images: [
-    [0, require("../assets/Ecosystem/butterfly-sm.png")],
-    [1, require("../assets/Ecosystem/butterfly-md.png")],
-    [2, require("../assets/Ecosystem/butterfly-lg.png")],
-    [3, require("../assets/Ecosystem/butterfly-gray.png")]
+    [0, require("../assets/habit@/butterfly-sm.png")],
+    [1, require("../assets/habit@/butterfly-md.png")],
+    [2, require("../assets/habit@/butterfly-lg.png")],
+    [3, require("../assets/habit@/butterfly-gray.png")]
   ]},
   {buddy: 'LadyBugs', 
    images: [
-    [0, require("../assets/Ecosystem/ladybug-sm.png")],
-    [1, require("../assets/Ecosystem/ladybug-md.png")],
-    [2, require("../assets/Ecosystem/ladybug-lg.png")],
-    [3, require("../assets/Ecosystem/ladybug-gray.png")]
+    [0, require("../assets/habit@/ladybug-sm.png")],
+    [1, require("../assets/habit@/ladybug-md.png")],
+    [2, require("../assets/habit@/ladybug-lg.png")],
+    [3, require("../assets/habit@/ladybug-gray.png")]
   ]},
   {buddy: 'SeaStars',
    images: [
-    [0, require("../assets/Ecosystem/starfish-sm.png")],
-    [1, require("../assets/Ecosystem/starfish-md.png")],
-    [2, require("../assets/Ecosystem/starfish-lg.png")],
-    [3, require("../assets/Ecosystem/starfish-gray.png")]
+    [0, require("../assets/habit@/starfish-sm.png")],
+    [1, require("../assets/habit@/starfish-md.png")],
+    [2, require("../assets/habit@/starfish-lg.png")],
+    [3, require("../assets/habit@/starfish-gray.png")]
   ]}
 ];
 

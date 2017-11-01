@@ -353,14 +353,22 @@ export default class EcoSystem extends Component {
 
 const ecobuddies = [
   [
-    [0, require("../assets/Ecosystem/toast0.png")],
-    [1, require("../assets/Ecosystem/toast1.png")],
-    [2, require("../assets/Ecosystem/toast2.png")]
+    [0, require("../assets/habit@/starfish-gray.png")],
+    [1, require("../assets/habit@/starfish-sm.png")],
+    [2, require("../assets/habit@/starfish-md.png")],
+    [2, require("../assets/habit@/starfish-lg.png")]
   ],
   [
-    [0, require("../assets/Ecosystem/tree0.png")],
-    [1, require("../assets/Ecosystem/tree1.png")],
-    [2, require("../assets/Ecosystem/tree2.png")]
+    [0, require("../assets/habit@/butterfly-gray.png")],
+    [1, require("../assets/habit@/butterfly-sm.png")],
+    [2, require("../assets/habit@/butterfly-md.png")],
+    [2, require("../assets/habit@/butterfly-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/ladybug-gray.png")],
+    [1, require("../assets/habit@/ladybug-sm.png")],
+    [2, require("../assets/habit@/ladybug-md.png")],
+    [2, require("../assets/habit@/ladybug-lg.png")]
   ]
 ]
 
