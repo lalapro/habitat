@@ -50,7 +50,7 @@ export default class AllTasks extends Component {
     }
 
     let positivePoints = task.PositivePoints + 1;
-    axios.put('http://10.16.1.131:3000/yayTask', {
+    axios.put('http://10.16.1.152:3000/yayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       positivePoints: positivePoints
@@ -75,7 +75,7 @@ export default class AllTasks extends Component {
     }
 
     let negativePoints = task.NegativePoints + 1;
-    axios.put('http://10.16.1.131:3000/nayTask', {
+    axios.put('http://10.16.1.152:3000/nayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       negativePoints: negativePoints
@@ -108,6 +108,7 @@ export default class AllTasks extends Component {
           </Text>
         )
     } else {
+      let eco = this.props.task.Ecosystem;
       return (
         <View>
           <Text>
@@ -115,10 +116,10 @@ export default class AllTasks extends Component {
           </Text>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <TouchableOpacity onPress={() => { this.markFailed(this.props.task) }}>
-              <Image source={sprites[0][1]} style={{ height: 35, width: 35 }} />
+              <Image source={ecobuddies[eco][0][1]} style={{ height: 35, width: 35 }} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { this.markCompleted(this.props.task) }}>
-              <Image source={sprites[2][1]} style={{ height: 35, width: 35 }} />
+              <Image source={ecobuddies[eco][2][1]} style={{ height: 35, width: 35 }} />
             </TouchableOpacity>
           </View>
         </View>
@@ -128,13 +129,15 @@ export default class AllTasks extends Component {
 
 
   render() {
+    console.log('this.props.task', this.props.task); 
     let taskStatus = this.props.task.Completion;
+    let eco = this.props.task.Ecosystem;
     if (taskStatus === "True") {
-      taskStatus = <Image source={sprites[2][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][2][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
     } else if (taskStatus === "False") {
-      taskStatus = <Image source={sprites[0][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][0][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
     } else {
-      taskStatus = <Image source={sprites[1][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][1][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
     }
     return (
       <View>
@@ -173,19 +176,19 @@ const ecobuddies = [
     [0, require("../assets/habit@/starfish-gray.png")],
     [1, require("../assets/habit@/starfish-sm.png")],
     [2, require("../assets/habit@/starfish-md.png")],
-    [2, require("../assets/habit@/starfish-lg.png")]
+    [3, require("../assets/habit@/starfish-lg.png")]
   ],
   [
     [0, require("../assets/habit@/butterfly-gray.png")],
     [1, require("../assets/habit@/butterfly-sm.png")],
     [2, require("../assets/habit@/butterfly-md.png")],
-    [2, require("../assets/habit@/butterfly-lg.png")]
+    [3, require("../assets/habit@/butterfly-lg.png")]
   ],
   [
     [0, require("../assets/habit@/ladybug-gray.png")],
     [1, require("../assets/habit@/ladybug-sm.png")],
     [2, require("../assets/habit@/ladybug-md.png")],
-    [2, require("../assets/habit@/ladybug-lg.png")]
+    [3, require("../assets/habit@/ladybug-lg.png")]
   ]
 ]
 

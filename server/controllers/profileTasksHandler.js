@@ -11,6 +11,7 @@ const handleProfileTasks = (req, res) => {
     m.Avatar,
     m.PositivePoints,
     m.NegativePoints,
+    m.Ecosystem,
     c.Category,
     c.Color
     FROM Tasks t

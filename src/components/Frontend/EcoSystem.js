@@ -12,7 +12,6 @@ import ProgressBar from './ProgressBar'
 import convertDate from '../../../server/controllers/convertDate';
 import EcosystemView from './EcosystemView.js'
 import EcosystemViewPractice from './EcosystemViewPractice';
-
 export default class EcoSystem extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +38,6 @@ export default class EcoSystem extends Component {
     }
     this.showTask = this.showTask.bind(this);
   }
-
   componentDidMount() {
     GetCurrentLocation(this.props.screenProps.userID).then(location => {
       this.setState({
@@ -55,17 +53,14 @@ export default class EcoSystem extends Component {
       userID: this.props.screenProps.userID,
     }, () => this.getMarkers())
   }
-
-
   getMarkers() {
-    axios.get('http://10.16.1.131:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
+    axios.get('http://10.16.1.152:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
         this.setState({ locations: res.data })
       })
       .then(res => this.showCurrentLocation())
       .catch(err => console.error(err))
   }
-
   showCurrentLocation() {
     let locations = this.state.locations;
     if (locations.length > 0) {
@@ -86,7 +81,6 @@ export default class EcoSystem extends Component {
       this.setState({render: true})
     }
   }
-
   showTask(task, specificTask, indexOfTask) {
     this.setState({
       toggleShow: !this.state.toggleShow,
@@ -100,19 +94,15 @@ export default class EcoSystem extends Component {
       editSpecificTask: specificTask
     })
   }
-
   editTask(task) {
     this.props.navigation.navigate('TaskBuilder', { specificTask: this.state.editSpecificTask, editing: true })
   }
-
   deleteTask() {
-    axios.delete('http://10.16.1.131:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
-
   yayTask() {
-
     if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === "True") {
       Alert.alert('Dont try to cheat');
       return;
@@ -122,9 +112,9 @@ export default class EcoSystem extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    axios.put('http://10.16.1.131:3000/yayTask', {
+
+    axios.put('http://10.16.1.152:3000/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
@@ -136,7 +126,6 @@ export default class EcoSystem extends Component {
       console.error(err);
     })
   }
-
   nayTask() {
     if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === "True") {
       Alert.alert('Dont try to cheat');
@@ -147,9 +136,9 @@ export default class EcoSystem extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-
     let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
-    axios.put('http://10.16.1.131:3000/nayTask', {
+
+    axios.put('http://10.16.1.152:3000/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       negativePoints: negativePoints
@@ -161,7 +150,6 @@ export default class EcoSystem extends Component {
       console.error(err);
     })
   }
-
   markTaskComplete() {
     let newLocation = this.state.locations
     newLocation[this.state.index].tasks[this.state.currentTaskIndex].Completion = true;
@@ -169,7 +157,6 @@ export default class EcoSystem extends Component {
       locations: newLocation,
     })
   }
-
   render() {
     const { height, width } = Dimensions.get('window');
     const { navigate } = this.props.navigation;
@@ -230,7 +217,7 @@ export default class EcoSystem extends Component {
               downgradeImages.fill(location.Ecosystem);
               negImages = new Array(negativeImageNumber);
               negImages.fill(location.Ecosystem);
-    
+
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -244,9 +231,162 @@ export default class EcoSystem extends Component {
                 <Text style={styles.cardDescription}>
                   {location.Marker_Description}
                 </Text>
+                <Image style={{height: '60%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
+                <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
+                  {location.tasks ? (
+                    location.tasks.map((task, i) => {
+                      return (
+                        <EcosystemViewPractice img={task.Ecosystem} key={i} version={1}/>
+                    )})
+                  ) : null}
+                  {upgradeImageNumber > 0 ?
+                    upgradeImages.map((img, i) => {
+                      return (
+                        <EcosystemViewPractice img={img} key={i} version={3}/>
+                      )})
+                   : null}
+                {location.PositivePoints ?
+                  posImages.map((img, i) => (
+                    <EcosystemViewPractice img={img} key={i} version={2}/>
+                  ))
+                 : null}
+                 {downgradeImageNumber > 0 ?
+                  downgradeImages.map((img, i) => {
+                    console.log(img)
+                    return (
+                      <EcosystemViewPractice img={img} key={i} version={4}/>
+                    )
+                  })
+                 : null}
+                 {location.NegativePoints ?
+                  negImages.map((img, i) => {
+                    console.log(img)
+                    return (
+                      <EcosystemViewPractice img={img} key={i} version={0}/>
+                    )
+                  })
+                 : null}
+                 </View>
+              </Image>
+              </View>
+            )})}
+          </Swiper>
+          {this.state.toggleShow ? (
+          <View style={{height: 80, backgroundColor: 'rgba(52, 52, 52, 0.05)'}}>
+            <View style={styles.separator} />
+            <Swipeout
+              right={swipeRightBtns}
+              left={swipeLeftBtns}
+              autoClose={true}
+              backgroundColor= 'transparent'
+            >
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{marginTop: 20,  lineHeight: 0.5, fontSize: 16, fontWeight: 'bold'}}>
+                  {this.state.currentTask}
+                </Text>
+                <Text style={{fontSize: 14, lineHeight: 0.5}}>
+                  {this.state.currentDescription}
+                </Text>
+                <Text style={{margin: 2, lineHeight: 0.5}}>{this.state.currentTaskCategory}</Text>
+              </View>
+            </Swipeout>
+            <View style={styles.separator} />
+          </View>) : null }
+        </View>
+        <View style={{flex: 3}}>
+          <ScrollView horizontal={true}>
+            {this.state.locations[this.state.index].tasks ? (
+              this.state.locations[this.state.index].tasks.map((task, i) => {
+                return <ProgressBar key={i} task={task} locations={this.state.locations}
+                  index={this.state.index} showTask={this.showTask} specificIndex={i}
+                  showTask={() => this.showTask(task, this.state.locations[this.state.index].tasks[i], i)}/>
+              })
+          ) : null}
+            <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
+              <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </View>
+    ) :
+    <View style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+      <TutorialView />
+      <Button
+        title="Map"
+        onPress={() => navigate('Map')}
+      />
+    </View>
+  ) :
+  <View style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
+    <Image source={require('../assets/loading.gif')} style={{width: 400, height: 400}}/>
+  </View>
+  }
+}
+const ecobuddies = [
+  [
+    [0, require("../assets/habit@/starfish-gray.png")],
+    [1, require("../assets/habit@/starfish-sm.png")],
+    [2, require("../assets/habit@/starfish-md.png")],
+    [3, require("../assets/habit@/starfish-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/butterfly-gray.png")],
+    [1, require("../assets/habit@/butterfly-sm.png")],
+    [2, require("../assets/habit@/butterfly-md.png")],
+    [3, require("../assets/habit@/butterfly-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/ladybug-gray.png")],
+    [1, require("../assets/habit@/ladybug-sm.png")],
+    [2, require("../assets/habit@/ladybug-md.png")],
+    [3, require("../assets/habit@/ladybug-lg.png")]
+  ]
+]
 
-                <Image style={{height: '60%', width: '100%', position: 'relative'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
-                <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
+const images = [
+  [0, require("../assets/Ecosystem/home.png")],
+  [1, require("../assets/Ecosystem/work.png")],
+  [2, require("../assets/Ecosystem/gym.png")],
+  [3, require("../assets/Ecosystem/currentlocation.png")]
+];
+const { width, height } = Dimensions.get("window");
+const styles = StyleSheet.create({
+  container: {
+    padding: 10
+  },
+  wrapper: {
+    display: 'flex',
+    flex: 1
+  },
+  cardtitle: {
+    fontSize: 50,
+    // marginTop: 5,
+    fontWeight: "bold",
+  },
+  cardDescription: {
+    fontSize: 25,
+    color: "#444",
+  },
+  circle: {
+   width: 120,
+   height: 120,
+   borderRadius: 120,
+  //  borderColor: 'red',
+   borderWidth: 0.5,
+   margin: 5,
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center'
+ },
+  separator: {
+    flex: .005,
+    height: 1,
+    backgroundColor: '#8A7D80',
+    // marginLeft: 15
+  }
+})
+
+{/* <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
                 {location.tasks ? (
                   location.tasks.map((task, i) => {
                     return (<Image
@@ -293,125 +433,7 @@ export default class EcoSystem extends Component {
                       />
                     ))
                  : null}
-                 </View>
-                 </Image>
-              </View>
-            )})}
-          </Swiper>
-          {this.state.toggleShow ? (
-          <View style={{height: 80, backgroundColor: 'rgba(52, 52, 52, 0.05)'}}>
-            <View style={styles.separator} />
-            <Swipeout
-              right={swipeRightBtns}
-              left={swipeLeftBtns}
-              autoClose={true}
-              backgroundColor= 'transparent'
-            >
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{marginTop: 20,  lineHeight: 0.5, fontSize: 16, fontWeight: 'bold'}}>
-                  {this.state.currentTask} 
-                </Text>
-                <Text style={{fontSize: 14, lineHeight: 0.5}}>
-                  {this.state.currentDescription}
-                </Text>
-                <Text style={{margin: 2, lineHeight: 0.5}}>{this.state.currentTaskCategory}</Text>
-              </View>
-            </Swipeout>
-            <View style={styles.separator} />
-          </View>) : null }
-        </View>
-        <View style={{flex: 3}}>
-          <ScrollView horizontal={true}>
-            {this.state.locations[this.state.index].tasks ? (
-              this.state.locations[this.state.index].tasks.map((task, i) => {
-                return <ProgressBar key={i} task={task} locations={this.state.locations}
-                  index={this.state.index} showTask={this.showTask} specificIndex={i}
-                  showTask={() => this.showTask(task, this.state.locations[this.state.index].tasks[i], i)}/>
-              })
-          ) : null}
-            <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
-              <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      </View>
-    ) :
-    <View style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
-      <TutorialView />
-      <Button
-        title="Map"
-        onPress={() => navigate('Map')}
-      />
-    </View>
-  ) :
-  <View style={{display: 'flex', alignItems: 'center', justifyContent:'center'}}>
-    <Image source={require('../assets/loading.gif')} style={{width: 400, height: 400}}/>
-  </View>
-  }
-}
+                 </View> */}
 
-const ecobuddies = [
-  [
-    [0, require("../assets/habit@/starfish-gray.png")],
-    [1, require("../assets/habit@/starfish-sm.png")],
-    [2, require("../assets/habit@/starfish-md.png")],
-    [2, require("../assets/habit@/starfish-lg.png")]
-  ],
-  [
-    [0, require("../assets/habit@/butterfly-gray.png")],
-    [1, require("../assets/habit@/butterfly-sm.png")],
-    [2, require("../assets/habit@/butterfly-md.png")],
-    [2, require("../assets/habit@/butterfly-lg.png")]
-  ],
-  [
-    [0, require("../assets/habit@/ladybug-gray.png")],
-    [1, require("../assets/habit@/ladybug-sm.png")],
-    [2, require("../assets/habit@/ladybug-md.png")],
-    [2, require("../assets/habit@/ladybug-lg.png")]
-  ]
-]
 
-const images = [
-  [0, require("../assets/Ecosystem/home.png")],
-  [1, require("../assets/Ecosystem/work.png")],
-  [2, require("../assets/Ecosystem/gym.png")],
-  [3, require("../assets/Ecosystem/currentlocation.png")]
-];
-
-const { width, height } = Dimensions.get("window");
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 10
-  },
-  wrapper: {
-    display: 'flex',
-    flex: 1
-  },
-  cardtitle: {
-    fontSize: 50,
-    // marginTop: 5,
-    fontWeight: "bold",
-  },
-  cardDescription: {
-    fontSize: 25,
-    color: "#444",
-  },
-  circle: {
-   width: 120,
-   height: 120,
-   borderRadius: 120,
-  //  borderColor: 'red',
-   borderWidth: 0.5,
-   margin: 5,
-   display: 'flex',
-   alignItems: 'center',
-   justifyContent: 'center'
- },
-  separator: {
-    flex: .005,
-    height: 1,
-    backgroundColor: '#8A7D80',
-    // marginLeft: 15
-  }
-})
+// ff3900 color for title
