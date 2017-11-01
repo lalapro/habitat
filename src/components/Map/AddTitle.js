@@ -43,10 +43,6 @@ export default class Title extends React.Component {
     );
   }
 }
-const sprites = [
-  [0, require("../assets/Ecosystem/toast1.png")],
-  [1, require("../assets/Ecosystem/tree1.png")]
-]
 
 const images = [
   [0, require("../assets/Ecosystem/home.png")],

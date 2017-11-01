@@ -300,8 +300,8 @@ export default class Profile extends Component {
           calendarColor={'#7743CE'}
           dateNumberStyle={{ color: 'white' }}
           dateNameStyle={{ color: 'white' }}
-          iconLeft={require('../assets/egg2.png')}
-          iconRight={require('../assets/egg3.png')}
+          iconLeft={require('../assets/habit@/logout.png')}
+          iconRight={require('../assets/habit@/login.png')}
           iconContainer={{ flex: 0.1 }}
           onDateSelected={(date) => this.grabDailyTasks(date)}
         />
@@ -341,13 +341,6 @@ const template = [
   {day: 'Fri', value: 0},
   {day: 'Sat', value: 0},
   {day: 'Sun', value: 0}
-]
-
-
-const sprites = [
-  [0, require("../assets/Ecosystem/tree0.png")],
-  [1, require("../assets/Ecosystem/tree1.png")],
-  [2, require("../assets/Ecosystem/tree2.png")]
 ]
 
 const ecobuddies = [
