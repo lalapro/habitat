@@ -25,6 +25,7 @@ export default class Login extends Component {
   }
 
   handleRegularLogin() {
+
     axios.get(`http://10.16.1.218:3000/login`, {
       params: {
         username: this.state.username,
@@ -36,6 +37,30 @@ export default class Login extends Component {
       AsyncStorage.setItem(`user_token`, userData.data.token);
     })
   }
+
+  // googleLogin = async () => {
+  //   try {
+  //     const result = await Expo.Google.logInAsync({
+  //       androidClientId: '899144873193-oo8liloc1c6umegp4tmg02u8b7jn2ckn.apps.googleusercontent.com',
+  //       iosClientId: '899144873193-jneous07vbsq09ie72f8omumqfvfv6sg.apps.googleusercontent.com',
+  //       scopes: ['profile', 'email'],
+  //     });
+
+  //     if (result.type === 'success') {
+  //       axios.post('http://10.16.1.131:3000/token', {
+  //         name: result.user.name
+  //       })        
+
+
+
+  //       return result.accessToken;
+  //     } else {
+  //       return { cancelled: true };
+  //     }
+  //   } catch (e) {
+  //     return { error: true };
+  //   }
+  // }
 
   login = async () => {
       const APP_ID = "1729141044061993"
@@ -53,7 +78,7 @@ export default class Login extends Component {
 
         const response2 = await fetch(`https://graph.facebook.com/${user.id}/friends?access_token=${token}`)
         const  friends= await response2.json();
-
+        
         axios.post(`http://10.16.1.218:3000/token`, {
           name: user.name,
           username: user.id,

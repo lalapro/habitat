@@ -81,6 +81,7 @@ export default class Profile extends Component {
       .catch(err => {
         console.error(err)
       })
+
     axios.get('http://10.16.1.218:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
         tasks.data.forEach(task => {
@@ -105,7 +106,6 @@ export default class Profile extends Component {
 }
 
   countTasks() {
-
     axios.get('http://10.16.1.218:3000/countTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
         tasks.data.forEach(task => {

@@ -44,6 +44,7 @@ export default class Friends extends Component {
       normalImages: [],
       selectedFriend: friend.Friend
     })
+    
     axios.get(`http://10.16.1.218:3000/mapMarkers`, { params: { userID: friend.Friend}})
     .then(res => {
       this.setState({
