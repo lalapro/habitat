@@ -86,7 +86,8 @@ export default class Login extends Component {
         })
         .then(res => {
           this.getFBPic(user.id).then(pic => {
-            this.props.screenProps.handleLogIn(res.data.user, pic);
+            console.log(res.data.giftPoints)
+            this.props.screenProps.handleLogIn(res.data.user, pic, res.data.giftPoints);
           })
           AsyncStorage.setItem(`user_token`, token);
           friends.data.forEach(friend => {

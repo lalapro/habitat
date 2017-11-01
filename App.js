@@ -18,10 +18,11 @@ export default class App extends React.Component {
     }
   }
 
-  handleLogIn = (user, fbPic) => {
+  handleLogIn = (user, fbPic, giftPoints) => {
     this.setState({
       user: user,
-      fbPic: fbPic
+      fbPic: fbPic,
+      giftPoints: giftPoints
     })
   }
 
@@ -34,7 +35,6 @@ export default class App extends React.Component {
   componentDidMount() {
     this.checkAsyncStorage().then(token => {
       axios.get(`http://10.16.1.152:3000/token`, {
-
         params: {
           token: token
         }

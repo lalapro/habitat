@@ -18,6 +18,7 @@ class LocationPicker extends Component {
   }
 
   componentDidMount() {
+
     axios.get('http://10.16.1.152:3000/markers', {params: {userID: this.props.userID}})
       .then((response) => {
         let markers = response.data;
