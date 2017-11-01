@@ -106,7 +106,7 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.218:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.131:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
@@ -124,7 +124,7 @@ export default class EcoSystem extends Component {
     }
 
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    axios.put('http://10.16.1.218:3000/yayTask', {
+    axios.put('http://10.16.1.131:3000/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
@@ -149,7 +149,7 @@ export default class EcoSystem extends Component {
     }
 
     let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
-    axios.put('http://10.16.1.218:3000/nayTask', {
+    axios.put('http://10.16.1.131:3000/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       negativePoints: negativePoints

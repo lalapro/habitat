@@ -146,7 +146,7 @@ export default class CalendarTasks extends Component {
 	}
 
 	saveAllTasks(task, index) {
-		axios.post('http://10.16.1.218:3000/calendar', { tasks: this.state.tasksFromGoogle })
+		axios.post('http://10.16.1.131:3000/calendar', { tasks: this.state.tasksFromGoogle })
 		.then(response => {
       this.props.goBack()
     })

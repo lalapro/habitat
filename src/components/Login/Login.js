@@ -26,7 +26,7 @@ export default class Login extends Component {
 
   handleRegularLogin() {
 
-    axios.get(`http://10.16.1.218:3000/login`, {
+    axios.get(`http://10.16.1.131:3000/login`, {
       params: {
         username: this.state.username,
         password: this.state.password
@@ -79,19 +79,20 @@ export default class Login extends Component {
         const response2 = await fetch(`https://graph.facebook.com/${user.id}/friends?access_token=${token}`)
         const  friends= await response2.json();
         
-        axios.post(`http://10.16.1.218:3000/token`, {
+        axios.post(`http://10.16.1.131:3000/token`, {
           name: user.name,
           username: user.id,
           token: token
         })
         .then(res => {
           this.getFBPic(user.id).then(pic => {
-            this.props.screenProps.handleLogIn(res.data.user, pic);
+            console.log(res.data.giftPoints)
+            this.props.screenProps.handleLogIn(res.data.user, pic, res.data.giftPoints);
           })
           AsyncStorage.setItem(`user_token`, token);
           friends.data.forEach(friend => {
             this.getFBPic(friend.id).then(pic => {
-              axios.post('http://10.16.1.218:3000/friends', {
+              axios.post('http://10.16.1.131:3000/friends', {
                 user: res.data.user,
                 username: user.name,
                 userfbID: user.id,

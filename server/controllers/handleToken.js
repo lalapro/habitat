@@ -10,21 +10,22 @@ const handleToken = (req, res) => {
     if (err) {
       res.send('error in login query', err);
     } else {
-      console.log(user[0].Last_Visit)
-      if (moment(user[0].Last_Visit).isBefore(currentVisit, 'day')) {
-        user[0].Gift_Points = user[0].Gift_Points + 1;
-      }
-      currentVisit = currentVisit.format('YYYY/MM/DD HH:mm:ss');
-      let updatePointsDate = `UPDATE User SET 
-        Gift_Points = '${user[0].Gift_Points}',
-        Last_Visit = '${currentVisit}'
-        WHERE Token ='${token}'`
-      db.query(updatePointsDate, null, (err, result) => {
-        if (err) {
-          res.status(404).send(err);
+      if (user[0]) {
+        if (moment(user[0].Last_Visit).isBefore(currentVisit, 'day')) {
+          user[0].Gift_Points = user[0].Gift_Points + 1;
         }
-        res.send(user);
-      })
+        currentVisit = currentVisit.format('YYYY-MM-DD HH:mm:ss');
+        let updatePointsDate = `UPDATE User SET 
+          Gift_Points = '${user[0].Gift_Points}',
+          Last_Visit = '${currentVisit}'
+          WHERE Token ='${token}'`
+        db.query(updatePointsDate, null, (err, result) => {
+          if (err) {
+            res.status(404).send(err);
+          }
+          res.send(user);
+        })
+      }
     }
   })
 }
@@ -54,23 +55,25 @@ const handleAuth = (req, res) => {
           if (err) {
             res.send('error in updating existing auth-er', err);
           } else {
-            if (moment(user[0].Last_Visit).isBefore(currentVisit, 'day')) {
-              user[0].Gift_Points = user[0].Gift_Points + 1;
-            }
-            currentVisit = currentVisit.format('YYYY/MM/DD HH:mm:ss');
-            let updatePointsDate = `UPDATE User SET 
-              Gift_Points = '${user[0].Gift_Points}',
-              Last_Visit = '${currentVisit}'
-              WHERE Token ='${token}'`
-            db.query(updatePointsDate, null, (err, result) => {
-              if (err) {
-                res.status(404).send(err);
+            if (user[0]) {
+              if (moment(user[0].Last_Visit).isBefore(currentVisit, 'day')) {
+                user[0].Gift_Points = user[0].Gift_Points + 1;
               }
-              res.status(200).send({
-                user: user[0].ID,
-                giftPoints: user[0].Gift_Points
-              });
-            })
+              currentVisit = currentVisit.format('YYYY-MM-DD HH:mm:ss');
+              let updatePointsDate = `UPDATE User SET 
+                Gift_Points = '${user[0].Gift_Points}',
+                Last_Visit = '${currentVisit}'
+                WHERE Token ='${token}'`
+              db.query(updatePointsDate, null, (err, result) => {
+                if (err) {
+                  res.status(404).send(err);
+                }
+                res.status(200).send({
+                  user: user[0].ID,
+                  giftPoints: user[0].Gift_Points
+                });
+              })
+            }
           }
         })
       } else { //if user doesn't exist

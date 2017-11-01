@@ -26,7 +26,7 @@ export default class CalendarSetup extends Component {
   }
   
   getUserInfo() {
-    axios.get('http://10.16.1.218:3000/getUserInfo', { params: { userID: this.props.screenProps.userID }})
+    axios.get('http://10.16.1.131:3000/getUserInfo', { params: { userID: this.props.screenProps.userID }})
       .then(information => {
         let { markers, categories } = information.data;
         this.setState({ markers, categories });

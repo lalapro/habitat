@@ -150,7 +150,7 @@ export default class Timer extends Component {
         userID: this.props.screenProps.userID,
         currentImageIndex: Math.floor(Math.random()*3)
       }, () => {
-        axios.get('http://10.16.1.218:3000/timer', {
+        axios.get('http://10.16.1.131:3000/timer', {
           params: {
             User_ID: this.state.userID
           }
