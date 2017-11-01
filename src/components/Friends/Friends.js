@@ -86,7 +86,7 @@ export default class Friends extends Component {
     this.setState({
       giftPoints: this.state.giftPoints - 1
     })
-    axios.put('http://10.16.1.131:3000/gift', {
+    axios.put('http://10.16.1.218:3000/gift', {
       userId: this.state.userId,
       friendEcosystem: this.state.selectedLocation
     })

@@ -58,7 +58,7 @@ export default class EcoSystem extends Component {
 
 
   getMarkers() {
-    axios.get('http://10.16.1.131:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
+    axios.get('http://10.16.1.218:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
         this.setState({ locations: res.data })
       })
@@ -355,19 +355,19 @@ const ecobuddies = [
     [0, require("../assets/habit@/starfish-gray.png")],
     [1, require("../assets/habit@/starfish-sm.png")],
     [2, require("../assets/habit@/starfish-md.png")],
-    [2, require("../assets/habit@/starfish-lg.png")]
+    [3, require("../assets/habit@/starfish-lg.png")]
   ],
   [
     [0, require("../assets/habit@/butterfly-gray.png")],
     [1, require("../assets/habit@/butterfly-sm.png")],
     [2, require("../assets/habit@/butterfly-md.png")],
-    [2, require("../assets/habit@/butterfly-lg.png")]
+    [3, require("../assets/habit@/butterfly-lg.png")]
   ],
   [
     [0, require("../assets/habit@/ladybug-gray.png")],
     [1, require("../assets/habit@/ladybug-sm.png")],
     [2, require("../assets/habit@/ladybug-md.png")],
-    [2, require("../assets/habit@/ladybug-lg.png")]
+    [3, require("../assets/habit@/ladybug-lg.png")]
   ]
 ]
 
