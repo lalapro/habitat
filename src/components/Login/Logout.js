@@ -31,19 +31,25 @@ export default class Logout extends React.Component {
           onRequestClose={() => {alert("Modal has been closed.")}}
         >
 					<View style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, marginTop: 22, marginHorizontal: 22, backgroundColor: 'purple'}}>
-						{/* <View style={{ marginTop: 15, marginHorizontal: 22, backgroundColor: 'white', height: 250, width: 250}}> */}
-							<Image source={require("../assets/habit@/logout.png")} style={{width: 150, height: 150}}/>
-						{/* </View> */}
-						<Text>Are you sure you want to leave?</Text>
-						<Button
-							onPress={() => this.toggleModal()}
-							title="Yes, I'm sure."
-						/>
-						<Button
-							onPress = {() => this.props.navigation.goBack()}
-							title="Nevermind, take me back."
-						/>
-					 </View>
+						<View style={{flex: 1, alignContent: 'center'}}>
+							<View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7, justifyContent: 'center' }}>
+								 <Image source={require("../assets/habit@/logout.png")} style={{width: 150, height: 150}}/>
+								<Text>Are you sure you want to leave?</Text>
+								<View style={styles.button} >
+									<Button
+										onPress={() => this.toggleModal()}
+										title="Yes, I'm sure."
+									/>
+								</View>
+								<View style={styles.button} >
+									<Button
+										onPress = {() => this.props.navigation.goBack()}
+										title="Nevermind, take me back."
+									/>	
+								</View>
+							</View>
+          	</View>
+					</View>
         </Modal>
       </View>
 
