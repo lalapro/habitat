@@ -23,19 +23,22 @@ export default class CalendarTasks extends Component {
 	}
 
 	componentDidMount() {
+		console.log('mounted')
 		let { userID, markers, categories } = this.props;
 		this.setState({ userID, markers, categories })
 		this.getToken();
 	}
 
 	getToken = async () => {
-		console.log('calling google',config.redirect_url, config.client_id)
+		let reDirectUrl = await AuthSession.getRedirectUrl();
+		// console.log('calling google',config.redirect_url, config.client_id)
+		console.log(reDirectUrl, 'HIHIHI')
 		await AuthSession.startAsync({
 			authUrl:
 			`https://accounts.google.com/o/oauth2/v2/auth` +
 			`?scope=https://www.googleapis.com/auth/calendar` +
 			`&response_type=token` +
-			`&redirect_uri=${config.redirect_url}` +
+			`&redirect_uri=${reDirectUrl}` +
 			`&client_id=${config.client_id}`
 		})
 			.then(result => {
@@ -63,6 +66,8 @@ export default class CalendarTasks extends Component {
 		let maxTime = new Date(endOfDay);
 
     var getEachCalendar = async (IDs) => {
+			console.log(IDs, 'IDSSSSS');
+			console.log(userID, 'USER ID')
       let id = IDs.filter(ele => {
         return ele === userID
       });
@@ -133,6 +138,7 @@ export default class CalendarTasks extends Component {
 
 		axios.get(`https://www.googleapis.com/calendar/v3/users/me/calendarList/primary?access_token=${token}`)
 			.then(res => {
+				console.log(res,' RESSSS')
         userID = res.data.id;
 				return getCalendarID(userID);
 			})
@@ -146,7 +152,7 @@ export default class CalendarTasks extends Component {
 	}
 
 	saveAllTasks(task, index) {
-		axios.post('http://10.16.1.218:3000/calendar', { tasks: this.state.tasksFromGoogle })
+		axios.post('http://10.16.1.152:3000/calendar', { tasks: this.state.tasksFromGoogle })
 		.then(response => {
       this.props.goBack()
     })

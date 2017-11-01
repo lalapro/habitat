@@ -1,56 +1,111 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Animated, Dimensions, Image, PanResponder } from 'react-native';
+import { View, StyleSheet, Animated, Dimensions, Image, PanResponder, Easing } from 'react-native';
+
+
+const { width, height } = Dimensions.get("window");
+
+const ceiling = height * 1/3 - 50;
+const sides = width - 50;
 
 export default class EcosystemViewPractice extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        pan: new Animated.ValueXY(),
-        count: 0
-      }
-      this.animate = this.animate.bind(this);
-      this.panResponder = PanResponder.create({    //Step 2
-      onStartShouldSetPanResponder : () => true,
-    });
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+      deadPosition: new Animated.ValueXY({x: Math.random() * 100, y: 150}),
+      position: new Animated.ValueXY({x: Math.random() * 100, y: Math.random() * 100}),
+      inProgress: new Animated.ValueXY({x: Math.random() * 100, y: Math.random() * 100}),
+      version: props.version
+    }
+    this.animate = this.animate.bind(this);
+    this.animate2 = this.animate2.bind(this);
+    this.animate3 = this.animate3.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return false
   }
 
   componentDidMount() {
-    setInterval(this.animate, 1000)
+    if(this.state.version === 2 || this.state.version === 3) {
+      this.animate();
+    } else if (this.state.version === 0 || this.state.version === 4) {
+      this.animate2();
+    } else {
+      // version === 0
+      console.log('should trigger')
+      this.animate3();
+    }
   }
 
   animate() {
-    let position = new Animated.ValueXY({x: Math.random() * 350, y:  Math.random() * 500})
-      Animated.timing(position, {
-				toValue: {x: Math.random() * 350, y: Math.random() * 500},
-				duration: Math.random() * 2000 + 500,
-				delay: 500
-			}).start();
-			return (
-      <Animated.View style={position.getLayout()}>
-				<Image source={ecobuddies[this.props.img][2][1]} style={{borderRadius: 50, width: 60, height: 50}}/>
-			</Animated.View>
-    )
+    Animated.timing(this.state.position, {
+			toValue: ({x: Math.random() * 150, y: Math.random() * 200}),
+			duration: 3000,
+      delay: Math.random() * 1000,
+      userNativeDriver: true
+		}).start(() => this.animate());
+  }
+
+  animate2() {
+    Animated.timing(this.state.deadPosition, {
+      toValue: ({x: -100 * Math.random() * 0.9, y: 150 + Math.random() * 50}),
+      duration: 5000,
+      delay: Math.random() * 1000 + 500
+    }).start(() => this.animate2());
+  }
+
+  animate3() {
+    Animated.timing(this.state.inProgress, {
+      toValue: ({x: 100 + Math.random() * 100, y: 100 + Math.random() * 30}),
+      duration: 2000
+    }).start(() => this.animate3());
   }
 
   render() {
-      setInterval(this.animate, 1500);
     return (
-      <View>
-          {/* {this.animate()} */}
-          {/* <Animated.Image
-            {...this.panResponder.panHandlers}
-            source={toast[2][1]}
-            style={[this.state.pan.getLayout(), styles.image]}
-          /> */}
-          {this.animate()}
-      </View>
+      this.state.version === 2 || this.state.version === 3 ? (
+        <View>
+          <Animated.View style={this.state.position.getLayout()}>
+            <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
+              <Image source={ecobuddies[this.props.img][this.state.version][1]} style={{width: "100%", height: "100%"}}/>
+            </View>
+          </Animated.View>
+        </View>
+      ) : this.state.version === 1 ? (
+        <View>
+          <Animated.View style={this.state.inProgress.getLayout()}>
+            <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
+              <Image source={ecobuddies[this.props.img][this.state.version][1]} style={{width: "100%", height: "100%"}}/>
+            </View>
+          </Animated.View>
+        </View>
+      ) : (
+        <View>
+          <Animated.View style={this.state.deadPosition.getLayout()}>
+            <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
+              <Image source={ecobuddies[this.props.img][this.state.version][1]} style={{width: "100%", height: "100%"}}/>
+            </View>
+          </Animated.View>
+        </View>
+      )
     )
   }
 }
 
+const sizeKey = {
+  0: 25, // dead
+  1: 10, // inprogress
+  2: 25, // complete
+  3: 50, // complete upgrade
+  4: 50  // dead upgrade
+}
+
+
+
 const styles = StyleSheet.create({
   ball: {
-    height: 60,
+    height: 40,
     width: 60,
     borderRadius: 30,
     borderWidth: 30,
@@ -68,24 +123,26 @@ const styles = StyleSheet.create({
   }
 })
 
-
 const ecobuddies = [
   [
     [0, require("../assets/habit@/starfish-gray.png")],
     [1, require("../assets/habit@/starfish-sm.png")],
     [2, require("../assets/habit@/starfish-md.png")],
-    [3, require("../assets/habit@/starfish-lg.png")]
+    [3, require("../assets/habit@/starfish-lg.png")],
+    [4, require("../assets/habit@/starfish-gray.png")]
   ],
   [
     [0, require("../assets/habit@/butterfly-gray.png")],
     [1, require("../assets/habit@/butterfly-sm.png")],
     [2, require("../assets/habit@/butterfly-md.png")],
-    [3, require("../assets/habit@/butterfly-lg.png")]
+    [3, require("../assets/habit@/butterfly-lg.png")],
+    [4, require("../assets/habit@/butterfly-gray.png")]
   ],
   [
     [0, require("../assets/habit@/ladybug-gray.png")],
     [1, require("../assets/habit@/ladybug-sm.png")],
     [2, require("../assets/habit@/ladybug-md.png")],
-    [3, require("../assets/habit@/ladybug-lg.png")]
+    [3, require("../assets/habit@/ladybug-lg.png")],
+    [0, require("../assets/habit@/ladybug-gray.png")],
   ]
 ]
