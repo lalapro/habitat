@@ -51,9 +51,3 @@ export default class Logout extends React.Component {
   }
 }
 
-const images = [
-  [0, require("../assets/home2.png")],
-  [1, require("../assets/work2.png")],
-  [2, require("../assets/gym.png")],
-  [3, require("../assets/egg5.png")]
-]
