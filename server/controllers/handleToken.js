@@ -10,6 +10,7 @@ const handleToken = (req, res) => {
     if (err) {
       res.send('error in login query', err);
     } else {
+      console.log(user[0].Last_Visit)
       if (moment(user[0].Last_Visit).isBefore(currentVisit, 'day')) {
         user[0].Gift_Points = user[0].Gift_Points + 1;
       }
