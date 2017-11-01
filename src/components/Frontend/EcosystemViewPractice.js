@@ -27,9 +27,9 @@ export default class EcosystemViewPractice extends Component {
   }
 
   componentDidMount() {
-    if(this.state.version === 1 || this.state.version === 2) {
+    if(this.state.version === 2 || this.state.version === 3) {
       this.animate();
-    } else if (this.state.version === 3 || this.state.version === 4) {
+    } else if (this.state.version === 0 || this.state.version === 4) {
       this.animate2();
     } else {
       // version === 0
@@ -64,7 +64,7 @@ export default class EcosystemViewPractice extends Component {
 
   render() {
     return (
-      this.state.version === 1 || this.state.version === 2 ? (
+      this.state.version === 2 || this.state.version === 3 ? (
         <View>
           <Animated.View style={this.state.position.getLayout()}>
             <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
@@ -72,7 +72,7 @@ export default class EcosystemViewPractice extends Component {
             </View>
           </Animated.View>
         </View>
-      ) : this.state.version === 0 ? (
+      ) : this.state.version === 1 ? (
         <View>
           <Animated.View style={this.state.inProgress.getLayout()}>
             <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
@@ -94,11 +94,11 @@ export default class EcosystemViewPractice extends Component {
 }
 
 const sizeKey = {
-  0: 10,
-  1: 25,
-  2: 50,
-  3: 25,
-  4: 50
+  0: 25, // dead
+  1: 10, // inprogress
+  2: 25, // complete
+  3: 50, // complete upgrade
+  4: 50  // dead upgrade
 }
 
 
@@ -123,20 +123,26 @@ const styles = StyleSheet.create({
   }
 })
 
-
 const ecobuddies = [
   [
-    [0, require("../assets/habit@/butterfly-sm.png")],
-    [1, require("../assets/habit@/butterfly-md.png")],
-    [2, require("../assets/habit@/butterfly-lg.png")],
-    [3, require("../assets/habit@/butterfly-dead.png")],
-    [4, require("../assets/habit@/butterfly-dead.png")]
+    [0, require("../assets/habit@/starfish-gray.png")],
+    [1, require("../assets/habit@/starfish-sm.png")],
+    [2, require("../assets/habit@/starfish-md.png")],
+    [3, require("../assets/habit@/starfish-lg.png")],
+    [4, require("../assets/habit@/starfish-gray.png")]
   ],
   [
-    [0, require("../assets/habit@/ladybug-sm.png")],
-    [1, require("../assets/habit@/ladybug-md.png")],
-    [2, require("../assets/habit@/ladybug-lg.png")],
-    [3, require("../assets/Ecosystem/ladybug-gray.png")],
-    [4, require("../assets/Ecosystem/ladybug-gray.png")]
+    [0, require("../assets/habit@/butterfly-gray.png")],
+    [1, require("../assets/habit@/butterfly-sm.png")],
+    [2, require("../assets/habit@/butterfly-md.png")],
+    [3, require("../assets/habit@/butterfly-lg.png")],
+    [4, require("../assets/habit@/butterfly-gray.png")]
+  ],
+  [
+    [0, require("../assets/habit@/ladybug-gray.png")],
+    [1, require("../assets/habit@/ladybug-sm.png")],
+    [2, require("../assets/habit@/ladybug-md.png")],
+    [3, require("../assets/habit@/ladybug-lg.png")],
+    [0, require("../assets/habit@/ladybug-gray.png")],
   ]
 ]
