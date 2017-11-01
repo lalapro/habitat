@@ -5,7 +5,7 @@ const convertCalendar = (string) => {
   let hour = string.split(' ')[1].split(':')[0]
   let minute = string.split(' ')[1].split(':')[1]
 
-  
+
   if (day.split('')[day.length-1] !== '1' && day.split('')[day.length-1] !== '2' &&
   day.split('')[day.length-1] !== '3' && Number(day) > 3) {
     day += 'th';
@@ -15,18 +15,18 @@ const convertCalendar = (string) => {
     day += 'rd';
   } else if (day.split('')[day.length-1] === '1' && day !== '11' ) {
     day += 'st'
-  } 
+  }
   if (day.split('')[0] === '0') {
     console.log('why not working?')
     day.split('').shift();
   }
-  
+
   let converter = 'am'
   if (Number(hour) > 12) {
     hour = Number(hour) - 12;
     converter = 'pm'
   }
-  
+
   let converted = `${Months[month]} ${day} ${year}, ${hour}:${minute} ${converter}`;
   return converted;
 }

@@ -33,7 +33,8 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.checkAsyncStorage().then(token => {
-      axios.get(`http://10.16.1.131:3000/token`, {
+      axios.get(`http://10.16.1.218:3000/token`, {
+
         params: {
           token: token
         }

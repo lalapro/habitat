@@ -28,7 +28,7 @@ const calendarHandler = require('./controllers/calendarHandler');
 const handleGetUserInfo = require('./controllers/getUserInfo');
 const handleGoogle = require('./controllers/checkGoogle');
 const friendLocations = require('./controllers/friendLocations');
-const handleGiveGift = require('./controllers/giveGiftHandler.js')
+const handleGiveGift = require('./controllers/giveGiftHandler.js');
 
 routes.post('/signup', handleSignup);
 routes.get('/login', handleLogin);
@@ -57,11 +57,11 @@ routes.get('/friends', getFriends);
 routes.put('/updateLocation', updateLocation);
 routes.get('/timer', getTimer);
 routes.put('/postimer', putPosTimerPoints);
-routes.put('/negtimer', putNegTimerPoints)
+routes.put('/negtimer', putNegTimerPoints);
 routes.post('/calendar', calendarHandler);
 routes.get('/getUserInfo', handleGetUserInfo);
 routes.get('/checkGoogle', handleGoogle);
 routes.get('/friendLocations', friendLocations);
-routes.put('/gift', handleGiveGift)
+routes.put('/gift', handleGiveGift);
 
 module.exports = routes;

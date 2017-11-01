@@ -10,13 +10,13 @@ export default class AddEcosystem extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }} >
-        {sprites.map((ele, i) => {
+        {ecobuddies.map((ele, i) => {
           return (
             <TouchableOpacity key={i} onPress={() => {navigate('Title', { 
               avatar: this.props.navigation.state.params.avatar,
               eco: ele[0]
             })}}>
-              <Image source={sprites[i][1]} style={{ height: 100, width: 100 }} />
+              <Image source={ecobuddies[i][1][1]} />
             </TouchableOpacity>
           )
         })}
@@ -25,7 +25,23 @@ export default class AddEcosystem extends Component {
   }
 }
 
-const sprites = [
-  [0, require("../assets/Ecosystem/toast1.png")],
-  [1, require("../assets/Ecosystem/tree1.png")]
+const ecobuddies = [
+  [
+    [0, require("../assets/habit@/starfish-gray.png")],
+    [1, require("../assets/habit@/starfish-sm.png")],
+    [2, require("../assets/habit@/starfish-md.png")],
+    [2, require("../assets/habit@/starfish-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/butterfly-gray.png")],
+    [1, require("../assets/habit@/butterfly-sm.png")],
+    [2, require("../assets/habit@/butterfly-md.png")],
+    [2, require("../assets/habit@/butterfly-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/ladybug-gray.png")],
+    [1, require("../assets/habit@/ladybug-sm.png")],
+    [2, require("../assets/habit@/ladybug-md.png")],
+    [2, require("../assets/habit@/ladybug-lg.png")]
+  ]
 ]

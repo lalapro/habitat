@@ -150,7 +150,7 @@ export default class Timer extends Component {
         userID: this.props.screenProps.userID,
         currentImageIndex: Math.floor(Math.random()*3)
       }, () => {
-        axios.get('http://10.16.1.131:3000/timer', {
+        axios.get('http://10.16.1.218:3000/timer', {
           params: {
             User_ID: this.state.userID
           }
@@ -195,15 +195,15 @@ export default class Timer extends Component {
                 <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
                   {this.state.duration ? 
                     <Image
-                      style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[0][1]}
+                      style={{height: 60, width: 60}}
+                      source={require("../assets/habit@/sun.png")}
                     /> : null
                   }
                   {this.state.lgPositivePoints ? 
                     lgImageArray.map((lgImage, i) => (
                       <Image
                       key={i}
-                      style={{height: 50, width: 50}}
+                      style={{height: 60, width: 60}}
                       source={ecobuddies[this.state.currentImageIndex].images[2][1]} 
                       /> 
                     ))
@@ -286,24 +286,24 @@ export default class Timer extends Component {
 const ecobuddies = [
   {buddy: 'Butterflies',
    images: [
-    [0, require("../assets/Ecosystem/butterfly-sm.png")],
-    [1, require("../assets/Ecosystem/butterfly-md.png")],
-    [2, require("../assets/Ecosystem/butterfly-lg.png")],
-    [3, require("../assets/Ecosystem/butterfly-gray.png")]
+    [0, require("../assets/habit@/butterfly-sm.png")],
+    [1, require("../assets/habit@/butterfly-md.png")],
+    [2, require("../assets/habit@/butterfly-lg.png")],
+    [3, require("../assets/habit@/butterfly-gray.png")]
   ]},
   {buddy: 'LadyBugs', 
    images: [
-    [0, require("../assets/Ecosystem/ladybug-sm.png")],
-    [1, require("../assets/Ecosystem/ladybug-md.png")],
-    [2, require("../assets/Ecosystem/ladybug-lg.png")],
-    [3, require("../assets/Ecosystem/ladybug-gray.png")]
+    [0, require("../assets/habit@/ladybug-sm.png")],
+    [1, require("../assets/habit@/ladybug-md.png")],
+    [2, require("../assets/habit@/ladybug-lg.png")],
+    [3, require("../assets/habit@/ladybug-gray.png")]
   ]},
   {buddy: 'SeaStars',
    images: [
-    [0, require("../assets/Ecosystem/starfish-sm.png")],
-    [1, require("../assets/Ecosystem/starfish-md.png")],
-    [2, require("../assets/Ecosystem/starfish-lg.png")],
-    [3, require("../assets/Ecosystem/starfish-gray.png")]
+    [0, require("../assets/habit@/starfish-sm.png")],
+    [1, require("../assets/habit@/starfish-md.png")],
+    [2, require("../assets/habit@/starfish-lg.png")],
+    [3, require("../assets/habit@/starfish-gray.png")]
   ]}
 ];
 

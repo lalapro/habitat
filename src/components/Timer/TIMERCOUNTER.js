@@ -5,7 +5,7 @@ import { Font, AppLoading} from 'expo';
 import Swipeout from 'react-native-swipeout';
 import axios from 'axios';
 
-class TaskItem extends Component {
+class TimerCounter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -95,7 +95,7 @@ class TaskItem extends Component {
   }
 }
 
-export default TaskItem;
+export default TimerCounter;
 
 styles = StyleSheet.create({
   subtitleView: {

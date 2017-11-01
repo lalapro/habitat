@@ -50,7 +50,7 @@ export default class AllTasks extends Component {
     }
 
     let positivePoints = task.PositivePoints + 1;
-    axios.put('http://10.16.1.131:3000/yayTask', {
+    axios.put('http://10.16.1.218:3000/yayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       positivePoints: positivePoints
@@ -75,7 +75,7 @@ export default class AllTasks extends Component {
     }
 
     let negativePoints = task.NegativePoints + 1;
-    axios.put('http://10.16.1.131:3000/nayTask', {
+    axios.put('http://10.16.1.218:3000/nayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       negativePoints: negativePoints
@@ -166,6 +166,27 @@ const sprites = [
   [0, require("../assets/Ecosystem/tree0.png")],
   [1, require("../assets/Ecosystem/tree1.png")],
   [2, require("../assets/Ecosystem/tree2.png")]
+]
+
+const ecobuddies = [
+  [
+    [0, require("../assets/habit@/starfish-gray.png")],
+    [1, require("../assets/habit@/starfish-sm.png")],
+    [2, require("../assets/habit@/starfish-md.png")],
+    [2, require("../assets/habit@/starfish-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/butterfly-gray.png")],
+    [1, require("../assets/habit@/butterfly-sm.png")],
+    [2, require("../assets/habit@/butterfly-md.png")],
+    [2, require("../assets/habit@/butterfly-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/ladybug-gray.png")],
+    [1, require("../assets/habit@/ladybug-sm.png")],
+    [2, require("../assets/habit@/ladybug-md.png")],
+    [2, require("../assets/habit@/ladybug-lg.png")]
+  ]
 ]
 
 const location = [

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native';
+import{ StyleSheet, View, Image, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native';
 import axios from 'axios';
 import LoginForm from './LoginForm';
 import { onSignIn } from '../auth.js'
@@ -21,21 +21,21 @@ export default class Login extends Component {
   }
 
   handlePasswordInput(event) {
-    this.setState({ password: event })
+    this.setState({ password: event})
   }
 
   handleRegularLogin() {
 
-    axios.get(`http://10.16.1.131:3000/login`, {
+    axios.get(`http://10.16.1.218:3000/login`, {
       params: {
         username: this.state.username,
         password: this.state.password
       }
     })
-      .then(userData => {
-        this.props.screenProps.handleLogIn(userData.data.user);
-        AsyncStorage.setItem(`user_token`, userData.data.token);
-      })
+    .then(userData => {
+      this.props.screenProps.handleLogIn(userData.data.user);
+      AsyncStorage.setItem(`user_token`, userData.data.token);
+    })
   }
 
   // googleLogin = async () => {
@@ -78,8 +78,8 @@ export default class Login extends Component {
 
         const response2 = await fetch(`https://graph.facebook.com/${user.id}/friends?access_token=${token}`)
         const  friends= await response2.json();
-
-        axios.post(`http://10.16.1.131:3000/token`, {
+        
+        axios.post(`http://10.16.1.218:3000/token`, {
           name: user.name,
           username: user.id,
           token: token
@@ -91,7 +91,7 @@ export default class Login extends Component {
           AsyncStorage.setItem(`user_token`, token);
           friends.data.forEach(friend => {
             this.getFBPic(friend.id).then(pic => {
-              axios.post('http://10.16.1.131:3000/friends', {
+              axios.post('http://10.16.1.218:3000/friends', {
                 user: res.data.user,
                 username: user.name,
                 userfbID: user.id,
@@ -121,10 +121,14 @@ export default class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/habit@/logo.png")}
+        />  
         <View style={styles.logoContainer}>
           <Image
             style={styles.logo}
-            source={require("../assets/toastlogo.png")}
+            source={require("../assets/habit@/login.png")}
           />
           <Text>Build Habitats by keeping Good Habits</Text>
         </View>
@@ -133,25 +137,25 @@ export default class Login extends Component {
           <LoginForm
             handleUserInput={this.handleUserInput}
             handlePasswordInput={this.handlePasswordInput}
-          />
+            />
         </View>
         <TouchableOpacity
           onPress={() => {
             username = this.state.username
             password = this.state.password
             this.handleRegularLogin()
-          }}
+            }}
           style={styles.buttonContainer}
-        >
+          >
           <Text style={styles.buttonText}>LOGIN</Text>
         </TouchableOpacity>
         <Button
-          onPress={this.login}
-          title='Login with facebook' />
+           onPress={this.login}
+           title='Login with facebook' />
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("SignUp")}
           style={styles.buttonContainer}
-        >
+          >
           <Text style={styles.buttonText}>SIGNUP</Text>
         </TouchableOpacity>
       </View>

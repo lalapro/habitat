@@ -3,61 +3,49 @@ import { View, StyleSheet, Animated, Dimensions, Image, PanResponder } from 'rea
 
 export default class EcosystemViewPractice extends Component {
     constructor(props) {
-        super(props);
-        this.state = {
-            tasks: [],
-            data: [1,2,3,4,5]
-        }
-        this.animate = this.animate.bind(this);
-        this.animations = [];
-        if (!!this.props.location.tasks) {
-          
-          this.props.location.tasks.forEach((ele, index) => {
-            this.animations[index] = new Animated.ValueXY({x: Math.random() * 100, y:  Math.random() * 100})
-          })
-        }
-        
-        this.panResponder = PanResponder.create({
-            onMoveShouldSetPanResponder: (event, gestureState) => true,
-            onStartShouldSetPanResponder: (event, gestureState) => true,
-            onMoveShouldSetPanResponderCapture: (event, gestureState) => true,
-            onPanResponderMove: Animated.event([
-                null, {dx: this.x, dy: this.y}
-            ])
-            // onPanResponderRelease: (event, gestureState) => {
-            //     Animated.spring(this, {
-            //         toValue: {x: 0, y: 0}                    
-            //     }).start();
-            // }
-        });
-    }
-
-    componentDidMount() {
-        this.animate()
+      super(props);
+      this.state = {
+        pan: new Animated.ValueXY(),
+        count: 0
+      }
+      this.animate = this.animate.bind(this);
+      this.panResponder = PanResponder.create({    //Step 2
+      onStartShouldSetPanResponder : () => true,
+    });
   }
-    animate(){
-        return this.animations.map((ele, i) => {
-            let height = 300 * Math.random() * 0.6;
-            let width = 300 * Math.random() * 0.9;
-            Animated.timing(ele, {
-                toValue: {x: width, y: height},
-                duration: 6000,
-                delay: 500
-            }).start();
-            return <Animated.View {...this.panResponder.panHandlers} key={i} style={ele.getLayout()}>
-                    <Image source={toast[0][1]} style={{borderRadius: 50, width: 60, height: 50}}/>
-                </Animated.View>
-            });
-    }
 
-    render() {
-        setInterval(this.animate, 1500);
-        return (
-            <View>
-                {this.animate()}
-            </View>
-        )
-    }
+  componentDidMount() {
+    setInterval(this.animate, 1000)
+  }
+
+  animate() {
+    let position = new Animated.ValueXY({x: Math.random() * 350, y:  Math.random() * 500})
+      Animated.timing(position, {
+				toValue: {x: Math.random() * 350, y: Math.random() * 500},
+				duration: Math.random() * 2000 + 500,
+				delay: 500
+			}).start();
+			return (
+      <Animated.View style={position.getLayout()}>
+				<Image source={ecobuddies[this.props.img][2][1]} style={{borderRadius: 50, width: 60, height: 50}}/>
+			</Animated.View>
+    )
+  }
+
+  render() {
+      setInterval(this.animate, 1500);
+    return (
+      <View>
+          {/* {this.animate()} */}
+          {/* <Animated.Image
+            {...this.panResponder.panHandlers}
+            source={toast[2][1]}
+            style={[this.state.pan.getLayout(), styles.image]}
+          /> */}
+          {this.animate()}
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -73,17 +61,31 @@ const styles = StyleSheet.create({
       width: 60,
       borderWidth: 30,
       borderColor: 'red'
+  },
+  image: {
+    width: 100,
+    height: 100
   }
 })
 
-const toast = [
-  [0, require("../assets/Ecosystem/toast0.png")],
-  [1, require("../assets/Ecosystem/toast1.png")],
-  [2, require("../assets/Ecosystem/toast2.png")]
-];
 
-const tree = [
-  [0, require("../assets/Ecosystem/tree0.png")],
-  [1, require("../assets/Ecosystem/tree1.png")],
-  [2, require("../assets/Ecosystem/tree2.png")]
-];
+const ecobuddies = [
+  [
+    [0, require("../assets/habit@/starfish-gray.png")],
+    [1, require("../assets/habit@/starfish-sm.png")],
+    [2, require("../assets/habit@/starfish-md.png")],
+    [2, require("../assets/habit@/starfish-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/butterfly-gray.png")],
+    [1, require("../assets/habit@/butterfly-sm.png")],
+    [2, require("../assets/habit@/butterfly-md.png")],
+    [2, require("../assets/habit@/butterfly-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/ladybug-gray.png")],
+    [1, require("../assets/habit@/ladybug-sm.png")],
+    [2, require("../assets/habit@/ladybug-md.png")],
+    [2, require("../assets/habit@/ladybug-lg.png")]
+  ]
+]
