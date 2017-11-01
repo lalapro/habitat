@@ -47,7 +47,7 @@ export default class Login extends Component {
   //     });
 
   //     if (result.type === 'success') {
-  //       axios.post('http://10.16.1.131:3000/token', {
+  //       axios.post('http://10.16.1.218:3000/token', {
   //         name: result.user.name
   //       })        
 

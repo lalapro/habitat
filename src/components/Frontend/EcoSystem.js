@@ -58,7 +58,7 @@ export default class EcoSystem extends Component {
 
 
   getMarkers() {
-    axios.get('http://10.16.1.131:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
+    axios.get('http://10.16.1.218:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
         this.setState({ locations: res.data })
       })

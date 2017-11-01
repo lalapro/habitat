@@ -205,6 +205,7 @@ export default class Profile extends Component {
 
   render() {
     let tabs = Object.entries(this.state.locations)
+    console.log(this.state.locations, 'what iso going on')
     tabs.unshift(['Overview'])
 
 
@@ -311,11 +312,8 @@ export default class Profile extends Component {
           visible={this.state.visibleModal}
           onRequestClosed={() => { alert('Photo is not selected!!') }}
         >
-          <View>
-            <View style={{ height: 470, opacity: 0.7, backgroundColor: '#ddd' }}>
-              <Image source={require('../assets/toastlogo.png')} style={{ height: '100%', width: '100%', opacity: 0.8 }} />
-            </View>
-            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7 }}>
+          <View style={{flex: 1, alignContent: 'center'}}>
+            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7, justifyContent: 'center' }}>
               <View style={styles.button} >
                 <Button title={`Take a photo`} onPress={this.takePhoto} />
               </View>
@@ -348,19 +346,19 @@ const ecobuddies = [
     [0, require("../assets/habit@/starfish-gray.png")],
     [1, require("../assets/habit@/starfish-sm.png")],
     [2, require("../assets/habit@/starfish-md.png")],
-    [3, require("../assets/habit@/starfish-lg.png")]
+    [2, require("../assets/habit@/starfish-lg.png")]
   ],
   [
     [0, require("../assets/habit@/butterfly-gray.png")],
     [1, require("../assets/habit@/butterfly-sm.png")],
     [2, require("../assets/habit@/butterfly-md.png")],
-    [3, require("../assets/habit@/butterfly-lg.png")]
+    [2, require("../assets/habit@/butterfly-lg.png")]
   ],
   [
     [0, require("../assets/habit@/ladybug-gray.png")],
     [1, require("../assets/habit@/ladybug-sm.png")],
     [2, require("../assets/habit@/ladybug-md.png")],
-    [3, require("../assets/habit@/ladybug-lg.png")]
+    [2, require("../assets/habit@/ladybug-lg.png")]
   ]
 ]
 
