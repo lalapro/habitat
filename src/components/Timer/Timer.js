@@ -36,10 +36,10 @@ export default class Timer extends Component {
       var minsInMSec = this.state.minute * 60000;
       var secsInMSec = this.state.second * 1000;
       var duration = hoursInMSec + minsInMSec + secsInMSec;
-      this.setState({
+      this.setState({ 
         toggleTimer: !this.state.toggleTimer
       }, () => {
-
+        
         if (this.state.toggleTimer && duration !== 0) {
           let startTime = new Date();
           this.setState({
@@ -67,10 +67,10 @@ export default class Timer extends Component {
                     duration: 0,
                     toggleTimer: false,
                     mdPositivePoints: mdPositivePoints,
-                    lgPositivePoints: lgPositivePoints
+                    lgPositivePoints: lgPositivePoints 
                   }, () => {
                     console.log('in timer', this.state)
-                    axios.put('http://10.16.1.152:3000/postimer', {
+                    axios.put('http://10.16.1.233:3000/postimer', {
                       user_ID: this.state.userID,
                       Medium_Positive_Points: this.state.mdPositivePoints,
                       Large_Positive_Points: this.state.lgPositivePoints
@@ -97,7 +97,7 @@ export default class Timer extends Component {
               negativePoints: this.state.negativePoints + 1
             }, () => {
               console.log(this.state.negativePoints,'neg')
-              axios.put('http://10.16.1.152:3000/negtimer', {
+              axios.put('http://10.16.1.233:3000/negtimer', {
                 user_ID: this.state.userID,
                 Negative_Points: this.state.negativePoints
               })
@@ -105,7 +105,7 @@ export default class Timer extends Component {
               .catch(err => console.error(err))
             })
           })
-        }
+        } 
       });
     };
 
@@ -150,7 +150,7 @@ export default class Timer extends Component {
         userID: this.props.screenProps.userID,
         currentImageIndex: Math.floor(Math.random()*3)
       }, () => {
-        axios.get('http://10.16.1.152:3000/timer', {
+        axios.get('http://10.16.1.218:3000/timer', {
           params: {
             User_ID: this.state.userID
           }
@@ -189,43 +189,43 @@ export default class Timer extends Component {
             title="&#9776;"
           />
         </View>
-          <View style={styles.container}>
+          <View style={styles.container}> 
             <View style={styles.ecosystem}>
               <Image style={{height: 300, width: 300}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
                 <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-                  {this.state.duration ?
+                  {this.state.duration ? 
                     <Image
-                      style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[0][1]}
+                      style={{height: 60, width: 60}}
+                      source={require("../assets/habit@/sun.png")}
                     /> : null
                   }
-                  {this.state.lgPositivePoints ?
+                  {this.state.lgPositivePoints ? 
                     lgImageArray.map((lgImage, i) => (
                       <Image
                       key={i}
-                      style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[2][1]}
-                      />
+                      style={{height: 60, width: 60}}
+                      source={ecobuddies[this.state.currentImageIndex].images[2][1]} 
+                      /> 
                     ))
                   : null
                   }
-                  {this.state.mdPositivePoints ?
+                  {this.state.mdPositivePoints ? 
                     mdImageArray.map((mdImage, i) => (
                       <Image
                       key={i}
                       style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[1][1]}
-                      />
+                      source={ecobuddies[this.state.currentImageIndex].images[1][1]} 
+                      /> 
                     ))
                   : null
                   }
-                  {this.state.negativePoints ?
+                  {this.state.negativePoints ? 
                     grayImageArray.map((grayImage, i) => (
                       <Image
                       key={i}
                       style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[3][1]}
-                      />
+                      source={ecobuddies[this.state.currentImageIndex].images[3][1]} 
+                      /> 
                     ))
                   : null
                   }
@@ -238,7 +238,7 @@ export default class Timer extends Component {
                 <Image source={require("../assets/cuteClock.png")} >
                   {this.eachPie(this.state.fill)}
                 </Image>
-              </TouchableOpacity>
+              </TouchableOpacity> 
             </View>
             <View style={styles.pickerContainer}>
               <Picker
@@ -286,24 +286,24 @@ export default class Timer extends Component {
 const ecobuddies = [
   {buddy: 'Butterflies',
    images: [
-    [0, require("../assets/Ecosystem/butterfly-sm.png")],
-    [1, require("../assets/Ecosystem/butterfly-md.png")],
-    [2, require("../assets/Ecosystem/butterfly-lg.png")],
-    [3, require("../assets/Ecosystem/butterfly-gray.png")]
+    [0, require("../assets/habit@/butterfly-sm.png")],
+    [1, require("../assets/habit@/butterfly-md.png")],
+    [2, require("../assets/habit@/butterfly-lg.png")],
+    [3, require("../assets/habit@/butterfly-gray.png")]
   ]},
-  {buddy: 'LadyBugs',
+  {buddy: 'LadyBugs', 
    images: [
-    [0, require("../assets/Ecosystem/ladybug-sm.png")],
-    [1, require("../assets/Ecosystem/ladybug-md.png")],
-    [2, require("../assets/Ecosystem/ladybug-lg.png")],
-    [3, require("../assets/Ecosystem/ladybug-gray.png")]
+    [0, require("../assets/habit@/ladybug-sm.png")],
+    [1, require("../assets/habit@/ladybug-md.png")],
+    [2, require("../assets/habit@/ladybug-lg.png")],
+    [3, require("../assets/habit@/ladybug-gray.png")]
   ]},
   {buddy: 'SeaStars',
    images: [
-    [0, require("../assets/Ecosystem/starfish-sm.png")],
-    [1, require("../assets/Ecosystem/starfish-md.png")],
-    [2, require("../assets/Ecosystem/starfish-lg.png")],
-    [3, require("../assets/Ecosystem/starfish-gray.png")]
+    [0, require("../assets/habit@/starfish-sm.png")],
+    [1, require("../assets/habit@/starfish-md.png")],
+    [2, require("../assets/habit@/starfish-lg.png")],
+    [3, require("../assets/habit@/starfish-gray.png")]
   ]}
 ];
 
@@ -337,12 +337,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     flex: 1
   },
-
+  
   pickerItem: {
     height: 100,
     color: 'red'
   },
-
+  
   arrowWrapper: {
     // backgroundColor: '#FFF0E0',
     flex: 10,
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
     marginLeft: -28,
     justifyContent: 'center'
   },
-
+  
   arrow: {
     textAlign: 'center',
     color: 'red',

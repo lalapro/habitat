@@ -26,7 +26,7 @@ export default class CalendarSetup extends Component {
   }
   
   getUserInfo() {
-    axios.get('http://10.16.1.152:3000/getUserInfo', { params: { userID: this.props.screenProps.userID }})
+    axios.get('http://10.16.1.218:3000/getUserInfo', { params: { userID: this.props.screenProps.userID }})
       .then(information => {
         let { markers, categories } = information.data;
         this.setState({ markers, categories });
@@ -45,13 +45,21 @@ export default class CalendarSetup extends Component {
 
   render() {
     return (
-      <View style={{ display: 'flex', flex:1, alignItems: 'center', justifyContent: 'center'}}>
-        {!this.state.sync ? <TouchableOpacity onPress={() => this.calendar()}>
-            <Image style={{ height: 300, width: 350}} source={require('../assets/googleCalendar.png')} />
-          </TouchableOpacity>
-          : (
-          <CalendarTasks goBack={this.goBack} markers={this.state.markers} categories={this.state.categories} userID={this.state.userID}/>
-        )}        
+      <View>
+        <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
+          <Button
+            onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
+            title="&#9776;"
+          />
+        </View>
+        <View style={{ display: 'flex', flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          {!this.state.sync ? <TouchableOpacity onPress={() => this.calendar()}>
+              <Image style={{ height: 300, width: 350}} source={require('../assets/googleCalendar.png')} />
+            </TouchableOpacity>
+            : (
+            <CalendarTasks goBack={this.goBack} markers={this.state.markers} categories={this.state.categories} userID={this.state.userID}/>
+          )}        
+        </View>
       </View>
     )
   }

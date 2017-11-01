@@ -58,7 +58,7 @@ export default class EcoSystem extends Component {
 
 
   getMarkers() {
-    axios.get('http://10.16.1.152:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
+    axios.get('http://10.16.1.218:3000/mapMarkers', {params: {userID: this.state.userID, currentDay: true}})
     .then(res => {
       let locations = res.data;
       this.setState({locations})
@@ -107,7 +107,7 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.218:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
@@ -125,7 +125,7 @@ export default class EcoSystem extends Component {
     }
 
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    axios.put('http://10.16.1.152:3000/yayTask', {
+    axios.put('http://10.16.1.218:3000/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
@@ -150,7 +150,7 @@ export default class EcoSystem extends Component {
     }
 
     let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
-    axios.put('http://10.16.1.152:3000/nayTask', {
+    axios.put('http://10.16.1.218:3000/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       negativePoints: negativePoints
@@ -353,14 +353,22 @@ export default class EcoSystem extends Component {
 
 const ecobuddies = [
   [
-    [0, require("../assets/Ecosystem/toast0.png")],
-    [1, require("../assets/Ecosystem/toast1.png")],
-    [2, require("../assets/Ecosystem/toast2.png")]
+    [0, require("../assets/habit@/starfish-gray.png")],
+    [1, require("../assets/habit@/starfish-sm.png")],
+    [2, require("../assets/habit@/starfish-md.png")],
+    [2, require("../assets/habit@/starfish-lg.png")]
   ],
   [
-    [0, require("../assets/Ecosystem/tree0.png")],
-    [1, require("../assets/Ecosystem/tree1.png")],
-    [2, require("../assets/Ecosystem/tree2.png")]
+    [0, require("../assets/habit@/butterfly-gray.png")],
+    [1, require("../assets/habit@/butterfly-sm.png")],
+    [2, require("../assets/habit@/butterfly-md.png")],
+    [2, require("../assets/habit@/butterfly-lg.png")]
+  ],
+  [
+    [0, require("../assets/habit@/ladybug-gray.png")],
+    [1, require("../assets/habit@/ladybug-sm.png")],
+    [2, require("../assets/habit@/ladybug-md.png")],
+    [2, require("../assets/habit@/ladybug-lg.png")]
   ]
 ]
 
