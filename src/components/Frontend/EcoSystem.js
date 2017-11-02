@@ -39,6 +39,7 @@ export default class EcoSystem extends Component {
     }
     this.showTask = this.showTask.bind(this);
   }
+
   componentDidMount() {
     GetCurrentLocation(this.props.screenProps.userID).then(location => {
       this.setState({
@@ -54,6 +55,8 @@ export default class EcoSystem extends Component {
       userID: this.props.screenProps.userID,
     }, () => this.getMarkers())
   }
+
+
   getMarkers() {
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
@@ -62,6 +65,7 @@ export default class EcoSystem extends Component {
       .then(res => this.showCurrentLocation())
       .catch(err => console.error(err))
   }
+
   showCurrentLocation() {
     let locations = this.state.locations;
     if (locations.length > 0) {
@@ -82,6 +86,7 @@ export default class EcoSystem extends Component {
       this.setState({render: true})
     }
   }
+
   showTask(task, specificTask, indexOfTask) {
     this.setState({
       toggleShow: !this.state.toggleShow,
@@ -95,15 +100,19 @@ export default class EcoSystem extends Component {
       editSpecificTask: specificTask
     })
   }
+
   editTask(task) {
     this.props.navigation.navigate('TaskBuilder', { specificTask: this.state.editSpecificTask, editing: true })
   }
+
   deleteTask() {
     axios.delete('https://naturalhabitat.herokuapp.com/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
+
   yayTask() {
+
     if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === "True") {
       Alert.alert('Dont try to cheat');
       return;
@@ -113,7 +122,6 @@ export default class EcoSystem extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-    let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
 
     axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: this.state.currentTaskId,
@@ -127,6 +135,7 @@ export default class EcoSystem extends Component {
       console.error(err);
     })
   }
+
   nayTask() {
     if (this.state.locations[this.state.index].tasks[this.state.currentTaskIndex].Completion === "True") {
       Alert.alert('Dont try to cheat');
@@ -137,7 +146,6 @@ export default class EcoSystem extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-    let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
 
     axios.put('https://naturalhabitat.herokuapp.com/nayTask', {
       taskId: this.state.currentTaskId,
@@ -151,6 +159,7 @@ export default class EcoSystem extends Component {
       console.error(err);
     })
   }
+
   markTaskComplete() {
     let newLocation = this.state.locations
     newLocation[this.state.index].tasks[this.state.currentTaskIndex].Completion = true;
@@ -158,6 +167,7 @@ export default class EcoSystem extends Component {
       locations: newLocation,
     })
   }
+
   render() {
     const { height, width } = Dimensions.get('window');
     const { navigate } = this.props.navigation;
@@ -218,7 +228,7 @@ export default class EcoSystem extends Component {
               downgradeImages.fill(location.Ecosystem);
               negImages = new Array(negativeImageNumber);
               negImages.fill(location.Ecosystem);
-
+    
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -254,27 +264,34 @@ export default class EcoSystem extends Component {
                    : null}
                 {location.PositivePoints ?
                   posImages.map((img, i) => (
-                    <EcosystemViewPractice img={img} key={i} version={2}/>
-                  ))
+                      // <Image
+                      //   key={i}
+                      //   source={ecobuddies[img][2][1]}
+                      //   style={{width: 200, height: 200}}
+                      // />
+                      <EcosystemViewPractice img={img} key={i}/>
+                    ))
                  : null}
                  {downgradeImageNumber > 0 ?
-                  downgradeImages.map((img, i) => {
-                    console.log(img)
-                    return (
-                      <EcosystemViewPractice img={img} key={i} version={4}/>
-                    )
-                  })
+                  downgradeImages.map((img, i) => (
+                      <Image
+                        key={i}
+                        source={ecobuddies[img][0][1]}
+                        style={{width: 100, height: 100}}
+                      />
+                    ))
                  : null}
                  {location.NegativePoints ?
-                  negImages.map((img, i) => {
-                    console.log(img)
-                    return (
-                      <EcosystemViewPractice img={img} key={i} version={0}/>
-                    )
-                  })
+                  negImages.map((img, i) => (
+                      <Image
+                        key={i}
+                        source={ecobuddies[img][0][1]}
+                        style={{width: 50, height: 50}}
+                      />
+                    ))
                  : null}
                  </View>
-              </Image>
+                 </Image>
               </View>
             )})}
           </Swiper>
@@ -327,24 +344,25 @@ export default class EcoSystem extends Component {
   </View>
   }
 }
+
 const ecobuddies = [
   [
     [0, require("../assets/habit@/starfish-gray.png")],
     [1, require("../assets/habit@/starfish-sm.png")],
     [2, require("../assets/habit@/starfish-md.png")],
-    [3, require("../assets/habit@/starfish-lg.png")]
+    [2, require("../assets/habit@/starfish-lg.png")]
   ],
   [
     [0, require("../assets/habit@/butterfly-gray.png")],
     [1, require("../assets/habit@/butterfly-sm.png")],
     [2, require("../assets/habit@/butterfly-md.png")],
-    [3, require("../assets/habit@/butterfly-lg.png")]
+    [2, require("../assets/habit@/butterfly-lg.png")]
   ],
   [
     [0, require("../assets/habit@/ladybug-gray.png")],
     [1, require("../assets/habit@/ladybug-sm.png")],
     [2, require("../assets/habit@/ladybug-md.png")],
-    [3, require("../assets/habit@/ladybug-lg.png")]
+    [2, require("../assets/habit@/ladybug-lg.png")]
   ]
 ]
 
@@ -354,7 +372,9 @@ const images = [
   [2, require("../assets/Ecosystem/gym.png")],
   [3, require("../assets/Ecosystem/currentlocation.png")]
 ];
+
 const { width, height } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
     padding: 10
@@ -391,55 +411,3 @@ const styles = StyleSheet.create({
     // marginLeft: 15
   }
 })
-
-{/* <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-                {location.tasks ? (
-                  location.tasks.map((task, i) => {
-                    return (<Image
-                      key={i}
-                      source={ecobuddies[task.Ecosystem][1][1]}
-                      style={{width: 50, height: 50}}
-                    />
-                  )})
-                ) : null}
-                {upgradeImageNumber > 0 ?
-                  upgradeImages.map((img, i) => {
-                      return (<Image
-                        key={i}
-                        source={ecobuddies[img][2][1]}
-                        style={{width: 100, height: 100}}
-                      />
-                   )})
-                 : null}
-                {location.PositivePoints ?
-                  posImages.map((img, i) => (
-                      // <Image
-                      //   key={i}
-                      //   source={ecobuddies[img][2][1]}
-                      //   style={{width: 200, height: 200}}
-                      // />
-                      <EcosystemViewPractice img={img} key={i}/>
-                    ))
-                 : null}
-                 {downgradeImageNumber > 0 ?
-                  downgradeImages.map((img, i) => (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][0][1]}
-                        style={{width: 100, height: 100}}
-                      />
-                    ))
-                 : null}
-                 {location.NegativePoints ?
-                  negImages.map((img, i) => (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][0][1]}
-                        style={{width: 50, height: 50}}
-                      />
-                    ))
-                 : null}
-                 </View> */}
-
-
-// ff3900 color for title
