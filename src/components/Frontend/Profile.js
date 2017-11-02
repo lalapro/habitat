@@ -55,7 +55,7 @@ export default class Profile extends Component {
   }
 
   getPicture() {
-    axios.get('http://10.16.1.152:3000/pictures', { params: { username: this.props.screenProps.userID }})
+    axios.get('http://10.16.1.131:3000/pictures', { params: { username: this.props.screenProps.userID }})
     .then(res => {
       let jpg = 'data:image/jpg;base64,' + res.data.picture;
       this.setState({ image: jpg })
@@ -69,7 +69,7 @@ export default class Profile extends Component {
 
     let current = new Date();
 
-    axios.get('http://10.16.1.152:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
+    axios.get('http://10.16.1.131:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
       .then(res => {
         this.setState({
           categoryPercentage: res.data
@@ -82,7 +82,7 @@ export default class Profile extends Component {
         console.error(err)
       })
 
-    axios.get('http://10.16.1.152:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
+    axios.get('http://10.16.1.131:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
         tasks.data.forEach(task => {
           let eachDate = task.Start.split(' ').slice(0, 3).reduce((acc, task) => {
@@ -106,7 +106,7 @@ export default class Profile extends Component {
 }
 
   countTasks() {
-    axios.get('http://10.16.1.152:3000/countTasks', { params: { username: this.props.screenProps.userID } })
+    axios.get('http://10.16.1.131:3000/countTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
         tasks.data.forEach(task => {
           if (task.Completion === "False") {
@@ -159,7 +159,7 @@ export default class Profile extends Component {
   uploadPhoto(picture) {
     let uri = picture.base64;
     let pictureText = 'data:image/jpg;base64,' + uri;
-    axios.post('http://10.16.1.152:3000/pictures', { picture: uri, username: this.state.username })
+    axios.post('http://10.16.1.131:3000/pictures', { picture: uri, username: this.state.username })
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })
@@ -205,7 +205,6 @@ export default class Profile extends Component {
 
   render() {
     let tabs = Object.entries(this.state.locations)
-    console.log(this.state.locations, 'what iso going on')
     tabs.unshift(['Overview'])
 
 
@@ -312,8 +311,11 @@ export default class Profile extends Component {
           visible={this.state.visibleModal}
           onRequestClosed={() => { alert('Photo is not selected!!') }}
         >
-          <View style={{flex: 1, alignContent: 'center'}}>
-            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7, justifyContent: 'center' }}>
+          <View>
+            <View style={{ height: 470, opacity: 0.7, backgroundColor: '#ddd' }}>
+              <Image source={require('../assets/toastlogo.png')} style={{ height: '100%', width: '100%', opacity: 0.8 }} />
+            </View>
+            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7 }}>
               <View style={styles.button} >
                 <Button title={`Take a photo`} onPress={this.takePhoto} />
               </View>
