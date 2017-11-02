@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Alert, Button, Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Alert, Button, Text, View, StyleSheet, TouchableOpacity, TouchableHighlight, Image } from 'react-native';
 import axios from 'axios';
 import convertDate from './convertDate';
 
 
 export default class AllTasks extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +12,7 @@ export default class AllTasks extends Component {
       completionTime: '',
       completion: null,
       hasStarted: true,
-      rerender: 0
+      rerender: 0,
     }
   }
 
@@ -23,7 +22,7 @@ export default class AllTasks extends Component {
 
   showEdit(task) {
     let currentTime = new Date();
-    console.log(convertDate(task.Start), 'hehehe')
+
     currentTime > convertDate(task.Start) ? null : this.setState({ hasStarted: false });
 
     if (task.Completion === "True" || task.Completion === "False") {
@@ -88,46 +87,44 @@ export default class AllTasks extends Component {
     })
   }
 
-  test() {
-    if (this.state.completion === "True") {
-      return (
+  extraDescriptions() {
+    console.log('in extra descriptions', this.props)
+    if (!this.state.completion && this.state.hasStarted) {
+      var statusOption = 
+      <View>
         <Text>
-          Completed Task on: {this.state.completionTime}
+          Task in Progress! Hold to edit!
         </Text>
-      )
-    } else if (this.state.completion === "False") {
-      return (
-        <Text>
-          Failed Task on: {this.state.completionTime}
-        </Text>
-      )
-    } else if (!this.state.hasStarted) {
-        return (
-          <Text>
-            Task has not been started yet!
-          </Text>
-        )
-    } else {
-      return (
-        <View>
-          <Text>
-            Task in Progress! Hold to edit!
-          </Text>
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <TouchableOpacity onPress={() => { this.markFailed(this.props.task) }}>
-              <Image source={sprites[0][1]} style={{ height: 35, width: 35 }} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => { this.markCompleted(this.props.task) }}>
-              <Image source={sprites[2][1]} style={{ height: 35, width: 35 }} />
-            </TouchableOpacity>
-          </View>
+        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <TouchableOpacity onPress={() => { this.markFailed(this.props.task) }}>
+            <Image source={sprites[0][1]} style={{ height: 35, width: 35 }} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { this.markCompleted(this.props.task) }}>
+            <Image source={sprites[2][1]} style={{ height: 35, width: 35 }} />
+          </TouchableOpacity>
         </View>
-      )
+      </View>;
     }
+
+    return (
+      <View style={styles.subtitleView}>
+        <Text style={styles.expanded}>
+          Completed: {this.props.task.Completion ? this.props.task.Completion : "hasn't started"} {"\n"}
+          Start: {this.props.task.Start} {"\n"}
+          End: {this.props.task.End} {"\n"}
+          Frequency: {this.props.task.Frequency}
+        </Text>
+        <TouchableHighlight onPress={() => this.props.goToEditTask(this.props.task)}>
+          <Text style={{fontSize: 30}}>&#x2699;</Text>
+        </TouchableHighlight>
+        {statusOption}
+      </View>
+    )
   }
 
 
   render() {
+    console.log('in All tasks render, Avatar', this.props.goToEditTask)
     let taskStatus = this.props.task.Completion;
     if (taskStatus === "True") {
       taskStatus = <Image source={sprites[2][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
@@ -140,7 +137,7 @@ export default class AllTasks extends Component {
       <View>
         <TouchableOpacity onPress={() => this.showEdit(this.props.task)}>
           <View style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={location[this.props.task.Avatar][1]} style={{ height: 50, width: 50, flex: 1 }} />
+            <Image source={location[this.props.task.Avatar ? this.props.task.Avatar : this.props.marker.Avatar][1]} style={{ height: 50, width: 50, flex: 1 }} />
             <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}>
               <Text style={styles.title}>
                 {this.props.task.Task_Title}
@@ -154,7 +151,7 @@ export default class AllTasks extends Component {
         </TouchableOpacity>
         {this.state.showEdit ? (
           <View style={{ display: 'flex', marginTop: 15, marginBottom: 15, justifyContent: 'center', alignItems: 'center' }}>
-            {this.test()}
+            {this.extraDescriptions()}
           </View>
         ) : null}
       </View>

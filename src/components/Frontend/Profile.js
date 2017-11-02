@@ -122,6 +122,9 @@ export default class Profile extends Component {
       })
   }
 
+  goToEditTask(task) {
+    this.props.navigation.navigate('TaskBuilder', { specificTask: task });
+  }
 
   pickPhoto = async () => {
     let picture = await ImagePicker.launchImageLibraryAsync({
@@ -264,7 +267,10 @@ export default class Profile extends Component {
               <ScrollView style={{ marginTop: 15 }}>
                 {this.state.dailyTasks.map((task, i) => {
                   return (
-                    <AllTasks task={task} key={i} reRender={this.reRender.bind(this)}/>
+                    <AllTasks 
+                    task={task} key={i} 
+                    reRender={this.reRender.bind(this)}
+                    goToEditTask={this.goToEditTask.bind(this)}/>
                   )
                 })}
               </ScrollView>
@@ -288,7 +294,11 @@ export default class Profile extends Component {
                       <ScrollView style={{ marginTop: 15}}>
                         {this.state.selectedLocation[1].map((task, i) => {
                           return (
-                            <AllTasks task={task} key={i} reRender={this.reRender.bind(this)}/>
+                            <AllTasks 
+                              task={task} key={i} 
+                              reRender={this.reRender.bind(this)} 
+                              goToEditTask={this.goToEditTask.bind(this)}
+                            />
                           )
                         })}
                       </ScrollView>

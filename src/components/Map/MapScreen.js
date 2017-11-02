@@ -35,9 +35,10 @@ export default class MapScreen extends Component {
       friends: [],
       fakeWalk: false,
       walkTo: null,
-      count: 0
+      count: 0,
+      currentMarker: null
     };
-    this.editTask = this.editTask.bind(this);
+    this.goToEditTask = this.goToEditTask.bind(this);
     this.onRegionChange = this.onRegionChange.bind(this);
     this.startWalking = this.startWalking.bind(this)
   }
@@ -81,7 +82,7 @@ export default class MapScreen extends Component {
     })
   }
 
-  editTask(task) {
+  goToEditTask(task) {
     this.props.navigation.navigate('TaskBuilder', { specificTask: task });
   }
 
@@ -125,16 +126,17 @@ export default class MapScreen extends Component {
     })
   }
 
-  toggleModal(marker) {
+  openModal(marker) {
     if(marker.tasks) {
       this.setState({
         modalVisible: true,
-        currentPress: marker.tasks
+        currentPress: marker.tasks,
+        currentMarker: marker
       })
     }
   }
 
-  toggleHide() {
+  closeModal() {
     this.setState({
       modalVisible: false
     })
@@ -193,7 +195,6 @@ export default class MapScreen extends Component {
   }
 
   startWalking() {
-    // console.log(this.state.currentLocation.coordinate, this.state.walkTo)
     let x = this.state.walkTo.latitude - this.state.currentLocation.coordinate.latitude;
     let y = this.state.walkTo.longitude - this.state.currentLocation.coordinate.longitude;
 
@@ -241,7 +242,7 @@ export default class MapScreen extends Component {
           style={styles.container}
           onRegionChange={this.onRegionChange}
         >
-          <MapView.Marker
+          <MapView.Marker //for current location
             key={this.state.iconLoaded ? 'markerLoaded' : 'marker'}
             coordinate={this.state.currentLocation.coordinate}
             title={this.state.currentLocation.title}
@@ -249,7 +250,7 @@ export default class MapScreen extends Component {
             >
             <Image style={{width: 20, height: 20}} source={require("../assets/Ecosystem/currentlocation.png")} onLoadEnd={() => {if (!this.state.iconLoaded) this.setState({iconLoaded: true});}}/>
           </MapView.Marker>
-          {this.state.markers ? (
+          {this.state.markers ? ( //for all other location markers
             this.state.markers.map((marker, index) => {
               return (
                 <MapView.Marker
@@ -258,7 +259,7 @@ export default class MapScreen extends Component {
                   title={marker.Marker_Title}
                   description={marker.Marker_Description}
                   identifier={marker.Marker_Title}
-                  onPress={() => this.toggleModal(marker)}
+                  onPress={() => this.openModal(marker)}
                   >
                   <Image source={images[marker.Avatar][1]} style={styles.marker} />
                 </MapView.Marker>
@@ -315,8 +316,14 @@ export default class MapScreen extends Component {
           <Image source={require("../assets/walking.png")} style={{width: 50, height: 50}}/>
         </TouchableOpacity>
         {this.state.modalVisible ? (
-          <TaskModal userID={this.state.userID} editTask={this.editTask} tasks={this.state.currentPress} modalVisible={this.state.modalVisible} toggleHide={this.toggleHide.bind(this)}/>
-        ) : null }
+          <TaskModal 
+            userID={this.state.userID} 
+            goToEditTask={this.goToEditTask} 
+            tasks={this.state.currentPress} 
+            marker={this.state.currentMarker} 
+            modalVisible={this.state.modalVisible} 
+            closeModal={this.closeModal.bind(this)}
+          />) : null }
       </View>
     ) :  (
         <View style={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
