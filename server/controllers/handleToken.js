@@ -16,7 +16,7 @@ const handleToken = (req, res) => {
           user[0].Gift_Points = user[0].Gift_Points + 1;
         }
         currentVisit = currentVisit.format('YYYY-MM-DD HH:mm:ss');
-        let updatePointsDate = `UPDATE User SET 
+        let updatePointsDate = `UPDATE User SET
           Gift_Points = '${user[0].Gift_Points}',
           Last_Visit = '${currentVisit}'
           WHERE Token ='${token}'`
@@ -61,7 +61,7 @@ const handleAuth = (req, res) => {
                 user[0].Gift_Points = user[0].Gift_Points + 1;
               }
               currentVisit = currentVisit.format('YYYY-MM-DD HH:mm:ss');
-              let updatePointsDate = `UPDATE User SET 
+              let updatePointsDate = `UPDATE User SET
                 Gift_Points = '${user[0].Gift_Points}',
                 Last_Visit = '${currentVisit}'
                 WHERE Token ='${token}'`

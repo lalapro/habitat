@@ -40,6 +40,7 @@
     "googleapis": "^22.2.0",
     "jwt-simple": "^0.5.1",
     "moment": "^2.19.1",
+    "moment-timezone": "^0.5.14",
     "mysql": "^2.15.0",
     "react": "16.0.0-alpha.12",
     "react-color": "^2.13.8",

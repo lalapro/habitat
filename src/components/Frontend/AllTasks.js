@@ -23,7 +23,7 @@ export default class AllTasks extends Component {
 
   showEdit(task) {
     let currentTime = new Date();
-
+    console.log(convertDate(task.Start), 'hehehe')
     currentTime > convertDate(task.Start) ? null : this.setState({ hasStarted: false });
 
     if (task.Completion === "True" || task.Completion === "False") {
@@ -129,7 +129,7 @@ export default class AllTasks extends Component {
 
 
   render() {
-    console.log('this.props.task', this.props.task); 
+    // console.log('this.props.task', this.props.task);
     let taskStatus = this.props.task.Completion;
     let eco = this.props.task.Ecosystem;
     if (taskStatus === "True") {
