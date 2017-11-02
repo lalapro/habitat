@@ -124,7 +124,7 @@ export default class EcoSystem extends Component {
       return;
     }
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    
+
     axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
@@ -254,40 +254,34 @@ export default class EcoSystem extends Component {
                     location.tasks.map((task, i) => {
                       if (task.Completion === null) {
                         return (
-                          <EcosystemViewPractice img={task.Ecosystem} key={i} version={1}/>
+                          <EcosystemViewPractice img={img} key={i} version={3}/>
                         )
                       } else {
                         return null
                       }
-                    })
-                  ) : null}
-                  {upgradeImageNumber > 0 ?
-                    upgradeImages.map((img, i) => {
-                      return (
-                        <EcosystemViewPractice img={img} key={i} version={3}/>
-                      )})
+                    })) : null}
+                  {location.PositivePoints ?
+                    posImages.map((img, i) => (
+                      <EcosystemViewPractice img={img} key={i} version={2}/>
+                    ))
                    : null}
-                {location.PositivePoints ?
-                  posImages.map((img, i) => (
-                    <EcosystemViewPractice img={img} key={i} version={2}/>
-                  ))
-                 : null}
-                 {downgradeImageNumber > 0 ?
-                  downgradeImages.map((img, i) => {
-                    return (
-                      <EcosystemViewPractice img={img} key={i} version={4}/>
-                    )
-                  })
-                 : null}
-                 {location.NegativePoints ?
-                  negImages.map((img, i) => {
-                    return (
-                      <EcosystemViewPractice img={img} key={i} version={0}/>
-                    )
-                  })
-                 : null}
-                 </View>
-                </Image>
+                   {downgradeImageNumber > 0 ?
+                    downgradeImages.map((img, i) => {
+                      console.log(img)
+                      return (
+                        <EcosystemViewPractice img={img} key={i} version={4}/>
+                      )
+                    })
+                   : null}
+                   {location.NegativePoints ?
+                    negImages.map((img, i) => {
+                      return (
+                        <EcosystemViewPractice img={img} key={i} version={0}/>
+                      )
+                    })
+                  : null}
+                   </View>
+                 </Image>
               </View>
             )})}
           </Swiper>
