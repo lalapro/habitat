@@ -12,15 +12,25 @@ class LoginForm extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          onChangeText={this.props.handleUserInput}
-          placeholder="username"
-          style={styles.input} />
-        <TextInput
-          onChangeText={ this.props.handlePasswordInput }
-          placeholder="password"
-          secureTextEntry={true}
-          style={styles.input} />
+        <View style={styles.input}>
+          <TextInput
+            onChangeText={this.props.handleUserInput}
+            placeholder="username"
+            style={{marginTop: 10, paddingHorizontal: 2, color: 'yellow'}}
+            autoCorrect={false}
+            autoCapitalize='none'
+          />
+        </View>
+        <View style={styles.input}>
+          <TextInput
+            onChangeText={ this.props.handlePasswordInput }
+            placeholder="password"
+            secureTextEntry={true}
+            style={{marginTop: 10, paddingHorizontal: 2, color: 'yellow'}}
+            autoCapitalize='none'
+            autoCorrect={false}
+          />
+          </View>
       </View>
     );
   }
@@ -32,10 +42,14 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    backgroundColor: 'grey',
-    marginTop: 10,
-    paddingHorizontal: 10,
-    color: 'black'
+    backgroundColor: '#99CCFF',
+    borderRadius: 30,
+    borderWidth: 3,
+    borderColor: 'black',
+    width: 150,
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 5
   }
 })
 

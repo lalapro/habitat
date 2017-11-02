@@ -26,7 +26,7 @@ export default class Login extends Component {
 
   handleRegularLogin() {
 
-    axios.get(`http://10.16.1.152:3000/login`, {
+    axios.get(`http://10.16.1.218:3000/login`, {
       params: {
         username: this.state.username,
         password: this.state.password
@@ -47,7 +47,7 @@ export default class Login extends Component {
   //     });
 
   //     if (result.type === 'success') {
-  //       axios.post('http://10.16.1.152:3000/token', {
+  //       axios.post('http://10.16.1.218:3000/token', {
   //         name: result.user.name
   //       })        
 
@@ -79,7 +79,7 @@ export default class Login extends Component {
         const response2 = await fetch(`https://graph.facebook.com/${user.id}/friends?access_token=${token}`)
         const  friends= await response2.json();
         
-        axios.post(`http://10.16.1.152:3000/token`, {
+        axios.post(`http://10.16.1.218:3000/token`, {
           name: user.name,
           username: user.id,
           token: token
@@ -92,7 +92,7 @@ export default class Login extends Component {
           AsyncStorage.setItem(`user_token`, token);
           friends.data.forEach(friend => {
             this.getFBPic(friend.id).then(pic => {
-              axios.post('http://10.16.1.152:3000/friends', {
+              axios.post('http://10.16.1.218:3000/friends', {
                 user: res.data.user,
                 username: user.name,
                 userfbID: user.id,
@@ -128,37 +128,41 @@ export default class Login extends Component {
         />  
         <View style={styles.logoContainer}>
           <Image
-            style={styles.logo}
+            style={styles.house}
             source={require("../assets/habit@/login.png")}
           />
-          <Text>Build Habitats by keeping Good Habits</Text>
+          <Text style={{color: 'orange'}}>Build Habitats by keeping Good Habits</Text>
         </View>
 
         <View style={styles.formContainer}>
           <LoginForm
             handleUserInput={this.handleUserInput}
             handlePasswordInput={this.handlePasswordInput}
-            />
+          />
         </View>
-        <TouchableOpacity
-          onPress={() => {
-            username = this.state.username
-            password = this.state.password
-            this.handleRegularLogin()
-            }}
-          style={styles.buttonContainer}
-          >
-          <Text style={styles.buttonText}>LOGIN</Text>
-        </TouchableOpacity>
-        <Button
-           onPress={this.login}
-           title='Login with facebook' />
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("SignUp")}
-          style={styles.buttonContainer}
-          >
-          <Text style={styles.buttonText}>SIGNUP</Text>
-        </TouchableOpacity>
+        <View style={styles.button} >
+          <Button
+            onPress={() => {
+              username = this.state.username
+              password = this.state.password
+              this.handleRegularLogin()
+              }}
+            title='LOGIN'
+          />
+        </View>
+        <View style={styles.button} >
+          <Button
+            style={styles.button}
+            onPress={() => this.props.navigation.navigate("SignUp")}
+            title='SIGNUP'
+          />
+        </View>
+        <View style={styles.fbbutton} >
+          <Button
+            onPress={this.login}
+            title='Login with facebook' 
+          />
+        </View>
       </View>
     );
   }
@@ -176,10 +180,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 80,
   },
-  formContainer: {
+  house: {
+    width: 100,
+    height: 110
   },
   buttonContainer: {
     alignItems: 'center',
@@ -193,5 +199,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '700',
     paddingHorizontal: 10
+  },
+  button: {
+    backgroundColor: '#FF9966',
+    borderRadius: 30,
+    borderWidth: 3,
+    borderColor: 'black',
+    width: 250,
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 5
+  },
+  fbbutton: {
+    backgroundColor: '#CCFFFF',
+    borderRadius: 30,
+    borderWidth: 3,
+    borderColor: 'blue',
+    width: 250,
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 5
   }
+
 });
