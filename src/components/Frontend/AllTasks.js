@@ -90,7 +90,7 @@ export default class AllTasks extends Component {
   extraDescriptions() {
     console.log('in extra descriptions', this.props)
     if (!this.state.completion && this.state.hasStarted) {
-      var statusOption = 
+      var statusOption =
       <View>
         <Text>
           Task in Progress! Hold to edit!
