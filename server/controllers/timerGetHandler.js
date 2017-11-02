@@ -10,8 +10,23 @@ const getTimer = (req, res) => {
     if (err) {
       res.status(404).send(`We encountered an error looking up your tasks: ${err}`);
     } else {
-      console.log('results in timergethandler', results);
-      res.status(201).send(results);
+      if (results.length === 0) {
+        db.query(`INSERT INTO TimerEcosystem (User_ID) VALUES (${User_ID})`, null, (err, user) => {
+          if (err) {
+            res.status(404).send(`We encountered an error looking up your tasks: ${err}`);
+          } else {
+            db.query(selectTasks, null, (err, user) => {
+              if (err) {
+                res.status(404).send(`We encountered an error looking up your tasks: ${err}`);
+              } else {
+                res.status(201).send(user)
+              }
+            })
+          }
+        })
+      } else {
+        res.status(201).send(results);
+      }
     }
   })
 }
