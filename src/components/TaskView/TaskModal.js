@@ -4,60 +4,72 @@ import { List, ListItem } from 'react-native-elements';
 import { Font, AppLoading} from 'expo';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import TaskItem from './TaskItem.js';
+import AllTasks from '../Frontend/AllTasks.js'
 
 class TaskModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: false,
+      // modalVisible: false,
       tasks: []
     }
-    this.hideModal = this.hideModal.bind(this);
+    // this.hideModal = this.hideModal.bind(this);
   }
 
   componentWillMount() {
     this.setState({
-      modalVisible: this.props.modalVisible,
+      // modalVisible: this.props.modalVisible,
       tasks: this.props.tasks
     })
   }
 
   componentWillReceiveProps() {
     this.setState({
-      modalVisible: this.props.modalVisible,
       tasks: this.props.tasks
     })
   }
 
-  hideModal() {
-    this.setState({
-      modalVisible: false
-    }, () => this.props.toggleHide())
+  closeModal() {
+    this.props.closeModal()
+  // )
   }
  
+  reRender() {
+    this.componentDidMount()
+  }
+
   render() {
+    console.log(this.props.goToEditTask)
     const { fontsAreLoaded } = this.state;
     
+    console.log('in task Modal looking at tasks', this.state.tasks)
     return (
       <View style={{marginTop: 22, marginHorizontal: 22}}>
         <Modal
           animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
-          style={{marginTop: 22, backgroundColor: 'rgba(255,255,255,0.5'}}
+          transparent={false}
+          visible={this.props.modalVisible}
+          style={{backgroundColor: 'rgba(255,255,255,0.5'}}
           onRequestClose={() => {alert("Modal has been closed.")}}
         >
          <View >
          <ScrollView 
+            style={styles.scrollView}
             automaticallyAdjustContentInsets={false}
             scrollEventThrottle={200}
             style={styles.scrollView}
           >
             <List>
-              <TouchableHighlight onPress={() => this.hideModal()}><Text style={{fontSize: 30, textAlign: 'right', marginTop: 5}}>&#x2612;</Text></TouchableHighlight>
+              <TouchableHighlight onPress={() => this.props.closeModal()}><Text style={{fontSize: 30, textAlign: 'right', marginTop: 5}}>&#x2612;</Text></TouchableHighlight>
               {this.state.tasks.map((task, i) => {
+                console.log('in the task mapping of AllTasks', this.props.goToEditTask)
                 return (
-                  <TaskItem hideModal={this.hideModal.bind(this)} key={i} userID={this.props.userID} task={task} editTask={this.props.editTask}/>
+                  <AllTasks 
+                    task={task} 
+                    key={i} 
+                    marker={this.props.marker} 
+                    reRender={this.reRender.bind(this)} 
+                    goToEditTask={this.props.goToEditTask}/>
                 )
               })}
             </List>
@@ -72,7 +84,8 @@ class TaskModal extends Component {
 var styles = StyleSheet.create({
   scrollView: {
     // backgroundColor: 'black',
-    height: 300
+    // height: 300
+    marginTop: 15
   },
   button: {
     backgroundColor: '#ddd',

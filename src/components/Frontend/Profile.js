@@ -122,6 +122,9 @@ export default class Profile extends Component {
       })
   }
 
+  goToEditTask(task) {
+    this.props.navigation.navigate('TaskBuilder', { specificTask: task });
+  }
 
   pickPhoto = async () => {
     let picture = await ImagePicker.launchImageLibraryAsync({
@@ -215,7 +218,6 @@ export default class Profile extends Component {
 
   render() {
     let tabs = Object.entries(this.state.locations)
-    // console.log(this.state.locations, 'what iso going on')
     tabs.unshift(['Overview'])
 
 
@@ -265,7 +267,10 @@ export default class Profile extends Component {
               <ScrollView style={{ marginTop: 15 }}>
                 {this.state.dailyTasks.map((task, i) => {
                   return (
-                    <AllTasks task={task} key={i} reRender={this.reRender.bind(this)}/>
+                    <AllTasks 
+                    task={task} key={i} 
+                    reRender={this.reRender.bind(this)}
+                    goToEditTask={this.goToEditTask.bind(this)}/>
                   )
                 })}
               </ScrollView>
@@ -289,7 +294,11 @@ export default class Profile extends Component {
                       <ScrollView style={{ marginTop: 15}}>
                         {this.state.selectedLocation[1].map((task, i) => {
                           return (
-                            <AllTasks task={task} key={i} reRender={this.reRender.bind(this)}/>
+                            <AllTasks 
+                              task={task} key={i} 
+                              reRender={this.reRender.bind(this)} 
+                              goToEditTask={this.goToEditTask.bind(this)}
+                            />
                           )
                         })}
                       </ScrollView>
@@ -319,8 +328,11 @@ export default class Profile extends Component {
           visible={this.state.visibleModal}
           onRequestClosed={() => { alert('Photo is not selected!!') }}
         >
-          <View style={{flex: 1, alignContent: 'center'}}>
-            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7, justifyContent: 'center' }}>
+          <View>
+            <View style={{ height: 470, opacity: 0.7, backgroundColor: '#ddd' }}>
+              <Image source={require('../assets/toastlogo.png')} style={{ height: '100%', width: '100%', opacity: 0.8 }} />
+            </View>
+            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7 }}>
               <View style={styles.button} >
                 <Button title={`Take a photo`} onPress={this.takePhoto} />
               </View>

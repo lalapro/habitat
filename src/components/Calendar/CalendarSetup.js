@@ -24,7 +24,7 @@ export default class CalendarSetup extends Component {
     });
     this.getUserInfo();
   }
-
+  
   getUserInfo() {
     axios.get('https://naturalhabitat.herokuapp.com/getUserInfo', { params: { userID: this.props.screenProps.userID }})
       .then(information => {
@@ -34,7 +34,6 @@ export default class CalendarSetup extends Component {
   }
 
   calendar(){
-    console.log('hi')
     this.setState({
       sync: !this.state.sync
     });
@@ -45,22 +44,22 @@ export default class CalendarSetup extends Component {
   }
 
   render() {
-    console.log('setup!!!')
     return (
-      <View style={{ display: 'flex', flex:1, alignItems: 'center', justifyContent: 'center', zIndex: 99}}>
-        <TouchableOpacity
-          style={{position: 'absolute', left: 16, top: 30}}
-          onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}>
-          <Text style={{color: 'blue', fontSize: 18}}>
-            &#9776;
-          </Text>
-        </TouchableOpacity>
-        {!this.state.sync ? <TouchableOpacity onPress={this.calendar.bind(this)}>
-          <Image style={{ height: 300, width: 350}} source={require('../assets/googleCalendar.png')} />
-        </TouchableOpacity>
-        : (
-          <CalendarTasks goBack={this.goBack} markers={this.state.markers} categories={this.state.categories} userID={this.state.userID}/>
-        )}
+      <View>
+        <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
+          <Button
+            onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
+            title="&#9776;"
+          />
+        </View>
+        <View style={{ display: 'flex', flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          {!this.state.sync ? <TouchableOpacity onPress={() => this.calendar()}>
+              <Image style={{ height: 300, width: 350}} source={require('../assets/googleCalendar.png')} />
+            </TouchableOpacity>
+            : (
+            <CalendarTasks goBack={this.goBack} markers={this.state.markers} categories={this.state.categories} userID={this.state.userID}/>
+          )}        
+        </View>
       </View>
     )
   }
