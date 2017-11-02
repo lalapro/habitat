@@ -238,7 +238,7 @@ export default class EcoSystem extends Component {
                 <Text style={styles.cardDescription}>
                   {location.Marker_Description}
                 </Text>
-                <Image style={{height: '70%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
+                <Image style={{height: '75%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
                 <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
                   {location.tasks ? (
                     location.tasks.map((task, i) => {
@@ -298,7 +298,7 @@ export default class EcoSystem extends Component {
             </Swipeout>
           </View>) : null }
         </View>
-        <View style={{flex: 3}}>
+        <View style={{flex: 2.5}}>
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, i) => {
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   cardtitle: {
-    fontSize: 40,
+    fontSize: 35,
     // marginTop: 5,
     fontWeight: "bold",
     color: '#FF3300'

@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
-import{ StyleSheet, View, Image, Text, TouchableOpacity, Button, AsyncStorage } from 'react-native';
+import{ StyleSheet, View, Image, Text, TouchableOpacity, Button, AsyncStorage, Animated } from 'react-native';
+import { asset } from 'expo';
 import axios from 'axios';
 import LoginForm from './LoginForm';
 import { onSignIn } from '../auth.js'
 
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === 'string') {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
 
 export default class Login extends Component {
   constructor(props) {
@@ -37,30 +47,6 @@ export default class Login extends Component {
       AsyncStorage.setItem(`user_token`, userData.data.token);
     })
   }
-
-  // googleLogin = async () => {
-  //   try {
-  //     const result = await Expo.Google.logInAsync({
-  //       androidClientId: '899144873193-oo8liloc1c6umegp4tmg02u8b7jn2ckn.apps.googleusercontent.com',
-  //       iosClientId: '899144873193-jneous07vbsq09ie72f8omumqfvfv6sg.apps.googleusercontent.com',
-  //       scopes: ['profile', 'email'],
-  //     });
-
-  //     if (result.type === 'success') {
-  //       axios.post('https://naturalhabitat.herokuapp.com/token', {
-  //         name: result.user.name
-  //       })        
-
-
-
-  //       return result.accessToken;
-  //     } else {
-  //       return { cancelled: true };
-  //     }
-  //   } catch (e) {
-  //     return { error: true };
-  //   }
-  // }
 
   login = async () => {
       const APP_ID = "1729141044061993"
@@ -124,11 +110,13 @@ export default class Login extends Component {
       <View style={styles.container}>
         <Image
           style={styles.logo}
+          resizeMethod='auto'
           source={require("../assets/habit@/logo.png")}
         />  
         <View style={styles.logoContainer}>
           <Image
             style={styles.house}
+            resizeMethod='auto'
             source={require("../assets/habit@/login.png")}
           />
           <Text style={{color: 'orange'}}>Build Habitats by keeping Good Habits</Text>
@@ -203,7 +191,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#FF9966',
     borderRadius: 30,
-    borderWidth: 3,
+    borderWidth: 0.5,
     borderColor: 'black',
     width: 250,
     alignItems: 'center',
@@ -213,7 +201,7 @@ const styles = StyleSheet.create({
   fbbutton: {
     backgroundColor: '#CCFFFF',
     borderRadius: 30,
-    borderWidth: 3,
+    borderWidth: 0.5,
     borderColor: 'blue',
     width: 250,
     alignItems: 'center',

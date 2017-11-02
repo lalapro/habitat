@@ -212,7 +212,6 @@ export default class Profile extends Component {
     this.componentDidMount()
   }
 
-
   render() {
     let tabs = Object.entries(this.state.locations)
     // console.log(this.state.locations, 'what iso going on')
@@ -320,7 +319,7 @@ export default class Profile extends Component {
           onRequestClosed={() => { alert('Photo is not selected!!') }}
         >
           <View style={{flex: 1, alignContent: 'center'}}>
-            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7, justifyContent: 'center' }}>
+            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.92, justifyContent: 'center' }}>
               <View style={styles.button} >
                 <Button title={`Take a photo`} onPress={this.takePhoto} />
               </View>
