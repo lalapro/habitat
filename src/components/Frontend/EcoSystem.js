@@ -309,7 +309,7 @@ export default class EcoSystem extends Component {
             </Swipeout>
           </View>) : null }
         </View>
-        <View style={{flex: 3}}>
+        <View style={{flex: 2.5}}>
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, i) => {
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   cardtitle: {
-    fontSize: 40,
+    fontSize: 35,
     // marginTop: 5,
     fontWeight: "bold",
     color: '#FF3300'
