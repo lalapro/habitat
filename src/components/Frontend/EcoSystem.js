@@ -12,6 +12,7 @@ import ProgressBar from './ProgressBar'
 import convertDate from '../../../server/controllers/convertDate';
 import EcosystemView from './EcosystemView.js'
 import EcosystemViewPractice from './EcosystemViewPractice';
+
 export default class EcoSystem extends Component {
   constructor(props) {
     super(props);
@@ -54,7 +55,7 @@ export default class EcoSystem extends Component {
     }, () => this.getMarkers())
   }
   getMarkers() {
-    axios.get('http://10.16.1.218:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
+    axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
         this.setState({ locations: res.data })
       })
@@ -98,7 +99,7 @@ export default class EcoSystem extends Component {
     this.props.navigation.navigate('TaskBuilder', { specificTask: this.state.editSpecificTask, editing: true })
   }
   deleteTask() {
-    axios.delete('http://10.16.1.218:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('https://naturalhabitat.herokuapp.com/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
@@ -114,7 +115,7 @@ export default class EcoSystem extends Component {
     }
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
 
-    axios.put('http://10.16.1.218:3000/yayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
@@ -138,7 +139,7 @@ export default class EcoSystem extends Component {
     }
     let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
 
-    axios.put('http://10.16.1.218:3000/nayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       negativePoints: negativePoints
@@ -196,7 +197,7 @@ export default class EcoSystem extends Component {
             title="&#9776;"
           />
         </View>
-        <View style={{flex: 8}}>
+        <View style={{flex: 8, marginBottom: 1, height: '75%'}}>
           <Swiper
             index={this.state.index}
             horizontal={true}
@@ -224,11 +225,11 @@ export default class EcoSystem extends Component {
                 <View style={{flexDirection: 'row'}}>
                   <Image
                     source={images[location.Avatar][1]}
-                    style={{width: 50, height: 50}}
+                    style={{width: 50, height: 50, resizeMode: 'contain'}}
                   />
                   <Image 
                     source={require('../assets/habit@/logo.png')}
-                    style={{height: 50, width: 100}}
+                    style={{height: 50, width: 100, resizeMode: 'contain'}}
                   />
                 </View>
                   <Text style={styles.cardtitle}>
@@ -237,7 +238,7 @@ export default class EcoSystem extends Component {
                 <Text style={styles.cardDescription}>
                   {location.Marker_Description}
                 </Text>
-                <Image style={{height: '60%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
+                <Image style={{height: '70%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
                 <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
                   {location.tasks ? (
                     location.tasks.map((task, i) => {
@@ -278,8 +279,7 @@ export default class EcoSystem extends Component {
             )})}
           </Swiper>
           {this.state.toggleShow ? (
-          <View style={{height: 80, backgroundColor: 'rgba(52, 52, 52, 0.05)'}}>
-            <View style={styles.separator} />
+          <View style={{marginTop: 0, height: 60, backgroundColor: 'rgba(52, 52, 52, 0.05)'}}>
             <Swipeout
               right={swipeRightBtns}
               left={swipeLeftBtns}
@@ -287,16 +287,15 @@ export default class EcoSystem extends Component {
               backgroundColor= 'transparent'
             >
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{marginTop: 20,  lineHeight: 0.5, fontSize: 16, fontWeight: 'bold'}}>
+                <Text style={{lineHeight: 0.2, fontSize: 16, fontWeight: 'bold'}}>
                   {this.state.currentTask}
                 </Text>
-                <Text style={{fontSize: 14, lineHeight: 0.5}}>
+                <Text style={{fontSize: 14, lineHeight: 0.2}}>
                   {this.state.currentDescription}
                 </Text>
-                <Text style={{margin: 2, lineHeight: 0.5}}>{this.state.currentTaskCategory}</Text>
+                <Text style={{margin: 2, lineHeight: 0.2}}>{this.state.currentTaskCategory}</Text>
               </View>
             </Swipeout>
-            <View style={styles.separator} />
           </View>) : null }
         </View>
         <View style={{flex: 3}}>
@@ -309,7 +308,7 @@ export default class EcoSystem extends Component {
               })
           ) : null}
             <TouchableOpacity onPress={() => { navigate('TaskBuilder')}}>
-              <Image source={require('../assets/plus.png')} style={{height: 150, width: 150}} />
+              <Image source={require('../assets/plus.png')} style={{marginTop: 20, height: 135, width: 135, resizeMode: 'contain'}} />
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -365,7 +364,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   cardtitle: {
-    fontSize: 50,
+    fontSize: 40,
     // marginTop: 5,
     fontWeight: "bold",
     color: '#FF3300'
