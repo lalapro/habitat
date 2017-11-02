@@ -117,10 +117,12 @@ export default class Friends extends Component {
     return (
       <View style={{flex: 1}}>
         <View style={{flex: 1.5}}>
-          <Button
-            onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
-            title="&#9776;"
-          />
+          <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
+            <Button
+              onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
+              title="&#9776;"
+            />
+          </View>
           <ScrollView horizontal={true} style={{borderBottomWidth: 1, borderColor: "black"}}>
             {this.state.friends.map((friend, key) => {
               return (

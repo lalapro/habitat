@@ -229,7 +229,7 @@ export default class EcoSystem extends Component {
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', height: 60, marginTop: '20%'}}>
                   <Image
                     source={images[location.Avatar][1]}
                     style={{width: 50, height: 50, resizeMode: 'contain'}}
@@ -238,14 +238,16 @@ export default class EcoSystem extends Component {
                     source={require('../assets/habit@/logo.png')}
                     style={{height: 50, width: 100, resizeMode: 'contain'}}
                   />
+                  <View style={{alignItems: 'center', marginBottom: 5}}>
+                    <Text style={styles.cardtitle}>
+                      {location.Marker_Title}
+                    </Text>
+                    <Text style={styles.cardDescription}>
+                      {location.Marker_Description}
+                    </Text>
+                  </View>
                 </View>
-                  <Text style={styles.cardtitle}>
-                    {location.Marker_Title}
-                  </Text>
-                <Text style={styles.cardDescription}>
-                  {location.Marker_Description}
-                </Text>
-                <Image style={{height: '70%', width: '100%'}} source={backgrounds[location.Ecosystem][1]}>
+                <Image style={{height: '100%', width: '100%'}} source={backgrounds[location.Ecosystem][1]}>
                 <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
                   {location.tasks ? (
                     location.tasks.map((task, i) => {
@@ -284,7 +286,7 @@ export default class EcoSystem extends Component {
                   })
                  : null}
                  </View>
-                 </Image>
+                </Image>
               </View>
             )})}
           </Swiper>
@@ -390,7 +392,7 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     fontSize: 25,
-    color: "#FF6600",
+    color: "#FF6600"
   },
   circle: {
    width: 120,
