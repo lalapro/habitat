@@ -316,8 +316,8 @@ export default class Profile extends Component {
           calendarColor={'#7743CE'}
           dateNumberStyle={{ color: 'white' }}
           dateNameStyle={{ color: 'white' }}
-          iconLeft={require('../assets/habit@/logout.png')}
-          iconRight={require('../assets/habit@/login.png')}
+          iconLeft={require('../assets/habit@/left-back.png')}
+          iconRight={require('../assets/habit@/right-forward.png')}
           iconContainer={{ flex: 0.1 }}
           onDateSelected={(date) => this.grabDailyTasks(date)}
         />
