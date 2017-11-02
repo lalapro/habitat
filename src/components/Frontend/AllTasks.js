@@ -50,7 +50,7 @@ export default class AllTasks extends Component {
     }
 
     let positivePoints = task.PositivePoints + 1;
-    axios.put('http://10.16.1.152:3000/yayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       positivePoints: positivePoints
@@ -75,7 +75,7 @@ export default class AllTasks extends Component {
     }
 
     let negativePoints = task.NegativePoints + 1;
-    axios.put('http://10.16.1.152:3000/nayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/nayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       negativePoints: negativePoints
@@ -129,7 +129,7 @@ export default class AllTasks extends Component {
 
 
   render() {
-    // console.log('this.props.task', this.props.task);
+    console.log('this.props.task', this.props.task);
     let taskStatus = this.props.task.Completion;
     let eco = this.props.task.Ecosystem;
     if (taskStatus === "True") {

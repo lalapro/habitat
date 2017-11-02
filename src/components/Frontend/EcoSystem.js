@@ -54,8 +54,9 @@ export default class EcoSystem extends Component {
     }, () => this.getMarkers())
   }
   getMarkers() {
-    axios.get('http://10.16.1.152:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
+    axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
+        // console.log(res.data, 'locations')
         this.setState({ locations: res.data })
       })
       .then(res => this.showCurrentLocation())
@@ -98,7 +99,7 @@ export default class EcoSystem extends Component {
     this.props.navigation.navigate('TaskBuilder', { specificTask: this.state.editSpecificTask, editing: true })
   }
   deleteTask() {
-    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('https://naturalhabitat.herokuapp.com/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
@@ -114,7 +115,7 @@ export default class EcoSystem extends Component {
     }
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
 
-    axios.put('http://10.16.1.152:3000/yayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
@@ -138,7 +139,7 @@ export default class EcoSystem extends Component {
     }
     let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
 
-    axios.put('http://10.16.1.152:3000/nayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       negativePoints: negativePoints
@@ -204,7 +205,7 @@ export default class EcoSystem extends Component {
             loop={false}
           >
             {this.state.locations.map((location, index) => {
-              // console.log(location, 'ecosystem')
+              console.log(this.state.locations, 'ecosystem')
               var upgradeImageNumber = Math.floor(location.PositivePoints/10);
               var positiveImageNumber = location.PositivePoints%10;
               var downgradeImageNumber = Math.floor(location.NegativePoints/4);
