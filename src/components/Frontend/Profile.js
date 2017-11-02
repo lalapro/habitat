@@ -215,7 +215,6 @@ export default class Profile extends Component {
     this.componentDidMount()
   }
 
-
   render() {
     let tabs = Object.entries(this.state.locations)
     tabs.unshift(['Overview'])
@@ -328,11 +327,8 @@ export default class Profile extends Component {
           visible={this.state.visibleModal}
           onRequestClosed={() => { alert('Photo is not selected!!') }}
         >
-          <View>
-            <View style={{ height: 470, opacity: 0.7, backgroundColor: '#ddd' }}>
-              <Image source={require('../assets/toastlogo.png')} style={{ height: '100%', width: '100%', opacity: 0.8 }} />
-            </View>
-            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.7 }}>
+          <View style={{flex: 1, alignContent: 'center'}}>
+            <View style={{ height: '100%', backgroundColor: '#ddd', opacity: 0.92, justifyContent: 'center' }}>
               <View style={styles.button} >
                 <Button title={`Take a photo`} onPress={this.takePhoto} />
               </View>
