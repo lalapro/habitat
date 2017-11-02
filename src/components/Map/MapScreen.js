@@ -316,12 +316,22 @@ export default class MapScreen extends Component {
           <Image source={require("../assets/walking.png")} style={{width: 50, height: 50}}/>
         </TouchableOpacity>
         {this.state.modalVisible ? (
+<<<<<<< HEAD
           <TaskModal
             userID={this.state.userID}
             goToEditTask={this.goToEditTask}
             tasks={this.state.currentPress}
             marker={this.state.currentMarker}
             modalVisible={this.state.modalVisible}
+=======
+          <TaskModal 
+            style={{flex: 2}}
+            userID={this.state.userID} 
+            goToEditTask={this.goToEditTask} 
+            tasks={this.state.currentPress} 
+            marker={this.state.currentMarker} 
+            modalVisible={this.state.modalVisible} 
+>>>>>>> fix modal
             closeModal={this.closeModal.bind(this)}
           />) : null }
       </View>

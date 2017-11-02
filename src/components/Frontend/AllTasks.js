@@ -134,7 +134,7 @@ export default class AllTasks extends Component {
       taskStatus = <Image source={ecobuddies[eco][1][1]} style={styles.completion} />
     }
     return (
-      <View>
+      <View style={{borderColor:'black'}}>
         <TouchableOpacity onPress={() => this.showEdit(this.props.task)}>
           <View style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Image source={location[this.props.task.Avatar ? this.props.task.Avatar : this.props.marker.Avatar][1]} style={{ height: 50, width: 50, flex: 1, resizeMode: 'contain' }} />
