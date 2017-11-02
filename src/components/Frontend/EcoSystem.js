@@ -60,7 +60,7 @@ export default class EcoSystem extends Component {
   getMarkers() {
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
-        // console.log(res.data, 'locations')
+        console.log(res.data, 'locations')
         this.setState({ locations: res.data })
       })
       .then(res => this.showCurrentLocation())
@@ -162,11 +162,7 @@ export default class EcoSystem extends Component {
   }
 
   markTaskComplete() {
-    let newLocation = this.state.locations
-    newLocation[this.state.index].tasks[this.state.currentTaskIndex].Completion = true;
-    this.setState({
-      locations: newLocation,
-    })
+    this.componentDidMount()
   }
 
   render() {
@@ -238,7 +234,7 @@ export default class EcoSystem extends Component {
                     source={images[location.Avatar][1]}
                     style={{width: 50, height: 50, resizeMode: 'contain'}}
                   />
-                  <Image 
+                  <Image
                     source={require('../assets/habit@/logo.png')}
                     style={{height: 50, width: 100, resizeMode: 'contain'}}
                   />
@@ -253,9 +249,14 @@ export default class EcoSystem extends Component {
                 <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
                   {location.tasks ? (
                     location.tasks.map((task, i) => {
-                      return (
-                        <EcosystemViewPractice img={task.Ecosystem} key={i} version={1}/>
-                    )})
+                      if (task.Completion === null) {
+                        return (
+                          <EcosystemViewPractice img={task.Ecosystem} key={i} version={1}/>
+                        )
+                      } else {
+                        return null
+                      }
+                    })
                   ) : null}
                   {upgradeImageNumber > 0 ?
                     upgradeImages.map((img, i) => {
