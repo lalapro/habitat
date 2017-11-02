@@ -59,7 +59,15 @@ export default class Friends extends Component {
   }
 
   showEcosystem(location) {
-    console.log(location, 'on location click')
+    this.setState({
+      selectedLocation: location.Marker_ID,
+      locationIsClicked: true,
+      upgradeImages: [],
+      posImages: [],
+      downgradeImages: [],
+      negImages: [],
+      normalImages: []
+    })
     let upgradeImageNumber = Math.floor(location.PositivePoints/10);
     let positiveImageNumber = location.PositivePoints%10;
     let downgradeImageNumber = Math.floor(location.NegativePoints/4);
@@ -135,7 +143,7 @@ export default class Friends extends Component {
             </View>
           ) : (
             <View style={{flex: 1}}>
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ScrollView horizontal={true}>
                   {this.state.selectedLocations.map((location, i) => {
                     return i === 0 ? (
@@ -152,7 +160,7 @@ export default class Friends extends Component {
                 </ScrollView>
               </View>
               {this.state.locationIsClicked ? (
-                <View style={{flex: 6}}>
+                <View style={{flex: 7}}>
                   <Image style={{height: '100%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
                   <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
                     {this.state.upgradeImages.map((img, i) => (
