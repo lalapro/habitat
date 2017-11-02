@@ -3,6 +3,7 @@ import { ART, AsyncStorage, Modal, ImageStore, StyleSheet, Text, View, Image, Te
 import Expo, { Asset, Camera, Permissions, ImagePicker } from 'expo';
 import axios from 'axios';
 import AllTasks from './AllTasks.js';
+import LocationTasks from './LocationTasks';
 import Chart from './Chart.js';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
@@ -31,14 +32,17 @@ export default class Profile extends Component {
       activeIndex: 0,
       orderedColors: [],
       dayByDay: [],
-      selectedLocation: null
+      selectedLocation: null,
+      currentDay: null,
+      showAll: false
     }
     this.showModal = this.showModal.bind(this);
     this.uploadPhoto = this.uploadPhoto.bind(this);
     this.getPicture = this.getPicture.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount(day) {
+
     this.setState({
       username: this.props.screenProps.userID,
       dailyTasks: [],
@@ -50,7 +54,7 @@ export default class Profile extends Component {
       upcomingTasks: 0
     })
     this.props.screenProps.fbPic ? this.setState({image: this.props.screenProps.fbPic}) : this.getPicture();
-    this.getCompletedTask();
+    this.getCompletedTask(day);
     this.countTasks();
   }
 
@@ -62,7 +66,7 @@ export default class Profile extends Component {
     })
   }
 
-  getCompletedTask() {
+  getCompletedTask(day) {
     var dateFormat = 'YYYY-MM-DD HH:mm:ss';
     let current = new Date();
     var date = timezone(current);
@@ -90,16 +94,12 @@ export default class Profile extends Component {
           });
           eachDate = eachDate.slice(0, eachDate.length - 1);
           let key = convertKey(eachDate);
-          console.log(key, 'on load')
           // creates an object with keys of dates and values of tasks within those dates
           this.state.daysWithTask[key] ? this.state.daysWithTask[key].push(task) : this.state.daysWithTask[key] = [task];
           // creates an object with keys of locations and values of
           this.state.locations[task.Marker_Title] ? this.state.locations[task.Marker_Title].push(task) : this.state.locations[task.Marker_Title] = [task];
-
-          // convertDate(task.Start) > current ? this.state.upcomingTasks++ : null;
         })
-        // let current = new Date();
-        this.grabDailyTasks(current)
+        day ? this.grabDailyTasks(day) : this.grabDailyTasks(current); 
       })
       .catch(err => {
         console.error(err)
@@ -109,6 +109,7 @@ export default class Profile extends Component {
 
   countTasks() {
     axios.get('https://naturalhabitat.herokuapp.com/countTasks', { params: { username: this.props.screenProps.userID } })
+<<<<<<< HEAD
       .then(tasks => {
         tasks.data.forEach(task => {
           if (task.Completion === "False") {
@@ -119,7 +120,19 @@ export default class Profile extends Component {
             this.setState({ inProgress: task.count })
           }
         })
+=======
+    .then(tasks => {
+      tasks.data.forEach(task => {
+        if (task.Completion === "False") {
+          this.setState({ failed: task.count })
+        } else if (task.Completion === "True") {
+          this.setState({ completed: task.count })
+        } else {
+          this.setState({ inProgress: task.count })
+        }
+>>>>>>> changing selected date in profile fixed
       })
+    })
   }
 
   goToEditTask(task) {
@@ -180,7 +193,8 @@ export default class Profile extends Component {
       date = JSON.stringify(converted).slice(1, 11);
       this.setState({
         dailyTasks: this.state.daysWithTask[date] || [],
-        graphs: false
+        graphs: false,
+        currentDay: date
       })
     })
   }
@@ -192,7 +206,6 @@ export default class Profile extends Component {
   }
 
   changeLocation(location) {
-    console.log(location, 'change me')
     this.setState({
       selectedLocation: location,
       graphs: true
@@ -211,12 +224,28 @@ export default class Profile extends Component {
     }
   }
 
-  reRender() {
-    this.componentDidMount()
+  reRender(day) {
+    this.componentDidMount(day)
+  }
+
+  showToday() {
+    this.setState({
+      showAll: false
+    })
+  }
+
+  showAll() {
+    this.setState({
+      showAll: true
+    })
   }
 
   render() {
+<<<<<<< HEAD
     let tabs = Object.entries(this.state.locations)
+=======
+    let tabs = Object.entries(this.state.locations);
+>>>>>>> changing selected date in profile fixed
     tabs.unshift(['Overview'])
 
 
@@ -263,7 +292,7 @@ export default class Profile extends Component {
         </View>
           {!this.state.graphs ? (
             <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
-              <ScrollView style={{ marginTop: 15 }}>
+              <ScrollView style={{ marginTop: 10 }}>
                 {this.state.dailyTasks.map((task, i) => {
                   return (
                     <AllTasks 
@@ -277,7 +306,7 @@ export default class Profile extends Component {
           ) : (
             // render based on what selected location is
             <View style={{ flex: 4, borderTopWidth: 1, borderColor: 'black'}}>
-              <View>
+              <View style={{ flex: 1 }}>
                 {this.state.selectedLocation[0] === "Overview" ? (
                   <Chart
                     pieWidth={150}
@@ -305,7 +334,6 @@ export default class Profile extends Component {
                   )}
               </View>
             </View>
-
           )}
 
         <CalendarStrip
@@ -426,7 +454,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     marginTop: 5,
-    fontWeight: "bold",
+    fontWeight: 'bold',
+  },
+  location: {
+    fontSize: 20,
+    marginTop: 20,
+    fontWeight: 'bold',
+  },
+  today: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 70,
+    marginRight: 70
+  },
+  allTask: {
+    fontSize: 15,
+    borderWidth: 0.5,
+    fontWeight: 'bold',
+    // backgroundColor: '#fff'
   }
 })
 

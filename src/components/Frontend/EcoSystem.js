@@ -10,7 +10,7 @@ import GetCurrentLocation from '../Map/GetCurrentLocation';
 import geodist from 'geodist';
 import ProgressBar from './ProgressBar'
 import convertDate from '../../../server/controllers/convertDate';
-import EcosystemView from './EcosystemView.js'
+// import EcosystemView from './EcosystemView.js'
 import EcosystemViewPractice from './EcosystemViewPractice';
 
 export default class EcoSystem extends Component {
@@ -124,8 +124,8 @@ export default class EcoSystem extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-         let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
- 
+    let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
+
     axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
@@ -276,7 +276,6 @@ export default class EcoSystem extends Component {
                  : null}
                  {downgradeImageNumber > 0 ?
                   downgradeImages.map((img, i) => {
-                    console.log(img)
                     return (
                       <EcosystemViewPractice img={img} key={i} version={4}/>
                     )

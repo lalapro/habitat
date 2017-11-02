@@ -22,7 +22,6 @@ export default class AllTasks extends Component {
 
   showEdit(task) {
     let currentTime = new Date();
-
     currentTime > convertDate(task.Start) ? null : this.setState({ hasStarted: false });
 
     if (task.Completion === "True" || task.Completion === "False") {
@@ -55,7 +54,7 @@ export default class AllTasks extends Component {
       positivePoints: positivePoints
     })
     .then(res => {
-      this.props.reRender()
+      this.props.reRender(this.props.currentDay)
     })
     .catch((err) => {
       console.error(err);
@@ -80,7 +79,7 @@ export default class AllTasks extends Component {
       negativePoints: negativePoints
     })
     .then(res => {
-      this.props.reRender()
+      this.props.reRender(this.props.currentDay)
     })
     .catch((err) => {
       console.error(err);
@@ -125,15 +124,14 @@ export default class AllTasks extends Component {
 
 
   render() {
-    console.log('in All tasks render, Avatar', this.props.task)
     let taskStatus = this.props.task.Completion;
     let eco = this.props.task.Ecosystem;
     if (taskStatus === "True") {
-      taskStatus = <Image source={ecobuddies[eco][2][1]} style={{ height: 45, width: 45, alignItems: 'flex-end', resizeMode: 'contain' }} />
+      taskStatus = <Image source={ecobuddies[eco][2][1]} style={styles.completion} />
     } else if (taskStatus === "False") {
-      taskStatus = <Image source={ecobuddies[eco][0][1]} style={{ height: 45, width: 45, alignItems: 'flex-end', resizeMode: 'contain' }} />
+      taskStatus = <Image source={ecobuddies[eco][0][1]} style={styles.completion} />
     } else {
-      taskStatus = <Image source={ecobuddies[eco][1][1]} style={{ height: 45, width: 45, alignItems: 'flex-end', resizeMode: 'contain' }} />
+      taskStatus = <Image source={ecobuddies[eco][1][1]} style={styles.completion} />
     }
     return (
       <View>
@@ -201,4 +199,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#444",
   },
+  completion: {
+    marginRight: 15,
+    height: 45,
+    width: 45,
+    alignItems: 'flex-end' ,
+    resizeMode: 'contain'
+  }
 })
