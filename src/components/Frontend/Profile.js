@@ -3,6 +3,7 @@ import { ART, AsyncStorage, Modal, ImageStore, StyleSheet, Text, View, Image, Te
 import Expo, { Asset, Camera, Permissions, ImagePicker } from 'expo';
 import axios from 'axios';
 import AllTasks from './AllTasks.js';
+import LocationTasks from './LocationTasks';
 import Chart from './Chart.js';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
@@ -31,14 +32,17 @@ export default class Profile extends Component {
       activeIndex: 0,
       orderedColors: [],
       dayByDay: [],
-      selectedLocation: null
+      selectedLocation: null,
+      currentDay: null,
+      showAll: false
     }
     this.showModal = this.showModal.bind(this);
     this.uploadPhoto = this.uploadPhoto.bind(this);
     this.getPicture = this.getPicture.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount(day) {
+
     this.setState({
       username: this.props.screenProps.userID,
       dailyTasks: [],
@@ -50,26 +54,26 @@ export default class Profile extends Component {
       upcomingTasks: 0
     })
     this.props.screenProps.fbPic ? this.setState({image: this.props.screenProps.fbPic}) : this.getPicture();
-    this.getCompletedTask();
+    this.getCompletedTask(day);
     this.countTasks();
   }
 
   getPicture() {
-    axios.get('http://10.16.1.152:3000/pictures', { params: { username: this.props.screenProps.userID }})
+    axios.get('https://naturalhabitat.herokuapp.com/pictures', { params: { username: this.props.screenProps.userID }})
     .then(res => {
       let jpg = 'data:image/jpg;base64,' + res.data.picture;
       this.setState({ image: jpg })
     })
   }
 
-  getCompletedTask() {
+  getCompletedTask(day) {
     var dateFormat = 'YYYY-MM-DD HH:mm:ss';
     let current = new Date();
     var date = timezone(current);
     var localDate = date.tz('America/New_York').format();
 
 
-    axios.get('http://10.16.1.152:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
+    axios.get('https://naturalhabitat.herokuapp.com/categoryPercentage', { params: { username: this.props.screenProps.userID}})
       .then(res => {
         this.setState({
           categoryPercentage: res.data
@@ -82,7 +86,7 @@ export default class Profile extends Component {
         console.error(err)
       })
 
-    axios.get('http://10.16.1.152:3000/completedTasks', { params: { username: this.props.screenProps.userID } })
+    axios.get('https://naturalhabitat.herokuapp.com/completedTasks', { params: { username: this.props.screenProps.userID } })
       .then(tasks => {
         tasks.data.forEach(task => {
           let eachDate = task.Start.split(' ').slice(0, 3).reduce((acc, task) => {
@@ -90,16 +94,12 @@ export default class Profile extends Component {
           });
           eachDate = eachDate.slice(0, eachDate.length - 1);
           let key = convertKey(eachDate);
-          console.log(key, 'on load')
           // creates an object with keys of dates and values of tasks within those dates
           this.state.daysWithTask[key] ? this.state.daysWithTask[key].push(task) : this.state.daysWithTask[key] = [task];
           // creates an object with keys of locations and values of
           this.state.locations[task.Marker_Title] ? this.state.locations[task.Marker_Title].push(task) : this.state.locations[task.Marker_Title] = [task];
-
-          // convertDate(task.Start) > current ? this.state.upcomingTasks++ : null;
         })
-        // let current = new Date();
-        this.grabDailyTasks(current)
+        day ? this.grabDailyTasks(day) : this.grabDailyTasks(current); 
       })
       .catch(err => {
         console.error(err)
@@ -108,18 +108,18 @@ export default class Profile extends Component {
 }
 
   countTasks() {
-    axios.get('http://10.16.1.152:3000/countTasks', { params: { username: this.props.screenProps.userID } })
-      .then(tasks => {
-        tasks.data.forEach(task => {
-          if (task.Completion === "False") {
-            this.setState({ failed: task.count })
-          } else if (task.Completion === "True") {
-            this.setState({ completed: task.count })
-          } else {
-            this.setState({ inProgress: task.count })
-          }
-        })
+    axios.get('https://naturalhabitat.herokuapp.com/countTasks', { params: { username: this.props.screenProps.userID } })
+    .then(tasks => {
+      tasks.data.forEach(task => {
+        if (task.Completion === "False") {
+          this.setState({ failed: task.count })
+        } else if (task.Completion === "True") {
+          this.setState({ completed: task.count })
+        } else {
+          this.setState({ inProgress: task.count })
+        }
       })
+    })
   }
 
 
@@ -161,7 +161,7 @@ export default class Profile extends Component {
   uploadPhoto(picture) {
     let uri = picture.base64;
     let pictureText = 'data:image/jpg;base64,' + uri;
-    axios.post('http://10.16.1.152:3000/pictures', { picture: uri, username: this.state.username })
+    axios.post('https://naturalhabitat.herokuapp.com/pictures', { picture: uri, username: this.state.username })
       .then(res => {
         let jpg = 'data:image/jpg;base64,' + res.data.picture;
         this.setState({ image: jpg })
@@ -177,7 +177,8 @@ export default class Profile extends Component {
       date = JSON.stringify(converted).slice(1, 11);
       this.setState({
         dailyTasks: this.state.daysWithTask[date] || [],
-        graphs: false
+        graphs: false,
+        currentDay: date
       })
     })
   }
@@ -189,7 +190,6 @@ export default class Profile extends Component {
   }
 
   changeLocation(location) {
-    console.log(location, 'change me')
     this.setState({
       selectedLocation: location,
       graphs: true
@@ -208,14 +208,25 @@ export default class Profile extends Component {
     }
   }
 
-  reRender() {
-    this.componentDidMount()
+  reRender(day) {
+    this.componentDidMount(day)
+  }
+
+  showToday() {
+    this.setState({
+      showAll: false
+    })
+  }
+
+  showAll() {
+    this.setState({
+      showAll: true
+    })
   }
 
 
   render() {
-    let tabs = Object.entries(this.state.locations)
-    // console.log(this.state.locations, 'what iso going on')
+    let tabs = Object.entries(this.state.locations);
     tabs.unshift(['Overview'])
 
 
@@ -262,10 +273,10 @@ export default class Profile extends Component {
         </View>
           {!this.state.graphs ? (
             <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
-              <ScrollView style={{ marginTop: 15 }}>
+              <ScrollView style={{ marginTop: 10 }}>
                 {this.state.dailyTasks.map((task, i) => {
                   return (
-                    <AllTasks task={task} key={i} reRender={this.reRender.bind(this)}/>
+                    <AllTasks currentDay={this.state.currentDay} task={task} key={i} reRender={this.reRender.bind(this)}/>
                   )
                 })}
               </ScrollView>
@@ -273,7 +284,7 @@ export default class Profile extends Component {
           ) : (
             // render based on what selected location is
             <View style={{ flex: 4, borderTopWidth: 1, borderColor: 'black'}}>
-              <View>
+              <View style={{ flex: 1 }}>
                 {this.state.selectedLocation[0] === "Overview" ? (
                   <Chart
                     pieWidth={150}
@@ -284,20 +295,50 @@ export default class Profile extends Component {
                     height={180}
                     data={this.state.categoryPercentage} />
                   ) : (
-                    <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
-                      <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{width: 75, height: 75}}/>
-                      <ScrollView style={{ marginTop: 15}}>
-                        {this.state.selectedLocation[1].map((task, i) => {
-                          return (
-                            <AllTasks task={task} key={i} reRender={this.reRender.bind(this)}/>
-                          )
-                        })}
-                      </ScrollView>
-                    </View>
+                      <View style={{ flex: 1 }}>
+                        <View style={styles.today}> 
+                          <TouchableOpacity onPress={() => {this.showToday()}}>
+                            <Text style={styles.allTask}>Selected Date</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={() => {this.showAll()}}>
+                            <Text style={styles.allTask}>All tasks</Text>
+                          </TouchableOpacity>
+                        </View>
+                        {!this.state.showAll ? (
+                          <ScrollView style={{ marginTop: 20 }}>
+                          {/* <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+                            <Text style={styles.title}>
+                              Today's Tasks at
+                            </Text>
+                            <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{ marginLeft: 15, width: 50, height: 50}}/>
+                          </View> */}
+                          {this.state.dailyTasks.filter(ele => {
+                            return ele.Marker_Title === this.state.selectedLocation[0]
+                          }).map((task, i) => {
+                            return (
+                              <AllTasks currentDay={this.state.currentDay} task={task} key={i} reRender={this.reRender.bind(this)}/>
+                            )
+                          })}
+                          </ScrollView>
+                        ) : (
+                          <ScrollView style={{ marginTop: 20 }}>
+                          {/* <View style={{ alignItems: 'center', marginTop: 5 }}>
+                            <Text style={styles.title}>
+                              All tasks at {this.state.selectedLocation[0]}
+                            </Text>
+                            <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{ marginLeft: 15, width: 50, height: 50}}/>
+                          </View> */}
+                          {this.state.selectedLocation[1].map((task, i) => {
+                            return (
+                              <AllTasks currentDay={this.state.currentDay} task={task} key={i} reRender={this.reRender.bind(this)}/>
+                            )
+                          })}
+                          </ScrollView>
+                        )}
+                      </View>
                   )}
               </View>
             </View>
-
           )}
 
         <CalendarStrip
@@ -417,7 +458,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     marginTop: 5,
-    fontWeight: "bold",
+    fontWeight: 'bold',
+  },
+  location: {
+    fontSize: 20,
+    marginTop: 20,
+    fontWeight: 'bold',
+  },
+  today: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 70,
+    marginRight: 70
+  },
+  allTask: {
+    fontSize: 15,
+    borderWidth: 0.5,
+    fontWeight: 'bold',
+    // backgroundColor: '#fff'
   }
 })
 

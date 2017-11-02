@@ -30,9 +30,8 @@ export default class CalendarTasks extends Component {
 	}
 
 	getToken = async () => {
-		let reDirectUrl = await AuthSession.getRedirectUrl();
-		// console.log('calling google',config.redirect_url, config.client_id)
-		console.log(reDirectUrl, 'HIHIHI')
+		let reDirectUrl = await AuthSession.getRedirectUrl(); 
+		console.log(reDirectUrl, )
 		await AuthSession.startAsync({
 			authUrl:
 			`https://accounts.google.com/o/oauth2/v2/auth` +
@@ -42,7 +41,6 @@ export default class CalendarTasks extends Component {
 			`&client_id=${config.client_id}`
 		})
 			.then(result => {
-				console.log(result, 'result from google call')
 				if (result.type !== 'success') {
 					this.props.goBack();
 				} else {
@@ -58,7 +56,7 @@ export default class CalendarTasks extends Component {
 	axiosCall = async (token) => {
     let userID;
     let today = moment().format();
-    let timeZone = today.slice(-6);
+    let timeZone = today.slice(-6);Ó
 		let filtered = [];
     let beginningOfDay = `${JSON.stringify(today).slice(1, 12)}00:00:00${timeZone}`;
 		let endOfDay = `${JSON.stringify(today).slice(1, 12)}23:59:59${timeZone}`;
@@ -66,8 +64,6 @@ export default class CalendarTasks extends Component {
 		let maxTime = new Date(endOfDay);
 
     var getEachCalendar = async (IDs) => {
-			console.log(IDs, 'IDSSSSS');
-			console.log(userID, 'USER ID')
       let id = IDs.filter(ele => {
         return ele === userID
       });
@@ -152,7 +148,7 @@ export default class CalendarTasks extends Component {
 	}
 
 	saveAllTasks(task, index) {
-		axios.post('http://10.16.1.152:3000/calendar', { tasks: this.state.tasksFromGoogle })
+		axios.post('https://naturalhabitat.herokuapp.com/calendar', { tasks: this.state.tasksFromGoogle })
 		.then(response => {
       this.props.goBack()
     })

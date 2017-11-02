@@ -28,7 +28,7 @@ export default class Friends extends Component {
 
   componentDidMount() {
     // this.checkAsyncStorage();
-    axios.get(`http://10.16.1.152:3000/friends`, { params: { user: this.state.userId }})
+    axios.get(`https://naturalhabitat.herokuapp.com/friends`, { params: { user: this.state.userId }})
     .then(friends => {
       this.setState({ friends: friends.data })
     })
@@ -45,7 +45,7 @@ export default class Friends extends Component {
       selectedFriend: friend.Friend
     })
 
-    axios.get(`http://10.16.1.152:3000/mapMarkers`, { params: { userID: friend.Friend}})
+    axios.get(`https://naturalhabitat.herokuapp.com/mapMarkers`, { params: { userID: friend.Friend}})
     .then(res => {
       this.setState({
         selectedLocations: res.data || [],
@@ -86,7 +86,7 @@ export default class Friends extends Component {
     this.setState({
       giftPoints: this.state.giftPoints - 1
     })
-    axios.put('http://10.16.1.152:3000/gift', {
+    axios.put('https://naturalhabitat.herokuapp.com/gift', {
       userId: this.state.userId,
       friendEcosystem: this.state.selectedLocation
     })

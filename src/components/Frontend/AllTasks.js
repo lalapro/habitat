@@ -23,7 +23,6 @@ export default class AllTasks extends Component {
 
   showEdit(task) {
     let currentTime = new Date();
-    console.log(convertDate(task.Start), 'hehehe')
     currentTime > convertDate(task.Start) ? null : this.setState({ hasStarted: false });
 
     if (task.Completion === "True" || task.Completion === "False") {
@@ -50,13 +49,13 @@ export default class AllTasks extends Component {
     }
 
     let positivePoints = task.PositivePoints + 1;
-    axios.put('http://10.16.1.152:3000/yayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       positivePoints: positivePoints
     })
     .then(res => {
-      this.props.reRender()
+      this.props.reRender(this.props.currentDay)
     })
     .catch((err) => {
       console.error(err);
@@ -75,20 +74,20 @@ export default class AllTasks extends Component {
     }
 
     let negativePoints = task.NegativePoints + 1;
-    axios.put('http://10.16.1.152:3000/nayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/nayTask', {
       taskId: task.Task_ID,
       markerId: task.Marker_ID,
       negativePoints: negativePoints
     })
     .then(res => {
-      this.props.reRender()
+      this.props.reRender(this.props.currentDay)
     })
     .catch((err) => {
       console.error(err);
     })
   }
 
-  test() {
+  completeTask() {
     if (this.state.completion === "True") {
       return (
         <Text>
@@ -129,21 +128,20 @@ export default class AllTasks extends Component {
 
 
   render() {
-    // console.log('this.props.task', this.props.task);
     let taskStatus = this.props.task.Completion;
     let eco = this.props.task.Ecosystem;
     if (taskStatus === "True") {
-      taskStatus = <Image source={ecobuddies[eco][2][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][2][1]} style={styles.completion} />
     } else if (taskStatus === "False") {
-      taskStatus = <Image source={ecobuddies[eco][0][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][0][1]} style={styles.completion} />
     } else {
-      taskStatus = <Image source={ecobuddies[eco][1][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][1][1]} style={styles.completion} />
     }
     return (
       <View>
         <TouchableOpacity onPress={() => this.showEdit(this.props.task)}>
           <View style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={location[this.props.task.Avatar][1]} style={{ height: 50, width: 50, flex: 1 }} />
+            <Image source={location[this.props.task.Avatar][1]} style={{ marginLeft: 15, height: 50, width: 50, flex: 1 }} />
             <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}>
               <Text style={styles.title}>
                 {this.props.task.Task_Title}
@@ -157,7 +155,7 @@ export default class AllTasks extends Component {
         </TouchableOpacity>
         {this.state.showEdit ? (
           <View style={{ display: 'flex', marginTop: 15, marginBottom: 15, justifyContent: 'center', alignItems: 'center' }}>
-            {this.test()}
+            {this.completeTask()}
           </View>
         ) : null}
       </View>
@@ -210,4 +208,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#444",
   },
+  completion: {
+    marginRight: 15,
+    height: 45,
+    width: 45,
+    alignItems: 'flex-end' 
+  }
 })
