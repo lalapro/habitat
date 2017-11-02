@@ -7,24 +7,24 @@ import axios from 'axios';
 
 export default class Timer extends Component {
     constructor(props) {
-        super (props);
-        this.state = {
-          fill: 0,
-          hour: 0,
-          minute: 0,
-          second: 0,
-          toggleTimer: false,
-          duration: 0,
-          timeRemaining: 0,
-          interval: null,
-          setTimeout: null,
-          userID: null,
-          negativePoints: null,
-          mdPositivePoints: null,
-          lgPositivePoints: null,
-          currentImageIndex: null,
-          mdUpgrade: false,
-          lgUpgrade: false
+      super (props);
+      this.state = {
+        fill: 0,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        toggleTimer: false,
+        duration: 0,
+        timeRemaining: 0,
+        interval: null,
+        setTimeout: null,
+        userID: null,
+        negativePoints: null,
+        mdPositivePoints: null,
+        lgPositivePoints: null,
+        currentImageIndex: null,
+        mdUpgrade: false,
+        lgUpgrade: false
       }
       this.calculateTime = this.calculateTime.bind(this);
       this.eachPie = this.eachPie.bind(this);
@@ -128,7 +128,7 @@ export default class Timer extends Component {
     };
 
     eachPie(percentage) {
-      return <Progress.Pie style={{alignItems: 'center', opacity: 0.3, marginTop: 32}} progress={percentage} size={130} />
+      return <Progress.Pie style={{alignItems: 'center', opacity: 0.3}} progress={percentage} size={130} />
     };
 
     trainWhistle = async () => {
@@ -235,7 +235,7 @@ export default class Timer extends Component {
             <View>
               <TouchableOpacity
                 onPress={this.startTimer}>
-                <Image source={require("../assets/cuteClock.png")} >
+                <Image source={require("../assets/habit@/timer.png")} style={{height: 130, width: 130, marginTop: 20}}>
                   {this.eachPie(this.state.fill)}
                 </Image>
               </TouchableOpacity> 
