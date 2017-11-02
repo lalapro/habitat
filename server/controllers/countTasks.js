@@ -7,7 +7,9 @@ const countTasks = (req, res) => {
 
     let taskStr =
     `Select t.User_ID,
-    t.Completion,
+    CASE WHEN t.Completion = "False" THEN "False"
+         WHEN t.Completion = "True" THEN "True"
+         ELSE NULL END AS Completion,
     count(*) as count
     FROM Tasks t
     WHERE t.User_ID = ${userID}

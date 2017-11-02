@@ -3,6 +3,12 @@ const convertKey = (string) => {
   let month = DATEKEY[date[0]];
   let day = date[1].replace(/th/, "").replace(/rd/, "").replace(/st/, "").replace(/nd/, "");
   let year = date[2] + "-";
+  let newDay = undefined;
+  if (day.length === 1) {
+    newDay = '0';
+    newDay = newDay + day
+  }
+  day = newDay || day;
   let newDate = year + month + day;
   return newDate
 }

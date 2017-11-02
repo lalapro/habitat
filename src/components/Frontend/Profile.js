@@ -6,6 +6,7 @@ import AllTasks from './AllTasks.js';
 import Chart from './Chart.js';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
+import timezone from 'moment-timezone';
 import convertKey from './convertKey';
 import Area from './Area';
 import convertDate from  './convertDate';
@@ -30,8 +31,7 @@ export default class Profile extends Component {
       activeIndex: 0,
       orderedColors: [],
       dayByDay: [],
-      selectedLocation: null,
-      upcomingTasks: 0
+      selectedLocation: null
     }
     this.showModal = this.showModal.bind(this);
     this.uploadPhoto = this.uploadPhoto.bind(this);
@@ -64,10 +64,10 @@ export default class Profile extends Component {
 
   getCompletedTask() {
     var dateFormat = 'YYYY-MM-DD HH:mm:ss';
-    var testDateUtc = moment.utc(new Date());
-    var localDate = testDateUtc.local();
-
     let current = new Date();
+    var date = timezone(current);
+    var localDate = date.tz('America/New_York').format();
+
 
     axios.get('http://10.16.1.152:3000/categoryPercentage', { params: { username: this.props.screenProps.userID}})
       .then(res => {
@@ -90,14 +90,16 @@ export default class Profile extends Component {
           });
           eachDate = eachDate.slice(0, eachDate.length - 1);
           let key = convertKey(eachDate);
+          console.log(key, 'on load')
           // creates an object with keys of dates and values of tasks within those dates
           this.state.daysWithTask[key] ? this.state.daysWithTask[key].push(task) : this.state.daysWithTask[key] = [task];
           // creates an object with keys of locations and values of
           this.state.locations[task.Marker_Title] ? this.state.locations[task.Marker_Title].push(task) : this.state.locations[task.Marker_Title] = [task];
 
-          convertDate(task.Start) > current ? this.state.upcomingTasks++ : null;
+          // convertDate(task.Start) > current ? this.state.upcomingTasks++ : null;
         })
-        this.grabDailyTasks(JSON.stringify(localDate).slice(1, 11))
+        // let current = new Date();
+        this.grabDailyTasks(current)
       })
       .catch(err => {
         console.error(err)
@@ -171,14 +173,23 @@ export default class Profile extends Component {
   }
 
   grabDailyTasks(date) {
-    date = JSON.stringify(date).slice(1, 11);
-    this.setState({
-      dailyTasks: this.state.daysWithTask[date] || [],
-      graphs: false
+    this.convertTimezone(date).then(converted => {
+      date = JSON.stringify(converted).slice(1, 11);
+      this.setState({
+        dailyTasks: this.state.daysWithTask[date] || [],
+        graphs: false
+      })
     })
   }
 
+  convertTimezone = async (date) => {
+    date = moment(date);
+    let converted = await date.tz('America/New_York').format();
+    return converted
+  }
+
   changeLocation(location) {
+    console.log(location, 'change me')
     this.setState({
       selectedLocation: location,
       graphs: true
@@ -188,7 +199,6 @@ export default class Profile extends Component {
   _onPieItemSelected(newIndex){
     for (key in this.state.color) {
       if (this.state.color[key].color === this.state.orderedColors[newIndex]) {
-
         this.setState({
           dayByDay: this.state.color[key].frequency,
           activeIndex: newIndex
@@ -205,7 +215,7 @@ export default class Profile extends Component {
 
   render() {
     let tabs = Object.entries(this.state.locations)
-    console.log(this.state.locations, 'what iso going on')
+    // console.log(this.state.locations, 'what iso going on')
     tabs.unshift(['Overview'])
 
 
@@ -232,9 +242,6 @@ export default class Profile extends Component {
             </Text>
             <Text style={styles.title}>
               Failed Tasks: {this.state.failed}
-            </Text>
-            <Text style={styles.title}>
-              Upcoming tasks: {this.state.upcomingTasks}
             </Text>
           </View>
         </View>
@@ -277,15 +284,15 @@ export default class Profile extends Component {
                     height={180}
                     data={this.state.categoryPercentage} />
                   ) : (
-                    <View style={{alignItems: 'center'}}>
+                    <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
                       <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{width: 75, height: 75}}/>
-                      {this.state.selectedLocation[1].map((task, i) => {
-                        return (
-                          <Text key={i}>
-                            {task.Task_Title}
-                          </Text>
-                        )
-                      })}
+                      <ScrollView style={{ marginTop: 15}}>
+                        {this.state.selectedLocation[1].map((task, i) => {
+                          return (
+                            <AllTasks task={task} key={i} reRender={this.reRender.bind(this)}/>
+                          )
+                        })}
+                      </ScrollView>
                     </View>
                   )}
               </View>
