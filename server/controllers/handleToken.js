@@ -4,7 +4,6 @@ const moment = require('moment');
 
 const handleToken = (req, res) => {
   let token = req.query.token;
-  console.log(token, 'token in body')
   let currentVisit = moment();
   let select = `SELECT * FROM User WHERE Token ='${token}'`;
   db.query(select, null, (err, user) => {

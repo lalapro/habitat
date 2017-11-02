@@ -29,7 +29,7 @@ export default class CalendarTasks extends Component {
 	}
 
 	getToken = async () => {
-		console.log('calling google',config.redirect_url, config.client_id)
+		let reDirectUrl = await AuthSession.getRedirectUrl(); 
 		await AuthSession.startAsync({
 			authUrl:
 			`https://accounts.google.com/o/oauth2/v2/auth` +
@@ -39,7 +39,6 @@ export default class CalendarTasks extends Component {
 			`&client_id=${config.client_id}`
 		})
 			.then(result => {
-				console.log(result, 'result from google call')
 				if (result.type !== 'success') {
 					this.props.goBack();
 				} else {
@@ -55,7 +54,7 @@ export default class CalendarTasks extends Component {
 	axiosCall = async (token) => {
     let userID;
     let today = moment().format();
-    let timeZone = today.slice(-6);
+    let timeZone = today.slice(-6);Ó
 		let filtered = [];
     let beginningOfDay = `${JSON.stringify(today).slice(1, 12)}00:00:00${timeZone}`;
 		let endOfDay = `${JSON.stringify(today).slice(1, 12)}23:59:59${timeZone}`;

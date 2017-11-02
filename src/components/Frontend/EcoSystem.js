@@ -10,7 +10,7 @@ import GetCurrentLocation from '../Map/GetCurrentLocation';
 import geodist from 'geodist';
 import ProgressBar from './ProgressBar'
 import convertDate from '../../../server/controllers/convertDate';
-import EcosystemView from './EcosystemView.js'
+// import EcosystemView from './EcosystemView.js'
 import EcosystemViewPractice from './EcosystemViewPractice';
 
 export default class EcoSystem extends Component {
@@ -271,7 +271,6 @@ export default class EcoSystem extends Component {
                  : null}
                  {downgradeImageNumber > 0 ?
                   downgradeImages.map((img, i) => {
-                    console.log(img)
                     return (
                       <EcosystemViewPractice img={img} key={i} version={4}/>
                     )
