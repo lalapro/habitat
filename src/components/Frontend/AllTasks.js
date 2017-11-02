@@ -129,7 +129,7 @@ export default class AllTasks extends Component {
 
 
   render() {
-    // console.log('this.props.task', this.props.task);
+    console.log('this.props.task', this.props.task);
     let taskStatus = this.props.task.Completion;
     let eco = this.props.task.Ecosystem;
     if (taskStatus === "True") {
