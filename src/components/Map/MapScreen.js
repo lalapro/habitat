@@ -44,11 +44,7 @@ export default class MapScreen extends Component {
   }
 
   getMarkers() {
-<<<<<<< HEAD
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', {params: {userID: this.state.userID}})
-=======
-    axios.get('http://10.16.1.131:3000/mapMarkers', {params: {userID: this.state.userID}})
->>>>>>> newdev
      .then(markers => {
        this.setState({markers: markers.data})
      })
@@ -321,6 +317,7 @@ export default class MapScreen extends Component {
         </TouchableOpacity>
         {this.state.modalVisible ? (
           <TaskModal 
+            style={{flex: 2}}
             userID={this.state.userID} 
             goToEditTask={this.goToEditTask} 
             tasks={this.state.currentPress} 
