@@ -44,11 +44,7 @@ export default class MapScreen extends Component {
   }
 
   getMarkers() {
-<<<<<<< HEAD
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', {params: {userID: this.state.userID}})
-=======
-    axios.get('http://10.16.1.131:3000/mapMarkers', {params: {userID: this.state.userID}})
->>>>>>> newdev
      .then(markers => {
        this.setState({markers: markers.data})
      })
@@ -320,12 +316,12 @@ export default class MapScreen extends Component {
           <Image source={require("../assets/walking.png")} style={{width: 50, height: 50}}/>
         </TouchableOpacity>
         {this.state.modalVisible ? (
-          <TaskModal 
-            userID={this.state.userID} 
-            goToEditTask={this.goToEditTask} 
-            tasks={this.state.currentPress} 
-            marker={this.state.currentMarker} 
-            modalVisible={this.state.modalVisible} 
+          <TaskModal
+            userID={this.state.userID}
+            goToEditTask={this.goToEditTask}
+            tasks={this.state.currentPress}
+            marker={this.state.currentMarker}
+            modalVisible={this.state.modalVisible}
             closeModal={this.closeModal.bind(this)}
           />) : null }
       </View>

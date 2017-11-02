@@ -60,6 +60,7 @@ export default class Friends extends Component {
 
   showEcosystem(location) {
     this.setState({
+      selectedEco: location.Ecosystem,
       selectedLocation: location.Marker_ID,
       locationIsClicked: true,
       upgradeImages: [],
@@ -161,7 +162,7 @@ export default class Friends extends Component {
               </View>
               {this.state.locationIsClicked ? (
                 <View style={{flex: 7}}>
-                  <Image style={{height: '100%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
+                  <Image style={{height: '100%', width: '100%'}} source={backgrounds[this.state.selectedEco][1]}>
                   <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
                     {this.state.upgradeImages.map((img, i) => (
                       <EcosystemViewPractice img={img} key={i} version={3}/>
@@ -218,6 +219,12 @@ const ecobuddies = [
     [2, require("../assets/habit@/ladybug-md.png")],
     [2, require("../assets/habit@/ladybug-lg.png")]
   ]
+]
+
+const backgrounds = [
+  [0, require("../assets/habit@/water-bg.png")],
+  [1, require("../assets/habit@/sky-bg.png")],
+  [2, require("../assets/habit@/leaf-bg.png")],
 ]
 
 const styles = StyleSheet.create({
