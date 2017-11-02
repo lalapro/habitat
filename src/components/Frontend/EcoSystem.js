@@ -254,7 +254,7 @@ export default class EcoSystem extends Component {
                     location.tasks.map((task, i) => {
                       if (task.Completion === null) {
                         return (
-                          <EcosystemViewPractice img={img} key={i} version={3}/>
+                          <EcosystemViewPractice img={task.Ecosystem} key={i} version={3}/>
                         )
                       } else {
                         return null
