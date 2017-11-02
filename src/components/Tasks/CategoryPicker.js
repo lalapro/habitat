@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Picker, Button, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, TextInput, Picker, Button, TouchableHighlight, Alert } from 'react-native';
 import axios from 'axios';
 import ColorPicker from './ColorPicker.js';
 
@@ -29,7 +29,7 @@ class CategoryPicker extends Component {
 
 	grabCategories(specific) {
 
-		axios.get('http://10.16.1.152:3000/categories', {params: {userID: this.props.userID}})
+		axios.get('http://10.16.1.218:3000/categories', {params: {userID: this.props.userID}})
 			.then((response) => {
 				let categories = response.data;
 				this.setState({
@@ -94,9 +94,9 @@ class CategoryPicker extends Component {
   newCategory() {
     let category = this.state.newCategory;
 		let color = this.state.color;
-		if (category.length > 1) {
+		if (category.length > 1 && color) {
 
-			axios.post('http://10.16.1.152:3000/categories', {category, color, userID: this.props.userID})
+			axios.post('http://10.16.1.218:3000/categories', {category, color, userID: this.props.userID})
 			.then(response => {
 				this.grabCategories(category)
 				this.setState({ newCategory: '' })
@@ -104,6 +104,13 @@ class CategoryPicker extends Component {
 			.catch((err) => {
 				console.error(err)
 			})
+		} else {
+			Alert.alert(
+        'Oops',
+        `Looks like you didn't choose a color.`,
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        { cancelable: false }
+      )
 		}
 	}
 

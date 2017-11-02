@@ -54,7 +54,7 @@ export default class EcoSystem extends Component {
     }, () => this.getMarkers())
   }
   getMarkers() {
-    axios.get('http://10.16.1.152:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
+    axios.get('http://10.16.1.218:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
         this.setState({ locations: res.data })
       })
@@ -98,7 +98,7 @@ export default class EcoSystem extends Component {
     this.props.navigation.navigate('TaskBuilder', { specificTask: this.state.editSpecificTask, editing: true })
   }
   deleteTask() {
-    axios.delete('http://10.16.1.152:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('http://10.16.1.218:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
@@ -114,7 +114,7 @@ export default class EcoSystem extends Component {
     }
     let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
 
-    axios.put('http://10.16.1.152:3000/yayTask', {
+    axios.put('http://10.16.1.218:3000/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
@@ -138,7 +138,7 @@ export default class EcoSystem extends Component {
     }
     let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
 
-    axios.put('http://10.16.1.152:3000/nayTask', {
+    axios.put('http://10.16.1.218:3000/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       negativePoints: negativePoints
@@ -221,13 +221,19 @@ export default class EcoSystem extends Component {
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Image
-                  source={images[location.Avatar][1]}
-                  style={{width: 50, height: 50}}
-                />
-                <Text style={styles.cardtitle}>
-                  {location.Marker_Title}
-                </Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={images[location.Avatar][1]}
+                    style={{width: 50, height: 50}}
+                  />
+                  <Image 
+                    source={require('../assets/habit@/logo.png')}
+                    style={{height: 50, width: 100}}
+                  />
+                </View>
+                  <Text style={styles.cardtitle}>
+                    {location.Marker_Title}
+                  </Text>
                 <Text style={styles.cardDescription}>
                   {location.Marker_Description}
                 </Text>
@@ -362,10 +368,11 @@ const styles = StyleSheet.create({
     fontSize: 50,
     // marginTop: 5,
     fontWeight: "bold",
+    color: '#FF3300'
   },
   cardDescription: {
     fontSize: 25,
-    color: "#444",
+    color: "#FF6600",
   },
   circle: {
    width: 120,
