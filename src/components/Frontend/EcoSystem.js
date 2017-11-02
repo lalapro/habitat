@@ -221,13 +221,19 @@ export default class EcoSystem extends Component {
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Image
-                  source={images[location.Avatar][1]}
-                  style={{width: 50, height: 50}}
-                />
-                <Text style={styles.cardtitle}>
-                  {location.Marker_Title}
-                </Text>
+                <View style={{flexDirection: 'row'}}>
+                  <Image
+                    source={images[location.Avatar][1]}
+                    style={{width: 50, height: 50}}
+                  />
+                  <Image 
+                    source={require('../assets/habit@/logo.png')}
+                    style={{height: 50, width: 100}}
+                  />
+                </View>
+                  <Text style={styles.cardtitle}>
+                    {location.Marker_Title}
+                  </Text>
                 <Text style={styles.cardDescription}>
                   {location.Marker_Description}
                 </Text>
@@ -362,10 +368,11 @@ const styles = StyleSheet.create({
     fontSize: 50,
     // marginTop: 5,
     fontWeight: "bold",
+    color: '#FF3300'
   },
   cardDescription: {
     fontSize: 25,
-    color: "#444",
+    color: "#FF6600",
   },
   circle: {
    width: 120,
