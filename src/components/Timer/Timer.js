@@ -3,6 +3,7 @@ import { Constants, Audio } from 'expo';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Picker, Button } from 'react-native';
 import * as Progress from 'react-native-progress';
 import axios from 'axios';
+import EcosystemViewPractice from '../Frontend/EcosystemViewPractice'
 // import convertDate from '../Frontend/convertDate'
 
 export default class Timer extends Component {
@@ -24,7 +25,8 @@ export default class Timer extends Component {
           lgPositivePoints: null,
           currentImageIndex: null,
           mdUpgrade: false,
-          lgUpgrade: false
+          lgUpgrade: false,
+          render: false
       }
       this.calculateTime = this.calculateTime.bind(this);
       this.eachPie = this.eachPie.bind(this);
@@ -36,10 +38,10 @@ export default class Timer extends Component {
       var minsInMSec = this.state.minute * 60000;
       var secsInMSec = this.state.second * 1000;
       var duration = hoursInMSec + minsInMSec + secsInMSec;
-      this.setState({ 
+      this.setState({
         toggleTimer: !this.state.toggleTimer
       }, () => {
-        
+
         if (this.state.toggleTimer && duration !== 0) {
           let startTime = new Date();
           this.setState({
@@ -67,7 +69,7 @@ export default class Timer extends Component {
                     duration: 0,
                     toggleTimer: false,
                     mdPositivePoints: mdPositivePoints,
-                    lgPositivePoints: lgPositivePoints 
+                    lgPositivePoints: lgPositivePoints
                   }, () => {
                     console.log('in timer', this.state)
                     axios.put('https://naturalhabitat.herokuapp.com/postimer', {
@@ -105,7 +107,7 @@ export default class Timer extends Component {
               .catch(err => console.error(err))
             })
           })
-        } 
+        }
       });
     };
 
@@ -157,6 +159,7 @@ export default class Timer extends Component {
         })
         .then(res => {
           this.setState({
+            render: true,
             negativePoints: res.data[0].Negative_Points,
             mdPositivePoints: res.data[0].Medium_Positive_Points,
             lgPositivePoints: res.data[0].Large_Positive_Points
@@ -189,43 +192,32 @@ export default class Timer extends Component {
             title="&#9776;"
           />
         </View>
-          <View style={styles.container}> 
+        {this.state.render ? (
+          <View style={styles.container}>
             <View style={styles.ecosystem}>
-              <Image style={{height: 300, width: 300}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
+              <Image style={{height: 300, width: 300}} source={backgrounds[this.state.currentImageIndex][1]}>
                 <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}>
-                  {this.state.duration ? 
+                  {this.state.duration ?
                     <Image
                       style={{height: 60, width: 60}}
                       source={require("../assets/habit@/sun.png")}
                     /> : null
                   }
-                  {this.state.lgPositivePoints ? 
+                  {this.state.lgPositivePoints ?
                     lgImageArray.map((lgImage, i) => (
-                      <Image
-                      key={i}
-                      style={{height: 60, width: 60}}
-                      source={ecobuddies[this.state.currentImageIndex].images[2][1]} 
-                      /> 
+                      <EcosystemViewPractice img={this.state.currentImageIndex} key={i} version={3}/>
                     ))
                   : null
                   }
-                  {this.state.mdPositivePoints ? 
+                  {this.state.mdPositivePoints ?
                     mdImageArray.map((mdImage, i) => (
-                      <Image
-                      key={i}
-                      style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[1][1]} 
-                      /> 
+                      <EcosystemViewPractice img={this.state.currentImageIndex} key={i} version={2}/>
                     ))
                   : null
                   }
-                  {this.state.negativePoints ? 
+                  {this.state.negativePoints ?
                     grayImageArray.map((grayImage, i) => (
-                      <Image
-                      key={i}
-                      style={{height: 50, width: 50}}
-                      source={ecobuddies[this.state.currentImageIndex].images[3][1]} 
-                      /> 
+                      <EcosystemViewPractice img={this.state.currentImageIndex} key={i} version={0}/>
                     ))
                   : null
                   }
@@ -238,7 +230,7 @@ export default class Timer extends Component {
                 <Image source={require("../assets/cuteClock.png")} >
                   {this.eachPie(this.state.fill)}
                 </Image>
-              </TouchableOpacity> 
+              </TouchableOpacity>
             </View>
             <View style={styles.pickerContainer}>
               <Picker
@@ -278,6 +270,7 @@ export default class Timer extends Component {
               </Text>
             </View>
           </View>
+        ) : null}
         </View>
       )
     }
@@ -291,7 +284,7 @@ const ecobuddies = [
     [2, require("../assets/habit@/butterfly-lg.png")],
     [3, require("../assets/habit@/butterfly-gray.png")]
   ]},
-  {buddy: 'LadyBugs', 
+  {buddy: 'LadyBugs',
    images: [
     [0, require("../assets/habit@/ladybug-sm.png")],
     [1, require("../assets/habit@/ladybug-md.png")],
@@ -306,6 +299,12 @@ const ecobuddies = [
     [3, require("../assets/habit@/starfish-gray.png")]
   ]}
 ];
+
+const backgrounds = [
+  [0, require("../assets/habit@/water-bg.png")],
+  [1, require("../assets/habit@/sky-bg.png")],
+  [2, require("../assets/habit@/leaf-bg.png")],
+]
 
 const styles = StyleSheet.create({
   circle: {
@@ -337,12 +336,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     flex: 1
   },
-  
+
   pickerItem: {
     height: 100,
     color: 'red'
   },
-  
+
   arrowWrapper: {
     // backgroundColor: '#FFF0E0',
     flex: 10,
@@ -350,7 +349,7 @@ const styles = StyleSheet.create({
     marginLeft: -28,
     justifyContent: 'center'
   },
-  
+
   arrow: {
     textAlign: 'center',
     color: 'red',

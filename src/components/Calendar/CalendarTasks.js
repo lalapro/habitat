@@ -30,12 +30,14 @@ export default class CalendarTasks extends Component {
 
 	getToken = async () => {
 		console.log('calling google',config.redirect_url, config.client_id)
+
+		let redirect = `https://auth.expo.io/@lalapro/habitation`
 		await AuthSession.startAsync({
 			authUrl:
 			`https://accounts.google.com/o/oauth2/v2/auth` +
 			`?scope=https://www.googleapis.com/auth/calendar` +
 			`&response_type=token` +
-			`&redirect_uri=${config.redirect_url}` +
+			`&redirect_uri=${redirect}` +
 			`&client_id=${config.client_id}`
 		})
 			.then(result => {

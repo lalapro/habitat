@@ -246,45 +246,45 @@ export default class EcoSystem extends Component {
                   {location.Marker_Description}
                 </Text>
                 <Image style={{height: '70%', width: '100%'}} source={backgrounds[location.Ecosystem][1]}>
-                <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
-                  {location.tasks ? (
-                    location.tasks.map((task, i) => {
-                      if (task.Completion === null) {
+                  <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
+                    {location.tasks ? (
+                      location.tasks.map((task, i) => {
+                        if (task.Completion === null) {
+                          return (
+                            <EcosystemViewPractice img={task.Ecosystem} key={i} version={1}/>
+                          )
+                        } else {
+                          return null
+                        }
+                      })
+                    ) : null}
+                    {upgradeImageNumber > 0 ?
+                      upgradeImages.map((img, i) => {
                         return (
-                          <EcosystemViewPractice img={task.Ecosystem} key={i} version={1}/>
-                        )
-                      } else {
-                        return null
-                      }
-                    })
-                  ) : null}
-                  {upgradeImageNumber > 0 ?
-                    upgradeImages.map((img, i) => {
-                      return (
-                        <EcosystemViewPractice img={img} key={i} version={3}/>
-                      )})
+                          <EcosystemViewPractice img={img} key={i} version={3}/>
+                        )})
+                     : null}
+                  {location.PositivePoints ?
+                    posImages.map((img, i) => (
+                      <EcosystemViewPractice img={img} key={i} version={2}/>
+                    ))
                    : null}
-                {location.PositivePoints ?
-                  posImages.map((img, i) => (
-                    <EcosystemViewPractice img={img} key={i} version={2}/>
-                  ))
-                 : null}
-                 {downgradeImageNumber > 0 ?
-                  downgradeImages.map((img, i) => {
-                    console.log(img)
-                    return (
-                      <EcosystemViewPractice img={img} key={i} version={4}/>
-                    )
-                  })
-                 : null}
-                 {location.NegativePoints ?
-                  negImages.map((img, i) => {
-                    return (
-                      <EcosystemViewPractice img={img} key={i} version={0}/>
-                    )
-                  })
-                 : null}
-                 </View>
+                   {downgradeImageNumber > 0 ?
+                    downgradeImages.map((img, i) => {
+                      console.log(img)
+                      return (
+                        <EcosystemViewPractice img={img} key={i} version={4}/>
+                      )
+                    })
+                   : null}
+                   {location.NegativePoints ?
+                    negImages.map((img, i) => {
+                      return (
+                        <EcosystemViewPractice img={img} key={i} version={0}/>
+                      )
+                    })
+                   : null}
+                   </View>
                  </Image>
               </View>
             )})}
