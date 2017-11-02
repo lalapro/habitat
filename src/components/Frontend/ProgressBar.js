@@ -37,7 +37,7 @@ export default class ProgressBar extends Component {
   }
 
   eachPie(percentage) {
-    return <Progress.Pie style={{ alignItems: 'center', opacity: 0.3 }} progress={percentage} size={130} />
+    return <Progress.Pie style={{ alignItems: 'center', opacity: 0.3 }} progress={percentage} size={110} />
   }
 
   eachTask(task, index) {
@@ -46,9 +46,9 @@ export default class ProgressBar extends Component {
 
   render() {
     let catStyle = {
-      width: 130,
-      height: 130,
-      borderRadius: 130,
+      width: 110,
+      height: 110,
+      borderRadius: 110,
       borderColor: this.props.task.Color || 'black',
       borderWidth: 3,
       marginLeft: 15,
@@ -67,7 +67,7 @@ export default class ProgressBar extends Component {
       <TouchableHighlight style={catStyle}
         onPress={() => this.eachTask(this.props.task, this.state.locations[this.state.index].tasks[this.props.specificIndex])}>
         <View style={{ position: 'absolute' }}>
-          <Image source={clocks[clock][1]} >
+          <Image source={clocks[clock][1]} style={{width: 110, height: 110, resizeMode: 'contain'}}>
             {this.eachPie(this.state.fill)}
           </Image>
         </View>

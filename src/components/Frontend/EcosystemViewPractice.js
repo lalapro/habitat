@@ -67,7 +67,7 @@ export default class EcosystemViewPractice extends Component {
       this.state.version === 2 || this.state.version === 3 ? (
         <View>
           <Animated.View style={this.state.position.getLayout()}>
-            <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
+            <View style={{resizeMode: 'contain', width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
               <Image source={ecobuddies[this.props.img][this.state.version][1]} style={{width: "100%", height: "100%"}}/>
             </View>
           </Animated.View>
@@ -75,7 +75,7 @@ export default class EcosystemViewPractice extends Component {
       ) : this.state.version === 1 ? (
         <View>
           <Animated.View style={this.state.inProgress.getLayout()}>
-            <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
+            <View style={{resizeMode: 'contain', width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
               <Image source={ecobuddies[this.props.img][this.state.version][1]} style={{width: "100%", height: "100%"}}/>
             </View>
           </Animated.View>
@@ -83,7 +83,7 @@ export default class EcosystemViewPractice extends Component {
       ) : (
         <View>
           <Animated.View style={this.state.deadPosition.getLayout()}>
-            <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
+            <View style={{resizeMode: 'contain', width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
               <Image source={ecobuddies[this.props.img][this.state.version][1]} style={{width: "100%", height: "100%"}}/>
             </View>
           </Animated.View>

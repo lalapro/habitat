@@ -19,7 +19,7 @@ class LocationPicker extends Component {
 
   componentDidMount() {
 
-    axios.get('http://10.16.1.218:3000/markers', {params: {userID: this.props.userID}})
+    axios.get('https://naturalhabitat.herokuapp.com/markers', {params: {userID: this.props.userID}})
       .then((response) => {
         let markers = response.data;
         this.setState({markers});
