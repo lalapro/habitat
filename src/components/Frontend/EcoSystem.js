@@ -60,6 +60,7 @@ export default class EcoSystem extends Component {
   getMarkers() {
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
+        console.log(res.data, 'locations')
         this.setState({ locations: res.data })
       })
       .then(res => this.showCurrentLocation())
@@ -161,11 +162,7 @@ export default class EcoSystem extends Component {
   }
 
   markTaskComplete() {
-    let newLocation = this.state.locations
-    newLocation[this.state.index].tasks[this.state.currentTaskIndex].Completion = true;
-    this.setState({
-      locations: newLocation,
-    })
+    this.componentDidMount()
   }
 
   render() {
@@ -215,7 +212,7 @@ export default class EcoSystem extends Component {
             loop={false}
           >
             {this.state.locations.map((location, index) => {
-              // console.log(location, 'ecosystem')
+              console.log(this.state.locations, 'ecosystem')
               var upgradeImageNumber = Math.floor(location.PositivePoints/10);
               var positiveImageNumber = location.PositivePoints%10;
               var downgradeImageNumber = Math.floor(location.NegativePoints/4);
@@ -228,7 +225,7 @@ export default class EcoSystem extends Component {
               downgradeImages.fill(location.Ecosystem);
               negImages = new Array(negativeImageNumber);
               negImages.fill(location.Ecosystem);
-    
+
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -237,7 +234,7 @@ export default class EcoSystem extends Component {
                     source={images[location.Avatar][1]}
                     style={{width: 50, height: 50, resizeMode: 'contain'}}
                   />
-                  <Image 
+                  <Image
                     source={require('../assets/habit@/logo.png')}
                     style={{height: 50, width: 100, resizeMode: 'contain'}}
                   />
@@ -248,13 +245,18 @@ export default class EcoSystem extends Component {
                 <Text style={styles.cardDescription}>
                   {location.Marker_Description}
                 </Text>
-                <Image style={{height: '70%', width: '100%'}} source={{uri: 'https://www.nature.org/cs/groups/webcontent/@web/@westvirginia/documents/media/panther-knob-1500x879.jpg'}}>
+                <Image style={{height: '70%', width: '100%'}} source={backgrounds[location.Ecosystem][1]}>
                 <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
                   {location.tasks ? (
                     location.tasks.map((task, i) => {
-                      return (
-                        <EcosystemViewPractice img={task.Ecosystem} key={i} version={1}/>
-                    )})
+                      if (task.Completion === null) {
+                        return (
+                          <EcosystemViewPractice img={task.Ecosystem} key={i} version={1}/>
+                        )
+                      } else {
+                        return null
+                      }
+                    })
                   ) : null}
                   {upgradeImageNumber > 0 ?
                     upgradeImages.map((img, i) => {
@@ -264,31 +266,23 @@ export default class EcoSystem extends Component {
                    : null}
                 {location.PositivePoints ?
                   posImages.map((img, i) => (
-                      // <Image
-                      //   key={i}
-                      //   source={ecobuddies[img][2][1]}
-                      //   style={{width: 200, height: 200}}
-                      // />
-                      <EcosystemViewPractice img={img} key={i}/>
-                    ))
+                    <EcosystemViewPractice img={img} key={i} version={2}/>
+                  ))
                  : null}
                  {downgradeImageNumber > 0 ?
-                  downgradeImages.map((img, i) => (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][0][1]}
-                        style={{width: 100, height: 100}}
-                      />
-                    ))
+                  downgradeImages.map((img, i) => {
+                    console.log(img)
+                    return (
+                      <EcosystemViewPractice img={img} key={i} version={4}/>
+                    )
+                  })
                  : null}
                  {location.NegativePoints ?
-                  negImages.map((img, i) => (
-                      <Image
-                        key={i}
-                        source={ecobuddies[img][0][1]}
-                        style={{width: 50, height: 50}}
-                      />
-                    ))
+                  negImages.map((img, i) => {
+                    return (
+                      <EcosystemViewPractice img={img} key={i} version={0}/>
+                    )
+                  })
                  : null}
                  </View>
                  </Image>
@@ -372,6 +366,12 @@ const images = [
   [2, require("../assets/Ecosystem/gym.png")],
   [3, require("../assets/Ecosystem/currentlocation.png")]
 ];
+
+const backgrounds = [
+  [0, require("../assets/habit@/water-bg.png")],
+  [1, require("../assets/habit@/sky-bg.png")],
+  [2, require("../assets/habit@/leaf-bg.png")],
+]
 
 const { width, height } = Dimensions.get("window");
 

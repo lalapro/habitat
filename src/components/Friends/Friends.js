@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import{ StyleSheet, View, Image, Text, TouchableWithoutFeedback, Button, Picker, ScrollView, Alert, AsyncStorage } from 'react-native';
+import{ StyleSheet, View, Image, Text, TouchableWithoutFeedback, Button, Picker, ScrollView, Alert, AsyncStorage, Dimensions } from 'react-native';
 import { StackNavigator, NavigationActions } from 'react-navigation';
+import EcosystemViewPractice from '../Frontend/EcosystemViewPractice'
 import axios from 'axios';
+
+const { height, width } = Dimensions.get('window');
 
 export default class Friends extends Component {
 
@@ -47,6 +50,7 @@ export default class Friends extends Component {
 
     axios.get(`https://naturalhabitat.herokuapp.com/mapMarkers`, { params: { userID: friend.Friend}})
     .then(res => {
+      console.log(res.data, 'res data from mapmarkers')
       this.setState({
         selectedLocations: res.data || [],
       })
@@ -55,6 +59,16 @@ export default class Friends extends Component {
   }
 
   showEcosystem(location) {
+    this.setState({
+      selectedEco: location.Ecosystem,
+      selectedLocation: location.Marker_ID,
+      locationIsClicked: true,
+      upgradeImages: [],
+      posImages: [],
+      downgradeImages: [],
+      negImages: [],
+      normalImages: []
+    })
     let upgradeImageNumber = Math.floor(location.PositivePoints/10);
     let positiveImageNumber = location.PositivePoints%10;
     let downgradeImageNumber = Math.floor(location.NegativePoints/4);
@@ -101,36 +115,36 @@ export default class Friends extends Component {
 
   render() {
     return (
-      <View>
-        <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
+      <View style={{flex: 1}}>
+        <View style={{flex: 1.5}}>
           <Button
             onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
             title="&#9776;"
           />
+          <ScrollView horizontal={true} style={{borderBottomWidth: 1, borderColor: "black"}}>
+            {this.state.friends.map((friend, key) => {
+              return (
+                <View key={key} style={styles.friends}>
+                  <TouchableWithoutFeedback onPress={() => this.selectFriend(friend, key)}>
+                    <Image source={{uri: friend.Pic}} style={styles.photo}/>
+                  </TouchableWithoutFeedback>
+                  <Text style={styles.name}>
+                    {friend.Friend_Name.split(' ')[0]}
+                  </Text>
+                </View>
+              )
+            })}
+          </ScrollView>
         </View>
-        <ScrollView horizontal={true} style={{borderBottomWidth: 1, borderColor: "black"}}>
-          {this.state.friends.map((friend, key) => {
-            return (
-              <View key={key} style={styles.friends}>
-                <TouchableWithoutFeedback onPress={() => this.selectFriend(friend, key)}>
-                  <Image source={{uri: friend.Pic}} style={styles.photo}/>
-                </TouchableWithoutFeedback>
-                <Text style={styles.name}>
-                  {friend.Friend_Name.split(' ')[0]}
-                </Text>
-              </View>
-            )
-          })}
-        </ScrollView>
-        <View>
-          <Text>Current Amount of GiftPoints: {this.state.giftPoints}</Text>
+        <View style={{flex: 4}}>
+          {/* <Text>Current Amount of GiftPoints: {this.state.giftPoints}</Text> */}
           {this.state.loadingEcosystem ? (
             <View>
               <Image source={require('../assets/loading.gif')} style={{width: 200, height: 200}}/>
             </View>
           ) : (
-            <View>
-              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <View style={{flex: 1}}>
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ScrollView horizontal={true}>
                   {this.state.selectedLocations.map((location, i) => {
                     return i === 0 ? (
@@ -146,53 +160,32 @@ export default class Friends extends Component {
                   })}
                 </ScrollView>
               </View>
-              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                {this.state.normalImages.map((task, i) => {
-                  return (
-                    <Image
-                      key={i}
-                      source={ecobuddies[task.Ecosystem][1][1]}
-                      style={{width: 50, height: 50}}
-                    />
-                  )
-                })}
-                {this.state.upgradeImages.map((img, i) => {
-                  return (
-                    <Image
-                      key={i}
-                      source={ecobuddies[img][2][1]}
-                      style={{width: 100, height: 100}}
-                    />
-                  )
-                })}
-                {this.state.posImages.map((img, i) => {
-                  return (
-                    <Image
-                      key={i}
-                      source={ecobuddies[img][2][1]}
-                      style={{width: 100, height: 100}}
-                    />
-                  )
-                })}
-                {this.state.downgradeImages.map((img, i) => {
-                  return (
-                    <Image
-                      key={i}
-                      source={ecobuddies[img][0][1]}
-                      style={{width: 100, height: 100}}
-                    />
-                  )
-                })}
-                {this.state.negImages.map((img, i) => {
-                  return (
-                    <Image
-                      key={i}
-                      source={ecobuddies[img][0][1]}
-                      style={{width: 100, height: 100}}
-                    />
-                  )
-                })}
+              {this.state.locationIsClicked ? (
+                <View style={{flex: 7}}>
+                  <Image style={{height: '100%', width: '100%'}} source={backgrounds[this.state.selectedEco][1]}>
+                  <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
+                    {this.state.upgradeImages.map((img, i) => (
+                      <EcosystemViewPractice img={img} key={i} version={3}/>
+                    ))}
+                    {this.state.posImages.map((img, i) => (
+                      <EcosystemViewPractice img={img} key={i} version={2}/>
+                    ))}
+                    {this.state.downgradeImages.map((img, i) => (
+                      <EcosystemViewPractice img={img} key={i} version={4}/>
+                    ))}
+                    {this.state.negImages.map((img, i) => (
+                      <EcosystemViewPractice img={img} key={i} version={0}/>
+                    ))}
+                  </View>
+                </Image>
               </View>
+            ) : (
+              <View style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
+                <Text>
+                  Place holder for blank space.
+                </Text>
+              </View>
+            )}
               <View style={styles.giftbutton}>
                 {this.state.locationIsClicked ? <Button
                   title="Give Gift"
@@ -226,6 +219,12 @@ const ecobuddies = [
     [2, require("../assets/habit@/ladybug-md.png")],
     [2, require("../assets/habit@/ladybug-lg.png")]
   ]
+]
+
+const backgrounds = [
+  [0, require("../assets/habit@/water-bg.png")],
+  [1, require("../assets/habit@/sky-bg.png")],
+  [2, require("../assets/habit@/leaf-bg.png")],
 ]
 
 const styles = StyleSheet.create({

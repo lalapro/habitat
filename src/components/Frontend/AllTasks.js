@@ -89,18 +89,19 @@ export default class AllTasks extends Component {
 
   extraDescriptions() {
     console.log('in extra descriptions', this.props)
+    let eco = this.props.task.Ecosystem;
     if (!this.state.completion && this.state.hasStarted) {
-      var statusOption = 
+      var statusOption =
       <View>
         <Text>
           Task in Progress! Hold to edit!
         </Text>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <TouchableOpacity onPress={() => { this.markFailed(this.props.task) }}>
-            <Image source={sprites[0][1]} style={{ height: 35, width: 35 }} />
+            <Image source={ecobuddies[eco][0][1]} style={{ height: 35, width: 35 }} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => { this.markCompleted(this.props.task) }}>
-            <Image source={sprites[2][1]} style={{ height: 35, width: 35 }} />
+            <Image source={ecobuddies[eco][2][1]} style={{ height: 35, width: 35 }} />
           </TouchableOpacity>
         </View>
       </View>;
@@ -124,14 +125,15 @@ export default class AllTasks extends Component {
 
 
   render() {
-    console.log('in All tasks render, Avatar', this.props.goToEditTask)
+    console.log('in All tasks render, Avatar', this.props.task)
     let taskStatus = this.props.task.Completion;
+    let eco = this.props.task.Ecosystem;
     if (taskStatus === "True") {
-      taskStatus = <Image source={sprites[2][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][2][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
     } else if (taskStatus === "False") {
-      taskStatus = <Image source={sprites[0][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][0][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
     } else {
-      taskStatus = <Image source={sprites[1][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
+      taskStatus = <Image source={ecobuddies[eco][1][1]} style={{ height: 45, width: 45, alignItems: 'flex-end' }} />
     }
     return (
       <View>
@@ -159,11 +161,6 @@ export default class AllTasks extends Component {
   }
 }
 
-const sprites = [
-  [0, require("../assets/Ecosystem/tree0.png")],
-  [1, require("../assets/Ecosystem/tree1.png")],
-  [2, require("../assets/Ecosystem/tree2.png")]
-]
 
 const ecobuddies = [
   [
