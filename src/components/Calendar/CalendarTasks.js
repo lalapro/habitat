@@ -47,7 +47,7 @@ export default class CalendarTasks extends Component {
 				}
 			})
 			.catch(err => {
-				console.log(err, ' first')
+				console.error(err, ' first')
 			})
 	}
 
@@ -117,7 +117,6 @@ export default class CalendarTasks extends Component {
 				}
 			})
 				.then(result => {
-          console.log(result.data, 'CALENDARS?S?')
 					let temp = [];
 					result.data.items.map(ele => {
 						temp.push(ele.id)
@@ -126,7 +125,7 @@ export default class CalendarTasks extends Component {
 					getEachCalendar(temp)
 				})
 				.catch(err => {
-					console.log(err, 'it reached the end')
+					console.error(err, 'it reached the end')
 				})
 		}
 
@@ -136,7 +135,7 @@ export default class CalendarTasks extends Component {
 				return getCalendarID(userID);
 			})
 			.catch(err => {
-				console.log(err, 'err close to the end')
+				console.error(err, 'err close to the end')
 			})
 	}
 

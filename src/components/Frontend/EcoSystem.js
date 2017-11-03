@@ -60,7 +60,6 @@ export default class EcoSystem extends Component {
   getMarkers() {
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
-        console.log(res.data, 'locations')
         this.setState({ locations: res.data })
       })
       .then(res => this.showCurrentLocation())
@@ -214,7 +213,6 @@ export default class EcoSystem extends Component {
             loop={false}
           >
             {this.state.locations.map((location, index) => {
-              console.log(this.state.locations, 'ecosystem')
               var upgradeImageNumber = Math.floor(location.PositivePoints/10);
               var positiveImageNumber = location.PositivePoints%10;
               var downgradeImageNumber = Math.floor(location.NegativePoints/4);
@@ -268,7 +266,6 @@ export default class EcoSystem extends Component {
                    : null}
                    {downgradeImageNumber > 0 ?
                     downgradeImages.map((img, i) => {
-                      console.log(img)
                       return (
                         <EcosystemViewPractice img={img} key={i} version={4}/>
                       )
@@ -310,7 +307,6 @@ export default class EcoSystem extends Component {
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, i) => {
-                console.log(task)
                 return <ProgressBar clock={task.Completion} key={i} task={task} locations={this.state.locations}
                   index={this.state.index} showTask={this.showTask} specificIndex={i}
                   showTask={() => this.showTask(task, this.state.locations[this.state.index].tasks[i], i)}/>
