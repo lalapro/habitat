@@ -302,6 +302,20 @@ export default class Profile extends Component {
                     height={180}
                     data={this.state.categoryPercentage} />
                   ) : (
+                    <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
+                      <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{width: 75, height: 75, resizeMode: 'contain'}}/>
+                      <ScrollView style={{ marginTop: 15}}>
+                        {this.state.selectedLocation[1].map((task, i) => {
+                          return (
+                            <AllTasks 
+                              task={task} key={i} 
+                              reRender={this.reRender.bind(this)} 
+                              goToEditTask={this.goToEditTask.bind(this)}
+                            />
+                          )
+                        })}
+                      </ScrollView>
+                    </View>
                       <View style={{ flex: 1 }}>
                         <View style={styles.today}> 
                           <TouchableOpacity onPress={() => {this.showToday()}}>
@@ -441,7 +455,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     zIndex: 3,
     width: 100,
-    height: 100
+    height: 100,
+    resizeMode: 'contain'
   },
   middle: {
     flex: 6,

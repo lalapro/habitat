@@ -363,7 +363,8 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: 30,
-    height: 30
+    height: 30,
+    resizeMode: 'contain'
   },
   cardtitle: {
     fontSize: 12,
@@ -376,7 +377,8 @@ const styles = StyleSheet.create({
   },
   marker: {
     maxWidth: 60,
-    maxHeight: 60
+    maxHeight: 60,
+    resizeMode: 'contain'
   },
   recenter: {
     flex: 1,

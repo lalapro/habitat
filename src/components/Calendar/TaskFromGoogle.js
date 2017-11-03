@@ -64,7 +64,7 @@ export default class TaskFromGoogle extends Component {
                   return <Picker.Item label={marker.Marker_Title} value={i} key={i} />
                 }) : null}
                 </Picker>
-                <Image source={images[this.state.selectedMarker][1]} style={{ height: 35, width: 35 }} />  
+                <Image source={images[this.state.selectedMarker][1]} style={{ height: 35, width: 35, resizeMode: 'contain'}} />  
 
                 <Picker onValueChange={(category) => this.pickCategory(category)} selectedValue={this.state.selectedCategory}
                   style={{ width: 100, height: 50 }} itemStyle={{ height: 50 }}>

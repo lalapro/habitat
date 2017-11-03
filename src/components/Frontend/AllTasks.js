@@ -137,7 +137,7 @@ export default class AllTasks extends Component {
       <View style={{borderColor:'black'}}>
         <TouchableOpacity onPress={() => this.showEdit(this.props.task)}>
           <View style={{ display: 'flex', flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={location[this.props.task.Avatar ? this.props.task.Avatar : this.props.marker.Avatar][1]} style={{ height: 50, width: 50, flex: 1 }} />
+            <Image source={location[this.props.task.Avatar ? this.props.task.Avatar : this.props.marker.Avatar][1]} style={{ height: 50, width: 50, flex: 1, resizeMode: 'contain' }} />
             <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}>
               <Text style={styles.title}>
                 {this.props.task.Task_Title}
@@ -203,6 +203,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     height: 45,
     width: 45,
-    alignItems: 'flex-end' 
+    alignItems: 'flex-end',
+    resizeMode: 'contain'
   }
 })
