@@ -203,6 +203,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     height: 45,
     width: 45,
-    alignItems: 'flex-end' 
+    alignItems: 'flex-end',
+    resizeMode: 'contain'
   }
 })
