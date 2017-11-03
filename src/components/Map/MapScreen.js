@@ -6,14 +6,11 @@ import axios from 'axios';
 import Location from './AddLocation.js';
 import GetCurrentLocation from './GetCurrentLocation';
 import TaskModal from '../TaskView/TaskModal.js';
-
 const { width, height } = Dimensions.get("window");
-
 export default class MapScreen extends Component {
   static navigationOptions = {
     title: 'Map',
   };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -42,10 +39,10 @@ export default class MapScreen extends Component {
     this.onRegionChange = this.onRegionChange.bind(this);
     this.startWalking = this.startWalking.bind(this)
   }
-
   getMarkers() {
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', {params: {userID: this.state.userID}})
      .then(markers => {
+       console.log(markers.data, 'after getting markers')
        this.setState({markers: markers.data})
      })
      .then(res => {
@@ -61,7 +58,6 @@ export default class MapScreen extends Component {
      .then(res => setTimeout(() => {this.animateMap()}, 1550))
      .catch(err => console.error('error getting markers',err))
   }
-
   getFriends() {
     axios.get(`https://naturalhabitat.herokuapp.com/friendLocations`, { params: { user: this.state.userID }})
     .then(friends => {
@@ -69,29 +65,25 @@ export default class MapScreen extends Component {
     })
     .catch(err => console.error(error))
   }
-
   componentDidMount() {
+    console.log(this.props.screenProps.userID, 'on load maps')
     this.setState({
       userID: this.props.screenProps.userID
     }, () => this.getMarkers())
   }
-
   startRender = () => {
     this.setState({
       render: true
     })
   }
-
   goToEditTask(task) {
     this.props.navigation.navigate('TaskBuilder', { specificTask: task });
   }
-
   animateMap() {
     this.state.markerIDs.length > 0 ?
     this.map.fitToSuppliedMarkers(this.state.markerIDs, true) :
     this.animateToRegion()
   }
-
   animateToRegion() {
     this.map.animateToRegion(
       {
@@ -101,7 +93,6 @@ export default class MapScreen extends Component {
       }
     )
   }
-
   updateCurrentLocation() {
     GetCurrentLocation(this.state.userID)
     .then(location => {
@@ -125,7 +116,6 @@ export default class MapScreen extends Component {
       console.error('error in updateCurrentLocation', err);
     })
   }
-
   openModal(marker) {
     if(marker.tasks) {
       this.setState({
@@ -135,13 +125,11 @@ export default class MapScreen extends Component {
       })
     }
   }
-
   closeModal() {
     this.setState({
       modalVisible: false
     })
   }
-
   zoom(marker) {
     this.map.animateToRegion(
       {
@@ -153,9 +141,7 @@ export default class MapScreen extends Component {
     this.setState({
       specifiedLocation: marker
     })
-
   }
-
   alertAtLocation() {
     var locations = this.state.markers.map((curr, idx, arr) => {
       return {
@@ -183,7 +169,6 @@ export default class MapScreen extends Component {
       }
     })
   }
-
   fakeWalk(region) {
     if (!region) {
       console.log('show icon')
@@ -193,14 +178,11 @@ export default class MapScreen extends Component {
       this.setState({ walkTo: region}, () => setTimeout(this.startWalking, 300))
     }
   }
-
   startWalking() {
     let x = this.state.walkTo.latitude - this.state.currentLocation.coordinate.latitude;
     let y = this.state.walkTo.longitude - this.state.currentLocation.coordinate.longitude;
-
     let dx = x/20;
     let dy = y/20;
-
     let convolutedMagic = () => {
       let x = this.state.walkTo.latitude - this.state.currentLocation.coordinate.latitude;
       let y = this.state.walkTo.longitude - this.state.currentLocation.coordinate.longitude;
@@ -217,14 +199,11 @@ export default class MapScreen extends Component {
         }
       }, () => setTimeout(convolutedMagic, 300))
     }
-
     convolutedMagic()
   }
-
   onRegionChange(region) {
     this.setState({region})
   }
-
   render() {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
@@ -316,13 +295,13 @@ export default class MapScreen extends Component {
           <Image source={require("../assets/walking.png")} style={{width: 50, height: 50, resizeMode: 'contain'}}/>
         </TouchableOpacity>
         {this.state.modalVisible ? (
-          <TaskModal 
+          <TaskModal
             style={{flex: 2}}
-            userID={this.state.userID} 
-            goToEditTask={this.goToEditTask} 
-            tasks={this.state.currentPress} 
-            marker={this.state.currentMarker} 
-            modalVisible={this.state.modalVisible} 
+            userID={this.state.userID}
+            goToEditTask={this.goToEditTask}
+            tasks={this.state.currentPress}
+            marker={this.state.currentMarker}
+            modalVisible={this.state.modalVisible}
             closeModal={this.closeModal.bind(this)}
           />) : null }
       </View>
@@ -333,17 +312,14 @@ export default class MapScreen extends Component {
     )
   }
 }
-
 const images = [
   [0, require("../assets/Ecosystem/home.png")],
   [1, require("../assets/Ecosystem/work.png")],
   [2, require("../assets/Ecosystem/gym.png")],
   [3, require("../assets/habit@/location.png")]
 ]
-
 const CARD_HEIGHT = height / 5;
 const CARD_WIDTH = CARD_HEIGHT - 50;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

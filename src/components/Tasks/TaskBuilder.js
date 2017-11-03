@@ -170,35 +170,39 @@ class TaskBuilder extends Component {
 
   render() {
     return this.state.userID ? (
-      <View style={styles.container}>
-        <View style={{margin: 10, alignSelf: 'flex-start'}}>
+      <View>
+        <Image source={require(`../assets/habit@/water-bg.png`)} style={{opacity: 0.8}}>
+        <View>
           <Button
             onPress={() => this.jankyNav()}
             title="&#9776;"
           />
         </View>
-        <ScrollView
-          automaticallyAdjustContentInsets={false}
-          scrollEventThrottle={200}
-          style={styles.scrollView}
-        >
-          <TaskForm style={styles.formContainer}
-            handleTaskTitleChange={this.handleTaskTitleChange}
-            handleDescriptionChange={this.handleDescriptionChange}
-            handleStartChange={this.handleStartChange}
-            handleEndChange={this.handleEndChange}
-            handleLocationChange={this.handleLocationChange.bind(this)}
-            handleCategoryChange={this.handleCategoryChange}
-            handleFrequencyChange={this.handleFrequencyChange}
-            handleMultipleTasks={this.handleMultipleTasks}
-            reRender={this.reRender.bind(this)}
-            saveTask={this.saveTask}
-            cancel={this.cancelTask}
-            task={this.state.editTask}
-            userID={this.state.userID}
-            frequency={this.state.frequency}
-          />
-        </ScrollView>
+        <View style={styles.container}>
+          <ScrollView
+            automaticallyAdjustContentInsets={false}
+            scrollEventThrottle={200}
+            style={styles.scrollView}
+            >
+              <TaskForm style={styles.formContainer}
+                handleTaskTitleChange={this.handleTaskTitleChange}
+                handleDescriptionChange={this.handleDescriptionChange}
+                handleStartChange={this.handleStartChange}
+                handleEndChange={this.handleEndChange}
+                handleLocationChange={this.handleLocationChange.bind(this)}
+                handleCategoryChange={this.handleCategoryChange}
+                handleFrequencyChange={this.handleFrequencyChange}
+                handleMultipleTasks={this.handleMultipleTasks}
+                reRender={this.reRender.bind(this)}
+                saveTask={this.saveTask}
+                cancel={this.cancelTask}
+                task={this.state.editTask}
+                userID={this.state.userID}
+                frequency={this.state.frequency}
+              />
+            </ScrollView>
+        </View>
+        </Image>
       </View>
     ) : null
   }
@@ -207,10 +211,10 @@ class TaskBuilder extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     alignItems: 'center',
-    justifyContent: 'center',
     top: 10,
+    left: -50,
     bottom: 50,
 
   },

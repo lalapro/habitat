@@ -24,7 +24,8 @@ export default class Friends extends Component {
       posImages: [],
       downgradeImages: [],
       negImages: [],
-      normalImages: []
+      normalImages: [],
+      selectedEco: 0
     }
     this.giveGift = this.giveGift.bind(this);
   }
@@ -115,7 +116,7 @@ export default class Friends extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <Image style={{flex: 1}}  source={backgrounds[this.state.selectedEco][1]}>
         <View style={{flex: 1.5}}>
           <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
             <Button
@@ -140,64 +141,62 @@ export default class Friends extends Component {
         </View>
         <View style={{flex: 4}}>
           {/* <Text>Current Amount of GiftPoints: {this.state.giftPoints}</Text> */}
-          {this.state.loadingEcosystem ? (
-            <View>
-              <Image source={require('../assets/loading.gif')} style={{width: 200, height: 200}}/>
-            </View>
-          ) : (
-            <View style={{flex: 1}}>
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <ScrollView horizontal={true}>
-                  {this.state.selectedLocations.map((location, i) => {
-                    return i === 0 ? (
-                      <Text style={{margin: 10}} key={i} onPress={() => this.showEcosystem(location)}>
-                        {location.Marker_Title}
-                      </Text>
-                    ) :
-                    (
-                      <Text style={{margin: 10}} key={i} onPress={() => this.showEcosystem(location)}>
-                        {location.Marker_Title}
-                      </Text>
-                    )
-                  })}
-                </ScrollView>
-              </View>
-              {this.state.locationIsClicked ? (
-                <View style={{flex: 7}}>
-                  <Image style={{height: '100%', width: '100%'}} source={backgrounds[this.state.selectedEco][1]}>
-                  <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
-                    {this.state.upgradeImages.map((img, i) => (
-                      <EcosystemViewPractice img={img} key={i} version={3}/>
-                    ))}
-                    {this.state.posImages.map((img, i) => (
-                      <EcosystemViewPractice img={img} key={i} version={2}/>
-                    ))}
-                    {this.state.downgradeImages.map((img, i) => (
-                      <EcosystemViewPractice img={img} key={i} version={4}/>
-                    ))}
-                    {this.state.negImages.map((img, i) => (
-                      <EcosystemViewPractice img={img} key={i} version={0}/>
-                    ))}
-                  </View>
-                </Image>
+            {this.state.loadingEcosystem ? (
+              <View>
+                <Image source={require('../assets/loading.gif')} style={{width: 200, height: 200}}/>
               </View>
             ) : (
-              <View style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
-                <Text>
-                  Place holder for blank space.
-                </Text>
+              <View style={{flex: 1}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                  <ScrollView horizontal={true}>
+                    {this.state.selectedLocations.map((location, i) => {
+                      return i === 0 ? (
+                        <Text style={{margin: 10}} key={i} onPress={() => this.showEcosystem(location)}>
+                          {location.Marker_Title}
+                        </Text>
+                      ) :
+                      (
+                        <Text style={{margin: 10}} key={i} onPress={() => this.showEcosystem(location)}>
+                          {location.Marker_Title}
+                        </Text>
+                      )
+                    })}
+                  </ScrollView>
+                </View>
+                {this.state.locationIsClicked ? (
+                  <View style={{flex: 7}}>
+                    <View style={{flex: 1, flexDirection:'row', flexWrap: 'wrap'}} >
+                      {this.state.upgradeImages.map((img, i) => (
+                        <EcosystemViewPractice img={img} key={i} version={3}/>
+                      ))}
+                      {this.state.posImages.map((img, i) => (
+                        <EcosystemViewPractice img={img} key={i} version={2}/>
+                      ))}
+                      {this.state.downgradeImages.map((img, i) => (
+                        <EcosystemViewPractice img={img} key={i} version={4}/>
+                      ))}
+                      {this.state.negImages.map((img, i) => (
+                        <EcosystemViewPractice img={img} key={i} version={0}/>
+                      ))}
+                    </View>
+                  </View>
+                ) : (
+                  <View style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text>
+                      Place holder for blank space.
+                    </Text>
+                  </View>
+                )}
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                  {this.state.locationIsClicked ? <Button
+                    title="Give Gift"
+                    onPress={this.giveGift}
+                  /> : null}
+                </View>
               </View>
             )}
-              <View style={styles.giftbutton}>
-                {this.state.locationIsClicked ? <Button
-                  title="Give Gift"
-                  onPress={this.giveGift}
-                  /> : null}
-              </View>
-            </View>
-          )}
         </View>
-      </View>
+      </Image>
     )
   }
 }
