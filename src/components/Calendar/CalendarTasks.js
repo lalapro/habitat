@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Button, TouchableOpacity, Picker } from 'react-native';
+import { View, Text, Image, Button, TouchableOpacity, TouchableHighlight, ScrollView } from 'react-native';
 import { AuthSession } from 'expo';
 import moment from 'moment';
 import axios from 'axios';
@@ -24,14 +24,14 @@ export default class CalendarTasks extends Component {
 
 	componentDidMount() {
 		let { userID, markers, categories } = this.props;
-		this.setState({ userID, markers, categories })
+		this.setState({ userID, markers, categories });
 		this.getToken();
 	}
 
 	getToken = async () => {
-		console.log('calling google',config.redirect_url, config.client_id)
-
-		let redirect = `https://auth.expo.io/@lalapro/habitation`
+		let Direct = await AuthSession.getRedirectUrl();
+		let redirect = await 'https://auth.expo.io/@anonymous/habitation-9cfba2e3-e7af-4814-ba00-d44c0e525856'
+		// let redirect = `https://auth.expo.io/@lalapro/habitation`
 		await AuthSession.startAsync({
 			authUrl:
 			`https://accounts.google.com/o/oauth2/v2/auth` +
@@ -44,7 +44,7 @@ export default class CalendarTasks extends Component {
 				if (result.type !== 'success') {
 					this.props.goBack();
 				} else {
-          let token = result.params.access_token;
+					let token = result.params.access_token;
 					this.axiosCall(token);
 				}
 			})
@@ -56,7 +56,7 @@ export default class CalendarTasks extends Component {
 	axiosCall = async (token) => {
     let userID;
     let today = moment().format();
-    let timeZone = today.slice(-6);Ó
+    let timeZone = today.slice(-6);
 		let filtered = [];
     let beginningOfDay = `${JSON.stringify(today).slice(1, 12)}00:00:00${timeZone}`;
 		let endOfDay = `${JSON.stringify(today).slice(1, 12)}23:59:59${timeZone}`;
@@ -119,7 +119,6 @@ export default class CalendarTasks extends Component {
 				}
 			})
 				.then(result => {
-          console.log(result.data, 'CALENDARS?S?')
 					let temp = [];
 					result.data.items.map(ele => {
 						temp.push(ele.id)
@@ -147,7 +146,7 @@ export default class CalendarTasks extends Component {
 	}
 
 	saveAllTasks(task, index) {
-		axios.post('https://naturalhabitat.herokuapp.com/calendar', { tasks: this.state.tasksFromGoogle })
+		axios.post('http://10.16.1.233:3000/calendar', { tasks: this.state.tasksFromGoogle })
 		.then(response => {
       this.props.goBack()
     })
@@ -158,18 +157,26 @@ export default class CalendarTasks extends Component {
     this.setState({
       tasksFromGoogle: this.state.tasksFromGoogle
     })
-  }
+	}
+	
+	goBack() {
+		this.props.goBack();
+	}
 
 	render() {
 		return (
 			<View style={{ flex: 1, width: '100%', marginTop: 50 }}>
-				<View style={{ flex: 9 }}>
-				{this.state.tasksFromGoogle ? this.state.tasksFromGoogle.map((task, i) => {
-					return <TaskFromGoogle notImport={this.notImport} userID={this.state.userID} eachIndex={i} key={i} task={task} markers={this.state.markers} categories={this.state.categories} />
-				}) : null}
-				</View>
-				<View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 30 }}>
-					<Button onPress={() => this.saveAllTasks()} title="Save" />
+				<Text style={{ fontWeight: 'bold', fontSize: 20, textAlign: 'center', textAlignVertical: 'center', marginBottom: 10 }}>Today's tasks from Google Calendar</Text>
+				<View style={{ flex: 1, backgroundColor: 'red' }}>
+					<ScrollView style={{ flex: 9, backgroundColor: 'blue' }}>
+						{this.state.tasksFromGoogle ? this.state.tasksFromGoogle.map((task, i) => {
+							return <TaskFromGoogle notImport={this.notImport} userID={this.state.userID} eachIndex={i} key={i} task={task} markers={this.props.markers} categories={this.state.categories} />
+						}) : null}
+					</ScrollView>
+					<View style={{ flexDirection: 'row', flex: 0.3, backgroundColor: 'purple', justifyContent: 'space-around'}}>
+						<TouchableHighlight onPress={() => this.saveAllTasks()}><Text style={{ fontSize: 30 }}>&#x2714;</Text></TouchableHighlight>
+						<TouchableHighlight onPress={() => this.goBack()}><Text style={{ fontSize: 30 }}>&#x274c;</Text></TouchableHighlight>
+					</View>
 				</View>
 			</View>
 		)

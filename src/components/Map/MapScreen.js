@@ -44,7 +44,7 @@ export default class MapScreen extends Component {
   }
 
   getMarkers() {
-    axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', {params: {userID: this.state.userID}})
+    axios.get('http://10.16.1.233:3000/mapMarkers', {params: {userID: this.state.userID}})
      .then(markers => {
        this.setState({markers: markers.data})
      })
@@ -63,7 +63,7 @@ export default class MapScreen extends Component {
   }
 
   getFriends() {
-    axios.get(`https://naturalhabitat.herokuapp.com/friendLocations`, { params: { user: this.state.userID }})
+    axios.get(`http://10.16.1.233:3000/friendLocations`, { params: { user: this.state.userID }})
     .then(friends => {
       this.setState({ friends: friends.data || [] })
     })
