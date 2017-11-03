@@ -30,10 +30,10 @@ export default class MapScreen extends Component {
       currentPress: [],
       specifiedLocation: undefined,
       friends: [],
-      fakeWalk: false,
       walkTo: null,
       count: 0,
       currentMarker: null
+      // fakeWalk: false,
     };
     this.goToEditTask = this.goToEditTask.bind(this);
     this.onRegionChange = this.onRegionChange.bind(this);
@@ -169,15 +169,15 @@ export default class MapScreen extends Component {
       }
     })
   }
-  fakeWalk(region) {
-    if (!region) {
-      console.log('show icon')
-      this.setState({fakeWalk: !this.state.fakeWalk})
-    } else {
-      console.log('is walking?')
-      this.setState({ walkTo: region}, () => setTimeout(this.startWalking, 300))
-    }
-  }
+  // fakeWalk(region) {
+  //   if (!region) {
+  //     console.log('show icon')
+  //     this.setState({fakeWalk: !this.state.fakeWalk})
+  //   } else {
+  //     console.log('is walking?')
+  //     this.setState({ walkTo: region}, () => setTimeout(this.startWalking, 300))
+  //   }
+  // }
   startWalking() {
     let x = this.state.walkTo.latitude - this.state.currentLocation.coordinate.latitude;
     let y = this.state.walkTo.longitude - this.state.currentLocation.coordinate.longitude;
@@ -262,11 +262,11 @@ export default class MapScreen extends Component {
               center={{latitude: this.state.specifiedLocation.Latitude, longitude: this.state.specifiedLocation.Longitude}}
             />
           ) : null}
-          {this.state.fakeWalk ? (
+          {/* {this.state.fakeWalk ? (
             <MapView.Marker coordinate={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}} title="walk here" onPress={() => this.fakeWalk(this.state.region)}>
               <Image source={require("../assets/pin.png")} style={{width: 50, height: 50}} />
             </MapView.Marker>
-          ) : null}
+          ) : null} */}
         </MapView>
         <Animated.ScrollView
           vertical
@@ -291,9 +291,9 @@ export default class MapScreen extends Component {
         <TouchableOpacity style={styles.recenter} onPress={() => this.updateCurrentLocation()}>
           <Image source={require("../assets/habit@/location.png")} style={{width: 50, height: 50, resizeMode: 'contain'}} />
         </TouchableOpacity>
-        <TouchableOpacity style={{position: "absolute", bottom: 60, left: 30}} onPress={() => this.fakeWalk()}>
+        {/* <TouchableOpacity style={{position: "absolute", bottom: 60, left: 30}} onPress={() => this.fakeWalk()}>
           <Image source={require("../assets/walking.png")} style={{width: 50, height: 50, resizeMode: 'contain'}}/>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {this.state.modalVisible ? (
           <TaskModal
             style={{flex: 2}}
