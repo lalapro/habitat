@@ -71,8 +71,8 @@ export default class ProgressBar extends Component {
       <TouchableHighlight style={catStyle}
         onPress={() => this.eachTask(this.props.task, this.state.locations[this.state.index].tasks[this.props.specificIndex])}>
         <View style={{ position: 'absolute' }}>
-          <Image source={clocks[clock][1]} style={{width: 110, height: 110, resizeMode: 'contain'}}>
-            {this.eachPie(this.state.fill)}
+          <Image source={clocks[clock][1]} style={{width: 110, height: 110, resizeMode: 'contain', zIndex: 99}}>
+            {this.props.clock === true ? this.eachPie(this.state.fill) : null}
           </Image>
         </View>
       </TouchableHighlight>
