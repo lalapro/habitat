@@ -34,7 +34,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.checkAsyncStorage().then(token => {
-      axios.get(`http://10.16.1.233:3000/token`, {
+      axios.get(`https://naturalhabitat.herokuapp.com/token`, {
         params: {
           token: token
         }

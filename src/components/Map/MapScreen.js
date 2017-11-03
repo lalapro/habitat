@@ -40,7 +40,7 @@ export default class MapScreen extends Component {
     this.startWalking = this.startWalking.bind(this)
   }
   getMarkers() {
-    axios.get('http://10.16.1.233:3000/mapMarkers', {params: {userID: this.state.userID}})
+    axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', {params: {userID: this.state.userID}})
      .then(markers => {
        console.log(markers.data, 'after getting markers')
        this.setState({markers: markers.data})
@@ -59,7 +59,7 @@ export default class MapScreen extends Component {
      .catch(err => console.error('error getting markers',err))
   }
   getFriends() {
-    axios.get(`http://10.16.1.233:3000/friendLocations`, { params: { user: this.state.userID }})
+    axios.get(`https://naturalhabitat.herokuapp.com/friendLocations`, { params: { user: this.state.userID }})
     .then(friends => {
       this.setState({ friends: friends.data || [] })
     })

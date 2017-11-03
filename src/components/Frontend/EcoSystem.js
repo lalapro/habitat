@@ -58,7 +58,7 @@ export default class EcoSystem extends Component {
   }
 
   getMarkers() {
-    axios.get('http://10.16.1.233:3000/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
+    axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
       .then(res => {
         this.setState({ locations: res.data })
       })
@@ -106,7 +106,7 @@ export default class EcoSystem extends Component {
   }
 
   deleteTask() {
-    axios.delete('http://10.16.1.233:3000/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
+    axios.delete('https://naturalhabitat.herokuapp.com/deleteTask', {params: {userID: this.state.userID, taskTitle: this.state.currentTask}})
     .then(res => this.getMarkers())
     .catch(err => console.error(err))
   }
@@ -123,7 +123,7 @@ export default class EcoSystem extends Component {
       return;
     }
 
-    axios.put('http://10.16.1.233:3000/yayTask', {
+    axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
       positivePoints: positivePoints
