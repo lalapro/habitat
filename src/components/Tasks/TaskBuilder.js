@@ -172,7 +172,7 @@ class TaskBuilder extends Component {
     return this.state.userID ? (
       <View>
         <Image source={require(`../assets/habit@/water-bg.png`)} style={{opacity: 0.8}}>
-        <View>
+        <View style={{margin: -10, marginLeft: 5, marginTop: 20, alignItems: 'flex-start'}}>
           <Button
             onPress={() => this.jankyNav()}
             title="&#9776;"

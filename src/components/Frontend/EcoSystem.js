@@ -35,8 +35,7 @@ export default class EcoSystem extends Component {
       toggleShow: false,
       positivePoints: 0,
       negativePoints: 0,
-      nullPoints: 0,
-      completedSun: false
+      nullPoints: 0
     }
     this.showTask = this.showTask.bind(this);
   }

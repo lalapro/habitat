@@ -272,7 +272,7 @@ export default class Timer extends Component {
             </View>
             <View style={{marginTop: 100}}>
               <Text>
-                COUNTDOWN: Award In T-MINUS {this.state.timeRemaining} Seconds
+                T-MINUS : {this.state.timeRemaining} Seconds
               </Text>
             </View>
           </View>
