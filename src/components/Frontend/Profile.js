@@ -441,7 +441,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     zIndex: 3,
     width: 100,
-    height: 100
+    height: 100,
+    resizeMode: 'contain'
   },
   middle: {
     flex: 6,

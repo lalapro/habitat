@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
   },
   ecobuds: {
     width: 100,
-    height: 100
+    height: 100,
+    resizeMode: 'contain'
   },
   cardtitle: {
     fontSize: 20,

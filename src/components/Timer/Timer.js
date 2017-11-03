@@ -227,7 +227,7 @@ export default class Timer extends Component {
             <View>
               <TouchableOpacity
                 onPress={this.startTimer}>
-                <Image source={require("../assets/habit@/timer.png")} style={{height: 130, width: 130, marginTop: 20}}>
+                <Image source={require("../assets/habit@/timer.png")} style={{height: 130, width: 130, marginTop: 20, resizeMode: 'contain'}}>
                   {this.eachPie(this.state.fill)}
                 </Image>
               </TouchableOpacity>
