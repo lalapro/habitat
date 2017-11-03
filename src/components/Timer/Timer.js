@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   picker: {
-    width: '33.333%',
+    width: '100%',
     height: 'auto',
     // backgroundColor: '#FFF0E0',
     // borderColor: 'red',
@@ -348,7 +348,8 @@ const styles = StyleSheet.create({
 
   pickerItem: {
     height: 100,
-    color: 'red'
+    color: 'red', 
+    width: '100%'
   },
 
   arrowWrapper: {
