@@ -35,7 +35,8 @@ export default class EcoSystem extends Component {
       toggleShow: false,
       positivePoints: 0,
       negativePoints: 0,
-      nullPoints: 0
+      nullPoints: 0,
+      completedSun: false
     }
     this.showTask = this.showTask.bind(this);
   }
@@ -123,8 +124,8 @@ export default class EcoSystem extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-    let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
-    
+         let positivePoints = this.state.locations[this.state.index].PositivePoints + 1;
+ 
     axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
@@ -148,7 +149,7 @@ export default class EcoSystem extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-    let negativePoints = this.state.locations[this.state.index].NegativePoints + 1;
+
     axios.put('https://naturalhabitat.herokuapp.com/nayTask', {
       taskId: this.state.currentTaskId,
       markerId: this.state.locations[this.state.index].Marker_ID,
@@ -163,7 +164,8 @@ export default class EcoSystem extends Component {
   }
 
   markTaskComplete() {
-    this.componentDidMount()
+    this.setState({completedSun: true});
+    this.componentDidMount();
   }
 
   render() {
@@ -316,7 +318,8 @@ export default class EcoSystem extends Component {
           <ScrollView horizontal={true}>
             {this.state.locations[this.state.index].tasks ? (
               this.state.locations[this.state.index].tasks.map((task, i) => {
-                return <ProgressBar key={i} task={task} locations={this.state.locations}
+                console.log(task)
+                return <ProgressBar clock={task.Completion} key={i} task={task} locations={this.state.locations}
                   index={this.state.index} showTask={this.showTask} specificIndex={i}
                   showTask={() => this.showTask(task, this.state.locations[this.state.index].tasks[i], i)}/>
               })

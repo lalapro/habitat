@@ -10,7 +10,8 @@ export default class ProgressBar extends Component {
     this.state = {
       index: this.props.index,
       locations: this.props.locations,
-      fill: 0
+      fill: 0,
+      sun: false
     }
     this.eachTask = this.eachTask.bind(this);
     this.calculateTime = this.calculateTime.bind(this);
@@ -18,7 +19,7 @@ export default class ProgressBar extends Component {
   }
 
   componentDidMount() {
-    this.calculateTime()
+    this.calculateTime();
   }
   componentWillReceiveProps(oldprops, newprops) {
     this.calculateTime(oldprops)
@@ -55,11 +56,14 @@ export default class ProgressBar extends Component {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 25
+      marginTop: 25,
+      zIndex: 2
     }
     let clock = this.props.task.Start.split(' ')[3].split(':')[0];
-    
-    if (clock.split('')[0] === '0' && clock.split('')[1] !== '0') {
+    if (this.props.clock === 'True') {
+      clock = 13;
+    }
+    if (clock !== 13 && clock.split('')[0] === '0' && clock.split('')[1] !== '0') {
       clock = clock.split('')[1]
     }
   
@@ -89,7 +93,8 @@ const clocks = [
   [9, require("../assets/clocks/nine.png")],
   [10, require("../assets/clocks/ten.png")],
   [11, require("../assets/clocks/eleven.png")],
-  [12, require("../assets/clocks/twelve.png")]
+  [12, require("../assets/clocks/twelve.png")],
+  [13, require("../assets/habit@/sun.png")]
 ]
 
 const styels = StyleSheet.create({

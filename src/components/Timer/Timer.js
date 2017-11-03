@@ -203,7 +203,7 @@ export default class Timer extends Component {
                     lgImageArray.map((lgImage, i) => (
                       <Image
                       key={i}
-                      style={{height: 60, width: 60}}
+                      style={{height: 60, width: 60, resizeMode: 'contain'}}
                       source={ecobuddies[this.state.currentImageIndex].images[2][1]} 
                       /> 
                     ))
@@ -213,7 +213,7 @@ export default class Timer extends Component {
                     mdImageArray.map((mdImage, i) => (
                       <Image
                       key={i}
-                      style={{height: 50, width: 50}}
+                      style={{height: 50, width: 50, resizeMode: 'contain'}}
                       source={ecobuddies[this.state.currentImageIndex].images[1][1]} 
                       /> 
                     ))
@@ -223,7 +223,7 @@ export default class Timer extends Component {
                     grayImageArray.map((grayImage, i) => (
                       <Image
                       key={i}
-                      style={{height: 50, width: 50}}
+                      style={{height: 50, width: 50, resizeMode: 'contain'}}
                       source={ecobuddies[this.state.currentImageIndex].images[3][1]} 
                       /> 
                     ))
@@ -235,7 +235,7 @@ export default class Timer extends Component {
             <View>
               <TouchableOpacity
                 onPress={this.startTimer}>
-                <Image source={require("../assets/habit@/timer.png")} style={{height: 130, width: 130, marginTop: 20}}>
+                <Image source={require("../assets/habit@/timer.png")} style={{height: 130, width: 130, marginTop: 20, resizeMode: 'contain'}}>
                   {this.eachPie(this.state.fill)}
                 </Image>
               </TouchableOpacity> 
