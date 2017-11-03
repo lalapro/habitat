@@ -233,38 +233,44 @@ export default class Timer extends Component {
               </TouchableOpacity>
             </View>
             <View style={styles.pickerContainer}>
-              <Picker
-                style={[styles.picker]} itemStyle={styles.pickerItem}
-                selectedValue={this.state.hour}
-                onValueChange={(itemValue) => this.setState({hour: itemValue})}
-              >
-                {hours.map((hour, i) => (
-                  <Picker.Item key={i} label={hour} value={hour}/>
-                ))}
-              </Picker>
-              <Text>Hours</Text>
-              <Picker
-                style={[styles.picker]} itemStyle={styles.pickerItem}
-                selectedValue={this.state.minute}
-                onValueChange={(itemValue) => this.setState({minute: itemValue})}
-              >
-                {minutes.map((minute, i) => (
-                  <Picker.Item key={i} label={minute} value={minute}/>
-                ))}
-              </Picker>
-              <Text>Minutes</Text>
-              <Picker
-                style={[styles.picker]} itemStyle={styles.pickerItem}
-                selectedValue={this.state.second}
-                onValueChange={(itemValue) => this.setState({second: itemValue})}
-              >
-                {seconds.map((second, i) => (
-                  <Picker.Item key={i} label={second} value={second}/>
-                ))}
-              </Picker>
-              <Text>Seconds</Text>
+              <View style={{justifyContent: 'center', marginHorizontal: 20}}>
+                <Text style={{textAlign: 'center'}}>Hours{'\n'}</Text>
+                <Picker
+                  style={[styles.picker]} itemStyle={styles.pickerItem}
+                  selectedValue={this.state.hour}
+                  onValueChange={(itemValue) => this.setState({hour: itemValue})}
+                >
+                  {hours.map((hour, i) => (
+                    <Picker.Item key={i} label={hour} value={hour}/>
+                  ))}
+                </Picker>
+              </View>
+              <View style={{justifyContent: 'center', marginHorizontal: 20}}>
+                <Text style={{textAlign: 'center'}}>Minutes{'\n'}</Text>
+                <Picker
+                  style={[styles.picker]} itemStyle={styles.pickerItem}
+                  selectedValue={this.state.minute}
+                  onValueChange={(itemValue) => this.setState({minute: itemValue})}
+                >
+                  {minutes.map((minute, i) => (
+                    <Picker.Item key={i} label={minute} value={minute}/>
+                  ))}
+                </Picker>
+              </View>
+              <View style={{justifyContent: 'center', marginHorizontal: 20}}>
+                <Text style={{textAlign: 'center'}}>Seconds{'\n'}</Text>
+                <Picker
+                  style={[styles.picker]} itemStyle={styles.pickerItem}
+                  selectedValue={this.state.second}
+                  onValueChange={(itemValue) => this.setState({second: itemValue})}
+                >
+                  {seconds.map((second, i) => (
+                    <Picker.Item key={i} label={second} value={second}/>
+                  ))}
+                </Picker>
+              </View>
             </View>
-            <View>
+            <View style={{marginTop: 100}}>
               <Text>
                 COUNTDOWN: Award In T-MINUS {this.state.timeRemaining} Seconds
               </Text>
@@ -322,24 +328,28 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     alignItems: 'center',
+    // alignContent: 'space-between',
     padding: Constants.statusBarHeight,
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   pickerContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginTop: 10
   },
   picker: {
-    width: '33.333%',
+    width: '100%',
     height: 'auto',
     // backgroundColor: '#FFF0E0',
     // borderColor: 'red',
     borderBottomWidth: 2,
-    flex: 1
+    flex: 1,
+    alignSelf: 'center'
   },
 
   pickerItem: {
     height: 100,
-    color: 'red'
+    color: 'red', 
+    width: '100%'
   },
 
   arrowWrapper: {
