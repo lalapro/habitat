@@ -1,64 +1,110 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Animated, Image, Dimensions, TextInput, Button} from "react-native";
-import { StackNavigator, NavigationActions } from 'react-navigation';
+import { View, StyleSheet, Animated, Dimensions, Image, PanResponder, Easing } from 'react-native';
 
 
+const { width, height } = Dimensions.get("window");
 
-export default class LocationSensor extends React.Component {
-  static navigationOptions = {
-    title: 'Give your ecosystem a name!'
-  };
+const ceiling = height * 1/3 - 50;
+const sides = width - 50;
 
+export default class LocationSensor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
-      description: ''
+      count: 0,
+      position: new Animated.ValueXY({x: this.getRandomInt(50, 300), y: this.getRandomInt(50, 300)}),
+      version: props.version
     }
+    this.animate = this.animate.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return false
+  }
+
+  componentDidMount() {
+    this.animate();
+  }
+
+  animate() {
+    Animated.timing(this.state.position, {
+			toValue: ({x: this.getRandomInt(50, 300), y: this.getRandomInt(100, 400)}),
+			duration: this.getRandomInt(3500, 5000),
+      delay: this.getRandomInt(200, 1500),
+      userNativeDriver: true
+		}).start(() => this.animate());
+  }
+
+  getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  }
+
+
   render() {
-    const { navigate } = this.props.navigation;
-    let avatar = this.props.navigation.state.params.avatar;
-    let eco = this.props.navigation.state.params.eco;
     return (
-      <View style={styles.container}>
-        <Image source={images[avatar][1]} style={styles.ecobuds}/>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1, width: 100}}
-          onChangeText={(e) => this.setState({title: e})}
-          value={this.state.title}
-        />
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1, width: 200}}
-          onChangeText={(e) => this.setState({description: e})}
-          value={this.state.description}
-        />
-        <Button
-          onPress={() => navigate('Location', {eco: eco, avatar: avatar, title: this.state.title, description: this.state.description})}
-          title="Next"
-          color="#841584"
-        />
+      <View>
+        <Animated.View style={this.state.position.getLayout()}>
+          <View style={{width: sizeKey[this.state.version], height: sizeKey[this.state.version]}}>
+            <Image source={ecobuddies[this.props.img][this.state.version][1]} style={{resizeMode: 'contain', width: "100%", height: "100%"}}/>
+          </View>
+        </Animated.View>
       </View>
-    );
+    )
   }
 }
 
-const images = [
-  [0, require("../assets/Ecosystem/home.png")],
-  [1, require("../assets/Ecosystem/work.png")],
-  [2, require("../assets/Ecosystem/gym.png")]
-]
+const sizeKey = {
+  0: 25, // dead
+  1: 10, // inprogress
+  2: 25, // complete
+  3: 50, // complete upgrade
+  4: 50  // dead upgrade
+}
+
+
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  ball: {
+    height: 40,
+    width: 60,
+    borderRadius: 30,
+    borderWidth: 30,
+    borderColor: 'black'
   },
-  ecobuds: {
+  square: {
+      height: 60,
+      width: 60,
+      borderWidth: 30,
+      borderColor: 'red'
+  },
+  image: {
     width: 100,
-    height: 100,
-    resizeMode: 'contain'
+    height: 100
   }
 })
+
+const ecobuddies = [
+  [
+    [0, require("../assets/habit@/starfish-gray.png")],
+    [1, require("../assets/habit@/starfish-sm.png")],
+    [2, require("../assets/habit@/starfish-md.png")],
+    [3, require("../assets/habit@/starfish-lg.png")],
+    [4, require("../assets/habit@/starfish-gray.png")]
+  ],
+  [
+    [0, require("../assets/habit@/butterfly-gray.png")],
+    [1, require("../assets/habit@/butterfly-sm.png")],
+    [2, require("../assets/habit@/butterfly-md.png")],
+    [3, require("../assets/habit@/butterfly-lg.png")],
+    [4, require("../assets/habit@/butterfly-gray.png")]
+  ],
+  [
+    [0, require("../assets/habit@/ladybug-gray.png")],
+    [1, require("../assets/habit@/ladybug-sm.png")],
+    [2, require("../assets/habit@/ladybug-md.png")],
+    [3, require("../assets/habit@/ladybug-lg.png")],
+    [0, require("../assets/habit@/ladybug-gray.png")],
+  ]
+]
