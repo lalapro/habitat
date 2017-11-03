@@ -46,17 +46,19 @@ class TaskForm extends Component {
         <TextInput
           onChangeText={(title) => this.props.handleTaskTitleChange(title)}
           placeholder={this.props.task.Task_Title ? this.props.task.Task_Title : "Name of Task"}
+          placeholderTextColor="darkgrey"
           style={styles.input}
         />
         <TextInput
           onChangeText={(description) => this.props.handleDescriptionChange(description)}
           placeholder={this.props.task.Task_Description ? this.props.task.Task_Description :"Description"}
+          placeholderTextColor="darkgrey"
           style={styles.input}
         />
         <TaskDatePicker placeholder={this.props.task.Start ? this.props.task.Start : "Start"} onSelect={(startTime) => this.props.handleStartChange(startTime)} />
         <TaskDatePicker placeholder={this.props.task.End ? this.props.task.End : "End"} onSelect={(endTime) => this.props.handleEndChange(endTime)} />
         <LocationPicker style={styles.picker} task={this.props.task} handleSelect={this.props.handleLocationChange} userID={this.state.userID}/>
-        <View style={{backgroundColor: this.state.currentColor, margin: 10, width: 25, height: 25, borderRadius: 25, position: 'absolute', left:200, top: 270}}/>
+        <View style={{backgroundColor: this.state.currentColor, top: 57, left: 170, width: 25, height: 25, borderRadius: 25}}/>
         <CategoryPicker style={styles.picker} task={this.props.task} onSelect={this.props.handleCategoryChange} userID={this.state.userID} reRender={this.props.reRender} renderReady={this.renderReady.bind(this)} currentColor={this.currentColor.bind(this)}/>
         <Picker
           style={[styles.onePicker]} itemStyle={styles.onePickerItem}
@@ -65,12 +67,13 @@ class TaskForm extends Component {
         >
           <Picker.Item label="Does not repeat" value="no-repeat" />
           <Picker.Item label="Daily" value="daily" />
-          <Picker.Item label="Weekly" value="weekly" /> 
+          <Picker.Item label="Weekly" value="weekly" />
           <Picker.Item label="Monthly" value="monthly" />
         </Picker>
-        <TextInput 
+        <TextInput
           onChangeText={(multiples) => {this.props.handleMultipleTasks(multiples)}}
           placeholder='Number of reoccurrences?'
+          placeholderTextColor="darkgrey"
           style={styles.input}
           keyboardType='numeric'/>
         <View style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
@@ -84,29 +87,31 @@ class TaskForm extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   input: {
     height: 30,
     marginTop: 10,
+    marginBottom: 10,
     paddingHorizontal: 10,
     color: '#8A7D80',
     borderColor: '#8A7D80',
-    borderWidth: 1
+    borderBottomWidth: 1,
+    color: 'white'
   },
   picker: {
     width: 200,
   },
   pickerItem: {
-    color: '#8A7D80'
+    color: 'white'
   },
   onePicker: {
     width: 200,
-    height: 88,
+    height: 88
   },
   onePickerItem: {
     height: 88,
-    color: '#8A7D80'
+    color: 'white'
   }
 });
 

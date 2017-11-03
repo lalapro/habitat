@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Alert, Button, Text, View, StyleSheet, TouchableOpacity, TouchableHighlight, Image } from 'react-native';
 import axios from 'axios';
 import convertDate from './convertDate';
-
-
 export default class AllTasks extends Component {
   constructor(props) {
     super(props);
@@ -15,15 +13,12 @@ export default class AllTasks extends Component {
       rerender: 0,
     }
   }
-
   componentWillReceiveProps(oldprops, newprops) {
     this.setState({ showEdit: false})
   }
-
   showEdit(task) {
     let currentTime = new Date();
     currentTime > convertDate(task.Start) ? null : this.setState({ hasStarted: false });
-
     if (task.Completion === "True" || task.Completion === "False") {
       let time = task.Time;
       time = time.slice(0, -9);
@@ -35,7 +30,6 @@ export default class AllTasks extends Component {
     }
     this.setState({ showEdit: !this.state.showEdit })
   }
-
   markCompleted(task) {
     if (task.Completion === "True") {
       Alert.alert('Dont try to cheat');
@@ -46,7 +40,6 @@ export default class AllTasks extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-
     let positivePoints = task.PositivePoints + 1;
     axios.put('https://naturalhabitat.herokuapp.com/yayTask', {
       taskId: task.Task_ID,
@@ -60,7 +53,6 @@ export default class AllTasks extends Component {
       console.error(err);
     })
   }
-
   markFailed(task) {
     if (task.Completion === "True") {
       Alert.alert('Dont try to cheat');
@@ -71,7 +63,6 @@ export default class AllTasks extends Component {
       Alert.alert('the task deadline has not ended yet. Wait!')
       return;
     }
-
     let negativePoints = task.NegativePoints + 1;
     axios.put('https://naturalhabitat.herokuapp.com/nayTask', {
       taskId: task.Task_ID,
@@ -85,7 +76,6 @@ export default class AllTasks extends Component {
       console.error(err);
     })
   }
-
   extraDescriptions() {
     console.log('in extra descriptions', this.props)
     let eco = this.props.task.Ecosystem;
@@ -105,7 +95,6 @@ export default class AllTasks extends Component {
         </View>
       </View>;
     }
-
     return (
       <View style={styles.subtitleView}>
         <Text style={styles.expanded}>
@@ -121,8 +110,6 @@ export default class AllTasks extends Component {
       </View>
     )
   }
-
-
   render() {
     let taskStatus = this.props.task.Completion;
     let eco = this.props.task.Ecosystem;
@@ -158,8 +145,6 @@ export default class AllTasks extends Component {
     )
   }
 }
-
-
 const ecobuddies = [
   [
     [0, require("../assets/habit@/starfish-gray.png")],
@@ -180,15 +165,12 @@ const ecobuddies = [
     [2, require("../assets/habit@/ladybug-lg.png")]
   ]
 ]
-
 const location = [
   [0, require("../assets/Ecosystem/home.png")],
   [1, require("../assets/Ecosystem/work.png")],
   [2, require("../assets/Ecosystem/gym.png")],
   [3, require("../assets/Ecosystem/currentlocation.png")]
 ]
-
-
 const styles = StyleSheet.create({
   title: {
     fontSize: 20,
