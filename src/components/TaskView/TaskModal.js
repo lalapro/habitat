@@ -5,7 +5,6 @@ import { Font, AppLoading} from 'expo';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import TaskItem from './TaskItem.js';
 import AllTasks from '../Frontend/AllTasks.js'
-
 class TaskModal extends Component {
   constructor(props) {
     super(props);
@@ -13,28 +12,24 @@ class TaskModal extends Component {
       tasks: []
     }
   }
-
   componentWillMount() {
     this.setState({
       tasks: this.props.tasks
     })
   }
-
   componentWillReceiveProps() {
     this.setState({
       tasks: this.props.tasks
     })
   }
-
   closeModal() {
     this.props.closeModal()
   // )
   }
- 
+
   reRender() {
     this.componentDidMount()
   }
-
   render() {
     const { fontsAreLoaded } = this.state;
     return (
@@ -46,7 +41,7 @@ class TaskModal extends Component {
           onRequestClose={() => {alert("Modal has been closed.")}}
         >
         <View style={styles.modalContent}>
-          <ScrollView 
+          <ScrollView
             style={styles.scrollView}
             automaticallyAdjustContentInsets={false}
             scrollEventThrottle={200}
@@ -56,11 +51,11 @@ class TaskModal extends Component {
             </TouchableHighlight>
             {this.state.tasks.map((task, i) => {
               return (
-                <AllTasks 
-                  task={task} 
-                  key={i} 
-                  marker={this.props.marker} 
-                  reRender={this.reRender.bind(this)} 
+                <AllTasks
+                  task={task}
+                  key={i}
+                  marker={this.props.marker}
+                  reRender={this.reRender.bind(this)}
                   goToEditTask={this.props.goToEditTask}
                 />
               )
@@ -72,7 +67,6 @@ class TaskModal extends Component {
     );
   }
 }
-
 var styles = StyleSheet.create({
   container: {
     // flex: 1,

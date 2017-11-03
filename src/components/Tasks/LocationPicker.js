@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Picker, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Picker, Button, Text } from 'react-native';
 import axios from 'axios';
 
 class LocationPicker extends Component {
@@ -48,18 +48,18 @@ class LocationPicker extends Component {
 
   render() {
     return(
-        <Picker
-          style={styles.onePicker} itemStyle={styles.onePickerItem}
-          selectedValue={this.state.location}
-          onValueChange={(location) => this.changeLocation(location)}
+      <Picker
+        style={styles.onePicker} itemStyle={styles.onePickerItem}
+        selectedValue={this.state.location}
+        onValueChange={(location) => this.changeLocation(location)}
         >
-        {this.state.markers ?
-          this.state.markers.map((location, i) => {
-            return (
-              <Picker.Item key={i} label={location.Marker_Title} value={location.Marker_ID} />
-            )
-          }) : ''
-        }
+          {this.state.markers ?
+            this.state.markers.map((location, i) => {
+              return (
+                <Picker.Item key={i} label={location.Marker_Title} value={location.Marker_ID} />
+              )
+            }) : ''
+          }
         </Picker>
     )
   }
@@ -81,16 +81,16 @@ const styles = StyleSheet.create({
     width: 200,
   },
   pickerItem: {
-    color: '#8A7D80'
+    color: 'white'
   },
   onePicker: {
     width: 200,
-    height: 88,
+    height: 88
   },
   onePickerItem: {
     height: 88,
-    color: '#8A7D80'
-  },
+    color: 'white'
+  }
 });
 
 export default LocationPicker;

@@ -16,5 +16,6 @@ export default GetCurrentLocation = async (userID) => {
 
   axios.put(`https://naturalhabitat.herokuapp.com/updateLocation`, { userID: userID, location: location})
   .then(res => console.log('update success'))
+  .catch(err => console.err(err))
   return location;
 }

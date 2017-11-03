@@ -6,13 +6,16 @@ class ColorPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      colors: ['#ffc0cb', '#008080', '#ff0000', '#ffd700', '#d3ffce', '#00ffff', '#ff7373', '#40e0d0', '#e6e6fa', '#0000ff', '#ffa500', '#800080', '#00ff00', '#ffff00', '#6dc066'],
+      colors: ['#ff0000', '#ffd700', '#ff7373', '#40e0d0', '#0000ff', '#ffa500', '#6dc066'],
       color: '',
       // usedColors: [],
       render: false
     }
     this.setColor = this.setColor.bind(this);
   }
+
+//'#ff0000', '#ffd700', '#ff7373', '#40e0d0', '#0000ff', '#ffa500', '#6dc066'
+
 
   componentWillReceiveProps() {
     this.props.usedColors.forEach(category => {
@@ -25,6 +28,7 @@ class ColorPicker extends Component {
   }
 
   setColor(color) {
+    console.log(color)
     this.setState({color});
     this.props.selectColor(color);
   }

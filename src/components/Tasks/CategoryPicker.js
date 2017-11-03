@@ -133,16 +133,19 @@ class CategoryPicker extends Component {
 				</Picker>
 				{this.state.color ? <TouchableHighlight style={{backgroundColor: this.state.color, margin: 10, width: 30, height: 30, borderRadius: 30}}><View></View></TouchableHighlight> : null}
 				<TextInput
+					style={{marginTop: 15, color: 'white', textAlign: 'center'}}
 					onChangeText={this.addCategory.bind(this)}
 					value={this.state.newCategory}
 					placeholder="Create a new category"
+					placeholderTextColor="darkgrey"
 				/>
 				<ColorPicker
 					selectColor={this.selectColor} color={this.state.color} userID={this.props.userID} usedColors={this.state.categories}
 				/>
 				<Button
 					onPress={this.newCategory}
-					title="Save Category"
+					color="red"
+					title="Add Category"
 				/>
 			</View>
 		)
@@ -155,7 +158,6 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		height: 30,
-		marginTop: 10,
 		paddingHorizontal: 10,
 		color: '#8A7D80',
 		borderColor: '#8A7D80',
@@ -165,15 +167,15 @@ const styles = StyleSheet.create({
 		width: 200,
 	},
 	pickerItem: {
-		color: '#8A7D80'
+		color: 'white'
 	},
 	onePicker: {
 		width: 200,
-		height: 88,
+		height: 88
 	},
 	onePickerItem: {
 		height: 88,
-		color: '#8A7D80'
+		color: 'white'
 	}
 });
 
