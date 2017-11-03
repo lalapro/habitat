@@ -305,8 +305,8 @@ export default class MapScreen extends Component {
           />) : null }
       </View>
     ) :  (
-        <View style={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <Image source={require("../assets/loading.gif")} style={{width: 200, height: 200, resizeMode: 'contain'}}/>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: "#dee1e2"}}>
+          <Image source={require("../assets/loading2.gif")} style={{width: 200, height: 200, resizeMode: 'contain'}}/>
         </View>
     )
   }
@@ -335,6 +335,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     height: 60,
     width: 90,
+    backgroundColor: 'transparent'
   },
   cardImage: {
     width: 30,
