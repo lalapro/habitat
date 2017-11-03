@@ -109,18 +109,6 @@ export default class Profile extends Component {
 
   countTasks() {
     axios.get('https://naturalhabitat.herokuapp.com/countTasks', { params: { username: this.props.screenProps.userID } })
-<<<<<<< HEAD
-      .then(tasks => {
-        tasks.data.forEach(task => {
-          if (task.Completion === "False") {
-            this.setState({ failed: task.count })
-          } else if (task.Completion === "True") {
-            this.setState({ completed: task.count })
-          } else {
-            this.setState({ inProgress: task.count })
-          }
-        })
-=======
     .then(tasks => {
       tasks.data.forEach(task => {
         if (task.Completion === "False") {
@@ -130,7 +118,6 @@ export default class Profile extends Component {
         } else {
           this.setState({ inProgress: task.count })
         }
->>>>>>> changing selected date in profile fixed
       })
     })
   }
@@ -241,11 +228,7 @@ export default class Profile extends Component {
   }
 
   render() {
-<<<<<<< HEAD
-    let tabs = Object.entries(this.state.locations)
-=======
     let tabs = Object.entries(this.state.locations);
->>>>>>> changing selected date in profile fixed
     tabs.unshift(['Overview'])
 
 
@@ -298,7 +281,9 @@ export default class Profile extends Component {
                     <AllTasks 
                     task={task} key={i} 
                     reRender={this.reRender.bind(this)}
-                    goToEditTask={this.goToEditTask.bind(this)}/>
+                    goToEditTask={this.goToEditTask.bind(this)}
+                    currentDay={this.state.currentDay}
+                    />
                   )
                 })}
               </ScrollView>
@@ -331,6 +316,47 @@ export default class Profile extends Component {
                         })}
                       </ScrollView>
                     </View>
+                      <View style={{ flex: 1 }}>
+                        <View style={styles.today}> 
+                          <TouchableOpacity onPress={() => {this.showToday()}}>
+                            <Text style={styles.allTask}>Selected Date</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={() => {this.showAll()}}>
+                            <Text style={styles.allTask}>All tasks</Text>
+                          </TouchableOpacity>
+                        </View>
+                        {!this.state.showAll ? (
+                          <ScrollView style={{ marginTop: 20 }}>
+                          {/* <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+                            <Text style={styles.title}>
+                              Today's Tasks at
+                            </Text>
+                            <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{ marginLeft: 15, width: 50, height: 50}}/>
+                          </View> */}
+                          {this.state.dailyTasks.filter(ele => {
+                            return ele.Marker_Title === this.state.selectedLocation[0]
+                          }).map((task, i) => {
+                            return (
+                              <AllTasks goToEditTask={this.goToEditTask.bind(this)} currentDay={this.state.currentDay} task={task} key={i} reRender={this.reRender.bind(this)}/>
+                            )
+                          })}
+                          </ScrollView>
+                        ) : (
+                          <ScrollView style={{ marginTop: 20 }}>
+                          {/* <View style={{ alignItems: 'center', marginTop: 5 }}>
+                            <Text style={styles.title}>
+                              All tasks at {this.state.selectedLocation[0]}
+                            </Text>
+                            <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{ marginLeft: 15, width: 50, height: 50}}/>
+                          </View> */}
+                          {this.state.selectedLocation[1].map((task, i) => {
+                            return (
+                              <AllTasks goToEditTask={this.goToEditTask.bind(this)} currentDay={this.state.currentDay} task={task} key={i} reRender={this.reRender.bind(this)}/>
+                            )
+                          })}
+                          </ScrollView>
+                        )}
+                      </View>
                   )}
               </View>
             </View>
