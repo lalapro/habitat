@@ -36,6 +36,8 @@ export default class EcoSystem extends Component {
       positivePoints: 0,
       negativePoints: 0,
       nullPoints: 0,
+      giftPoints: 0,
+      hatchedGiftPoints: 0,
       completedSun: false
     }
     this.showTask = this.showTask.bind(this);
@@ -56,6 +58,7 @@ export default class EcoSystem extends Component {
       userID: this.props.screenProps.userID,
     }, () => this.getMarkers())
   }
+
 
 
   getMarkers() {
@@ -102,6 +105,7 @@ export default class EcoSystem extends Component {
       editSpecificTask: specificTask
     })
   }
+
 
   editTask(task) {
     this.props.navigation.navigate('TaskBuilder', { specificTask: this.state.editSpecificTask, editing: true })
@@ -220,6 +224,7 @@ export default class EcoSystem extends Component {
               var positiveImageNumber = location.PositivePoints%10;
               var downgradeImageNumber = Math.floor(location.NegativePoints/4);
               var negativeImageNumber = location.NegativePoints%4;
+              var giftPointNumber = location.GiftPoints;
               upgradeImages = new Array(upgradeImageNumber);
               upgradeImages.fill(location.Ecosystem);
               posImages = new Array(positiveImageNumber);
@@ -228,6 +233,8 @@ export default class EcoSystem extends Component {
               downgradeImages.fill(location.Ecosystem);
               negImages = new Array(negativeImageNumber);
               negImages.fill(location.Ecosystem);
+              giftImages = new Array(giftPointNumber);
+              giftImages.fill(location.Ecosystem);
 
               return (
               // put backgroundImage in the style
@@ -269,7 +276,6 @@ export default class EcoSystem extends Component {
                    : null}
                    {downgradeImageNumber > 0 ?
                     downgradeImages.map((img, i) => {
-                      console.log(img)
                       return (
                         <EcosystemViewPractice img={img} key={i} version={4}/>
                       )
@@ -282,6 +288,14 @@ export default class EcoSystem extends Component {
                       )
                     })
                   : null}
+                  {location.GiftPoints ?
+                    giftImages.map((img, i) => {
+                      return (
+                        <EcosystemViewPractice img={img} key={i} version={5}/>
+                      )
+                    })
+                  : null}
+                  
                   </View>
                   </Image>
               </View>
@@ -363,7 +377,7 @@ const images = [
   [0, require("../assets/Ecosystem/home.png")],
   [1, require("../assets/Ecosystem/work.png")],
   [2, require("../assets/Ecosystem/gym.png")],
-  [3, require("../assets/Ecosystem/currentlocation.png")]
+  [3, require("../assets/Ecosystem/currentlocation.png")],
 ];
 
 const backgrounds = [
