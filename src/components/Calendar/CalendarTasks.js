@@ -54,7 +54,7 @@ export default class CalendarTasks extends Component {
 	axiosCall = async (token) => {
     let userID;
     let today = moment().format();
-    let timeZone = today.slice(-6);Ó
+    let timeZone = today.slice(-6);
 		let filtered = [];
     let beginningOfDay = `${JSON.stringify(today).slice(1, 12)}00:00:00${timeZone}`;
 		let endOfDay = `${JSON.stringify(today).slice(1, 12)}23:59:59${timeZone}`;
