@@ -17,7 +17,7 @@ export default class TaskFromGoogle extends Component {
 
   componentDidMount() {
     let checkExists = this.props.task;
-    axios.get('http://10.16.1.233:3000/checkGoogle', { params: { task: checkExists }})
+    axios.get('https://naturalhabitat.herokuapp.com/checkGoogle', { params: { task: checkExists }})
       .then(existence => {
         console.log(existence.data, 'existence')
         if (existence.data.length > 0) {

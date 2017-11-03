@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import{ StyleSheet, View, Image, Text, TouchableWithoutFeedback, Button, Picker, ScrollView, Alert, AsyncStorage, Dimensions } from 'react-native';
+import{ StyleSheet, View, Image, Text, TouchableOpacity, TouchableWithoutFeedback, Button, Picker, ScrollView, Alert, AsyncStorage, Dimensions } from 'react-native';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 import EcosystemViewPractice from '../Frontend/EcosystemViewPractice'
 import axios from 'axios';
@@ -32,7 +32,7 @@ export default class Friends extends Component {
 
   componentDidMount() {
     // this.checkAsyncStorage();
-    axios.get(`http://10.16.1.233:3000/friends`, { params: { user: this.state.userId }})
+    axios.get(`https://naturalhabitat.herokuapp.com/friends`, { params: { user: this.state.userId }})
     .then(friends => {
       this.setState({ friends: friends.data })
     })
@@ -49,7 +49,7 @@ export default class Friends extends Component {
       selectedFriend: friend.Friend
     })
 
-    axios.get(`http://10.16.1.233:3000/mapMarkers`, { params: { userID: friend.Friend}})
+    axios.get(`https://naturalhabitat.herokuapp.com/mapMarkers`, { params: { userID: friend.Friend}})
     .then(res => {
       console.log(res.data, 'res data from mapmarkers')
       this.setState({
@@ -101,7 +101,7 @@ export default class Friends extends Component {
     this.setState({
       giftPoints: this.state.giftPoints - 1
     })
-    axios.put('http://10.16.1.233:3000/gift', {
+    axios.put('https://naturalhabitat.herokuapp.com/gift', {
       userId: this.state.userId,
       friendEcosystem: this.state.selectedLocation
     })
@@ -122,43 +122,39 @@ export default class Friends extends Component {
             <Button
               onPress={() => this.props.navigation.navigate('DrawerToggle', {memes: true})}
               title="&#9776;"
+              color="white"
             />
           </View>
           <ScrollView horizontal={true} style={{borderBottomWidth: 1, borderColor: "black"}}>
             {this.state.friends.map((friend, key) => {
               return (
-                <View key={key} style={styles.friends}>
-                  <TouchableWithoutFeedback onPress={() => this.selectFriend(friend, key)}>
-                    <Image source={{uri: friend.Pic}} style={styles.photo}/>
-                  </TouchableWithoutFeedback>
+                <TouchableOpacity onPress={() => this.selectFriend(friend, key)} style={styles.friends}>
+                  <Image source={{uri: friend.Pic}} style={styles.photo}/>
                   <Text style={styles.name}>
                     {friend.Friend_Name.split(' ')[0]}
                   </Text>
-                </View>
+                </TouchableOpacity>
               )
             })}
           </ScrollView>
         </View>
         <View style={{flex: 4}}>
-          {/* <Text>Current Amount of GiftPoints: {this.state.giftPoints}</Text> */}
             {this.state.loadingEcosystem ? (
               <View>
                 <Image source={require('../assets/loading.gif')} style={{width: 200, height: 200}}/>
               </View>
             ) : (
               <View style={{flex: 1}}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
                   <ScrollView horizontal={true}>
                     {this.state.selectedLocations.map((location, i) => {
-                      return i === 0 ? (
-                        <Text style={{margin: 10}} key={i} onPress={() => this.showEcosystem(location)}>
-                          {location.Marker_Title}
-                        </Text>
-                      ) :
-                      (
-                        <Text style={{margin: 10}} key={i} onPress={() => this.showEcosystem(location)}>
-                          {location.Marker_Title}
-                        </Text>
+                      return (
+                        <TouchableOpacity onPress={() => this.showEcosystem(location)} style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                          <Image source={images[location.Avatar][1]} style={{width: 25, height: 25}}/>
+                          <Text style={{margin: 10, color: 'white', fontSize: 14, fontWeight: 'bold'}} key={i}>
+                            {location.Marker_Title}
+                          </Text>
+                        </TouchableOpacity>
                       )
                     })}
                   </ScrollView>
@@ -181,17 +177,21 @@ export default class Friends extends Component {
                     </View>
                   </View>
                 ) : (
-                  <View style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text>
-                      Place holder for blank space.
+                  <View style={{flex: 7}}>
+                    <Text style={{fontSize: 18, fontWeight: "bold", color: "white", textAlign: 'center', left: -70}}>
+                      View the Ecosystem of your friends!
                     </Text>
                   </View>
                 )}
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                  {this.state.locationIsClicked ? <Button
-                    title="Give Gift"
-                    onPress={this.giveGift}
-                  /> : null}
+                <View style={{flex: 1, alignItems: 'center'}}>
+                  {this.state.locationIsClicked ? (
+                    <TouchableOpacity onPress={this.giveGift} style={{left: -50, top: -20}}>
+                      <Image source={require("../assets/habit@/gift.png")} style={{width: 50, height: 50}}/>
+                      <Text style={{fontSize: 14, marginTop: 5, fontWeight: "bold", color: "white", left: -5}}>
+                        Give Gift!!
+                      </Text>
+                    </TouchableOpacity>
+                  ) : null}
                 </View>
               </View>
             )}
@@ -228,6 +228,12 @@ const backgrounds = [
   [2, require("../assets/habit@/leaf-bg.png")],
 ]
 
+const images = [
+  [0, require("../assets/Ecosystem/home.png")],
+  [1, require("../assets/Ecosystem/work.png")],
+  [2, require("../assets/Ecosystem/gym.png")]
+]
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -262,6 +268,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
     fontWeight: "bold",
+    color: "white"
   },
   backgroundName: {
     fontSize: 14,
