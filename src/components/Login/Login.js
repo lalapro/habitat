@@ -36,7 +36,7 @@ export default class Login extends Component {
 
   handleRegularLogin() {
 
-    axios.get(`https://naturalhabitat.herokuapp.com/login`, {
+    axios.get(`http://10.16.1.233:3000/login`, {
       params: {
         username: this.state.username,
         password: this.state.password
@@ -65,7 +65,7 @@ export default class Login extends Component {
         const response2 = await fetch(`https://graph.facebook.com/${user.id}/friends?access_token=${token}`)
         const  friends= await response2.json();
         
-        axios.post(`https://naturalhabitat.herokuapp.com/token`, {
+        axios.post(`http://10.16.1.233:3000/token`, {
           name: user.name,
           username: user.id,
           token: token
@@ -78,7 +78,7 @@ export default class Login extends Component {
           AsyncStorage.setItem(`user_token`, token);
           friends.data.forEach(friend => {
             this.getFBPic(friend.id).then(pic => {
-              axios.post('https://naturalhabitat.herokuapp.com/friends', {
+              axios.post('http://10.16.1.233:3000/friends', {
                 user: res.data.user,
                 username: user.name,
                 userfbID: user.id,
