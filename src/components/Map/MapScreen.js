@@ -42,7 +42,6 @@ export default class MapScreen extends Component {
   getMarkers() {
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', {params: {userID: this.state.userID}})
      .then(markers => {
-       console.log(markers.data, 'after getting markers')
        this.setState({markers: markers.data})
      })
      .then(res => {
