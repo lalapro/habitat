@@ -232,7 +232,7 @@ export default class EcoSystem extends Component {
               return (
               // put backgroundImage in the style
               <View key={index} style={{alignItems: 'center', justifyContent: 'center'}}>
-                <View style={{flexDirection: 'row', height: 60, marginTop: '20%'}}>
+                <View style={{flexDirection: 'row', height: 60, marginTop: '20%', marginBottom: 10}}>
                   <Image
                     source={images[location.Avatar][1]}
                     style={{width: 50, height: 50, resizeMode: 'contain'}}
@@ -282,6 +282,8 @@ export default class EcoSystem extends Component {
                       )
                     })
                   : null}
+                  </View>
+                  </Image>
               </View>
             )})}
           </Swiper>

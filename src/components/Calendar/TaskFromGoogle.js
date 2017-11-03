@@ -98,7 +98,8 @@ const images = [
 const styles = StyleSheet.create({
 	image: {
     width: 35,
-    height: 35
+    height: 35,
+    resizeMode: 'contain'
   },
   title: {
     fontSize: 15,

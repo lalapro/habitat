@@ -302,20 +302,21 @@ export default class Profile extends Component {
                     height={180}
                     data={this.state.categoryPercentage} />
                   ) : (
-                    <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
-                      <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{width: 75, height: 75, resizeMode: 'contain'}}/>
-                      <ScrollView style={{ marginTop: 15}}>
-                        {this.state.selectedLocation[1].map((task, i) => {
-                          return (
-                            <AllTasks 
-                              task={task} key={i} 
-                              reRender={this.reRender.bind(this)} 
-                              goToEditTask={this.goToEditTask.bind(this)}
-                            />
-                          )
-                        })}
-                      </ScrollView>
-                    </View>
+                    <View>
+                      <View style={{ flex: 4, borderColor: 'black', borderTopWidth: 1 }}>
+                        <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{width: 75, height: 75, resizeMode: 'contain'}}/>
+                        <ScrollView style={{ marginTop: 15}}>
+                          {this.state.selectedLocation[1].map((task, i) => {
+                            return (
+                              <AllTasks 
+                                task={task} key={i} 
+                                reRender={this.reRender.bind(this)} 
+                                goToEditTask={this.goToEditTask.bind(this)}
+                              />
+                            )
+                          })}
+                        </ScrollView>
+                      </View>
                       <View style={{ flex: 1 }}>
                         <View style={styles.today}> 
                           <TouchableOpacity onPress={() => {this.showToday()}}>
@@ -343,20 +344,21 @@ export default class Profile extends Component {
                           </ScrollView>
                         ) : (
                           <ScrollView style={{ marginTop: 20 }}>
-                          {/* <View style={{ alignItems: 'center', marginTop: 5 }}>
-                            <Text style={styles.title}>
-                              All tasks at {this.state.selectedLocation[0]}
-                            </Text>
-                            <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{ marginLeft: 15, width: 50, height: 50}}/>
-                          </View> */}
-                          {this.state.selectedLocation[1].map((task, i) => {
-                            return (
-                              <AllTasks goToEditTask={this.goToEditTask.bind(this)} currentDay={this.state.currentDay} task={task} key={i} reRender={this.reRender.bind(this)}/>
-                            )
-                          })}
+                            {/* <View style={{ alignItems: 'center', marginTop: 5 }}>
+                              <Text style={styles.title}>
+                                All tasks at {this.state.selectedLocation[0]}
+                              </Text>
+                              <Image source={images[this.state.selectedLocation[1][0].Avatar][1]} style={{ marginLeft: 15, width: 50, height: 50}}/>
+                            </View> */}
+                            {this.state.selectedLocation[1].map((task, i) => {
+                              return (
+                                <AllTasks goToEditTask={this.goToEditTask.bind(this)} currentDay={this.state.currentDay} task={task} key={i} reRender={this.reRender.bind(this)}/>
+                              )
+                            })}
                           </ScrollView>
                         )}
                       </View>
+                    </View>
                   )}
               </View>
             </View>
