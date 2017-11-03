@@ -35,7 +35,10 @@ export default class EcoSystem extends Component {
       toggleShow: false,
       positivePoints: 0,
       negativePoints: 0,
-      nullPoints: 0
+      nullPoints: 0,
+      giftPoints: 0,
+      hatchedGiftPoints: 0,
+      completedSun: false
     }
     this.showTask = this.showTask.bind(this);
   }
@@ -55,6 +58,8 @@ export default class EcoSystem extends Component {
       userID: this.props.screenProps.userID,
     }, () => this.getMarkers())
   }
+
+
 
   getMarkers() {
     axios.get('https://naturalhabitat.herokuapp.com/mapMarkers', { params: { userID: this.state.userID, currentDay: true } })
@@ -99,6 +104,7 @@ export default class EcoSystem extends Component {
       editSpecificTask: specificTask
     })
   }
+
 
   editTask(task) {
     this.props.navigation.navigate('TaskBuilder', { specificTask: this.state.editSpecificTask, editing: true })
@@ -215,6 +221,7 @@ export default class EcoSystem extends Component {
               var positiveImageNumber = location.PositivePoints%10;
               var downgradeImageNumber = Math.floor(location.NegativePoints/4);
               var negativeImageNumber = location.NegativePoints%4;
+              var giftPointNumber = location.GiftPoints;
               upgradeImages = new Array(upgradeImageNumber);
               upgradeImages.fill(location.Ecosystem);
               posImages = new Array(positiveImageNumber);
@@ -223,6 +230,8 @@ export default class EcoSystem extends Component {
               downgradeImages.fill(location.Ecosystem);
               negImages = new Array(negativeImageNumber);
               negImages.fill(location.Ecosystem);
+              giftImages = new Array(giftPointNumber);
+              giftImages.fill(location.Ecosystem);
 
               return (
               // put backgroundImage in the style
@@ -254,35 +263,36 @@ export default class EcoSystem extends Component {
                       } else {
                         return null
                       }
+                    })) : null}
+                  {location.PositivePoints ?
+                    posImages.map((img, i) => (
+                      <EcosystemViewPractice img={img} key={i} version={2}/>
+                    ))
+                   : null}
+                   {downgradeImageNumber > 0 ?
+                    downgradeImages.map((img, i) => {
+                      return (
+                        <EcosystemViewPractice img={img} key={i} version={4}/>
+                      )
                     })
                   ) : null}
                   {upgradeImageNumber > 0 ?
                     upgradeImages.map((img, i) => {
                       return (
-                        <EcosystemViewPractice img={img} key={i} version={3}/>
-                      )})
-                   : null}
-                {location.PositivePoints ?
-                  posImages.map((img, i) => (
-                    <EcosystemViewPractice img={img} key={i} version={2}/>
-                  ))
-                 : null}
-                 {downgradeImageNumber > 0 ?
-                  downgradeImages.map((img, i) => {
-                    return (
-                      <EcosystemViewPractice img={img} key={i} version={4}/>
-                    )
-                  })
-                 : null}
-                 {location.NegativePoints ?
-                  negImages.map((img, i) => {
-                    return (
-                      <EcosystemViewPractice img={img} key={i} version={0}/>
-                    )
-                  })
-                 : null}
-                 </View>
-                 </Image>
+                        <EcosystemViewPractice img={img} key={i} version={0}/>
+                      )
+                    })
+                  : null}
+                  {location.GiftPoints ?
+                    giftImages.map((img, i) => {
+                      return (
+                        <EcosystemViewPractice img={img} key={i} version={5}/>
+                      )
+                    })
+                  : null}
+                  
+                  </View>
+                  </Image>
               </View>
             )})}
           </Swiper>
@@ -362,7 +372,7 @@ const images = [
   [0, require("../assets/Ecosystem/home.png")],
   [1, require("../assets/Ecosystem/work.png")],
   [2, require("../assets/Ecosystem/gym.png")],
-  [3, require("../assets/Ecosystem/currentlocation.png")]
+  [3, require("../assets/Ecosystem/currentlocation.png")],
 ];
 
 const backgrounds = [
