@@ -248,7 +248,7 @@ export default class MapScreen extends Component {
             title={this.state.currentLocation.title}
             description={this.state.currentLocation.description}
             >
-            <Image style={{width: 20, height: 20}} source={require("../assets/Ecosystem/currentlocation.png")} onLoadEnd={() => {if (!this.state.iconLoaded) this.setState({iconLoaded: true});}}/>
+            <Image style={{width: 20, height: 20}} source={require("../assets/habit@/location.png")} onLoadEnd={() => {if (!this.state.iconLoaded) this.setState({iconLoaded: true});}}/>
           </MapView.Marker>
           {this.state.markers ? ( //for all other location markers
             this.state.markers.map((marker, index) => {
@@ -310,10 +310,10 @@ export default class MapScreen extends Component {
           </TouchableOpacity>
         </Animated.ScrollView>
         <TouchableOpacity style={styles.recenter} onPress={() => this.updateCurrentLocation()}>
-          <Image source={require("../assets/Ecosystem/currentlocation.png")} style={{width: 50, height: 50}} />
+          <Image source={require("../assets/habit@/location.png")} style={{width: 50, height: 50, resizeMode: 'contain'}} />
         </TouchableOpacity>
         <TouchableOpacity style={{position: "absolute", bottom: 60, left: 30}} onPress={() => this.fakeWalk()}>
-          <Image source={require("../assets/walking.png")} style={{width: 50, height: 50}}/>
+          <Image source={require("../assets/walking.png")} style={{width: 50, height: 50, resizeMode: 'contain'}}/>
         </TouchableOpacity>
         {this.state.modalVisible ? (
           <TaskModal 
@@ -328,7 +328,7 @@ export default class MapScreen extends Component {
       </View>
     ) :  (
         <View style={{display:'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <Image source={require("../assets/loading.gif")} style={{width: 200, height: 200}}/>
+          <Image source={require("../assets/loading.gif")} style={{width: 200, height: 200, resizeMode: 'contain'}}/>
         </View>
     )
   }
