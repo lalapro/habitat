@@ -72,7 +72,7 @@ export default class Timer extends Component {
                     lgPositivePoints: lgPositivePoints
                   }, () => {
                     console.log('in timer', this.state)
-                    axios.put('http://10.16.1.233:3000/postimer', {
+                    axios.put('https://naturalhabitat.herokuapp.com/postimer', {
                       user_ID: this.state.userID,
                       Medium_Positive_Points: this.state.mdPositivePoints,
                       Large_Positive_Points: this.state.lgPositivePoints
@@ -99,7 +99,7 @@ export default class Timer extends Component {
               negativePoints: this.state.negativePoints + 1
             }, () => {
               console.log(this.state.negativePoints,'neg')
-              axios.put('http://10.16.1.233:3000/negtimer', {
+              axios.put('https://naturalhabitat.herokuapp.com/negtimer', {
                 user_ID: this.state.userID,
                 Negative_Points: this.state.negativePoints
               })
@@ -152,7 +152,7 @@ export default class Timer extends Component {
         userID: this.props.screenProps.userID,
         currentImageIndex: Math.floor(Math.random()*3)
       }, () => {
-        axios.get('http://10.16.1.233:3000/timer', {
+        axios.get('https://naturalhabitat.herokuapp.com/timer', {
           params: {
             User_ID: this.state.userID
           }
