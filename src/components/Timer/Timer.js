@@ -71,7 +71,6 @@ export default class Timer extends Component {
                     mdPositivePoints: mdPositivePoints,
                     lgPositivePoints: lgPositivePoints
                   }, () => {
-                    console.log('in timer', this.state)
                     axios.put('https://naturalhabitat.herokuapp.com/postimer', {
                       user_ID: this.state.userID,
                       Medium_Positive_Points: this.state.mdPositivePoints,
@@ -98,7 +97,6 @@ export default class Timer extends Component {
               duration: 0,
               negativePoints: this.state.negativePoints + 1
             }, () => {
-              console.log(this.state.negativePoints,'neg')
               axios.put('https://naturalhabitat.herokuapp.com/negtimer', {
                 user_ID: this.state.userID,
                 Negative_Points: this.state.negativePoints
@@ -162,8 +160,8 @@ export default class Timer extends Component {
             render: true,
             negativePoints: res.data[0].Negative_Points,
             mdPositivePoints: res.data[0].Medium_Positive_Points,
-            lgPositivePoints: res.data[0].Large_Positive_Points
-          }, () => { console.log(this.state)})
+            lgPositivePoints: res.data[0].Large_Positive_points
+          })
         })
         .catch(err => console.error(err));
       })
@@ -204,9 +202,10 @@ export default class Timer extends Component {
                     /> : null
                   }
                   {this.state.lgPositivePoints ?
-                    lgImageArray.map((lgImage, i) => (
+                    lgImageArray.map((lgImage, i) => {
+                      return (
                       <EcosystemViewPractice img={this.state.currentImageIndex} key={i} version={3}/>
-                    ))
+                    )})
                   : null
                   }
                   {this.state.mdPositivePoints ?
